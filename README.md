@@ -1,2 +1,5 @@
-# TP2-Projeto-Final-2025.2
-Repositório para o trabalho da matéria CIC0198, Técnicas de Programação 2, da Universidade de Brasília (UnB).
+## Como executar:
+
+1. Clone o repositório
+2. Execute: `python create_database.py` (cria o banco)
+3. Para verificar código: `python -m pylint create_database.py`

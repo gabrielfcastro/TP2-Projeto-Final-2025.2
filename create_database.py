@@ -49,6 +49,7 @@ class CriadorBancoDados:
                     email VARCHAR UNIQUE NOT NULL,
                     senha VARCHAR NOT NULL,
                     nome VARCHAR NOT NULL,
+                    tipo_usuario VARCHAR NOT NULL,
                     latitude DECIMAL(10,6),
                     longitude DECIMAL(10,6)
                 )

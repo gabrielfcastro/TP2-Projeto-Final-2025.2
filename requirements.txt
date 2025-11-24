@@ -1,0 +1,6 @@
+bcrypt
+Flask
+Flask-JWT-Extended
+pylint
+pytest-cov
+SQLAlchemy

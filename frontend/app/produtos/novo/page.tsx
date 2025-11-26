@@ -1,3 +1,8 @@
 export default function NovoProdutoPage() {
-  return <h1>Em construção</h1>;
+  return (
+    <div className="p-10">
+      <h1 className="text-2xl font-bold">Página em construção</h1>
+      <p>O formulário será implementado em breve.</p>
+    </div>
+  );
 }

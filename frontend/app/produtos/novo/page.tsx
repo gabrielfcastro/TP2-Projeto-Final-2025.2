@@ -18,7 +18,7 @@ export default function NovoProdutoPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          feirante_id: 1, // Simulando usuário logado
+          feirante_id: 1,
           nome,
           descricao,
           preco: parseFloat(preco),
@@ -31,86 +31,110 @@ export default function NovoProdutoPage() {
         alert("Erro ao salvar produto");
       }
     } catch (error) {
-      console.error("Erro na requisição:", error);
+      console.error(error);
     }
   };
 
   return (
-    <main className="flex min-h-screen flex-col items-center p-8 bg-gray-50">
-      <div className="w-full max-w-md">
+    <main className="min-h-screen bg-zinc-950 flex flex-col items-center justify-center p-6 text-zinc-100">
+      <div className="w-full max-w-lg">
+        {/* Link de Voltar */}
         <Link
           href="/produtos"
-          className="text-blue-600 hover:underline mb-4 inline-block"
+          className="flex items-center text-zinc-400 hover:text-green-500 mb-6 transition-colors text-sm font-medium"
         >
-          &larr; Voltar
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={2}
+            stroke="currentColor"
+            className="w-4 h-4 mr-2"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"
+            />
+          </svg>
+          Voltar para a lista
         </Link>
 
-        <h1 className="text-3xl font-bold mb-6 text-gray-800">Novo Produto</h1>
+        <h1 className="text-3xl font-bold mb-8 text-white tracking-tight">
+          Novo Produto
+        </h1>
 
+        {/* Card do Formulário */}
         <form
           onSubmit={handleSubmit}
-          className="bg-white p-6 rounded-lg shadow-md"
+          className="bg-zinc-900 border border-zinc-800 p-8 rounded-xl shadow-2xl"
         >
-          {/* Campo Nome (O teste procura pelo Label "Nome do Produto") */}
-          <div className="mb-4">
+          {/* Campo Nome */}
+          <div className="mb-6">
             <label
               htmlFor="nome"
-              className="block text-sm font-medium text-gray-700 mb-1"
+              className="block text-sm font-medium text-zinc-400 mb-2"
             >
               Nome do Produto
             </label>
             <input
               id="nome"
               type="text"
-              className="w-full border border-gray-300 p-2 rounded focus:ring-2 focus:ring-blue-500 outline-none text-gray-900"
+              placeholder="Ex: Queijo Frescal"
+              className="w-full bg-zinc-800 border border-zinc-700 text-white p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent placeholder-zinc-600 transition-all"
               value={nome}
               onChange={(e) => setNome(e.target.value)}
               required
             />
           </div>
 
-          {/* Campo Descrição (O teste procura pelo Label "Descrição") */}
-          <div className="mb-4">
+          {/* Campo Descrição */}
+          <div className="mb-6">
             <label
               htmlFor="descricao"
-              className="block text-sm font-medium text-gray-700 mb-1"
+              className="block text-sm font-medium text-zinc-400 mb-2"
             >
               Descrição
             </label>
             <textarea
               id="descricao"
               rows={3}
-              className="w-full border border-gray-300 p-2 rounded focus:ring-2 focus:ring-blue-500 outline-none text-gray-900"
+              placeholder="Descreva os detalhes do produto..."
+              className="w-full bg-zinc-800 border border-zinc-700 text-white p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent placeholder-zinc-600 transition-all resize-none"
               value={descricao}
               onChange={(e) => setDescricao(e.target.value)}
             />
           </div>
 
-          {/* Campo Preço (O teste procura pelo Label "Preço") */}
-          <div className="mb-6">
+          {/* Campo Preço */}
+          <div className="mb-8">
             <label
               htmlFor="preco"
-              className="block text-sm font-medium text-gray-700 mb-1"
+              className="block text-sm font-medium text-zinc-400 mb-2"
             >
               Preço (R$)
             </label>
-            <input
-              id="preco"
-              type="number"
-              step="0.01"
-              className="w-full border border-gray-300 p-2 rounded focus:ring-2 focus:ring-blue-500 outline-none text-gray-900"
-              value={preco}
-              onChange={(e) => setPreco(e.target.value)}
-              required
-            />
+            <div className="relative">
+              <span className="absolute left-3 top-3 text-zinc-500">R$</span>
+              <input
+                id="preco"
+                type="number"
+                step="0.01"
+                placeholder="0.00"
+                className="w-full bg-zinc-800 border border-zinc-700 text-white p-3 pl-10 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent placeholder-zinc-600 transition-all"
+                value={preco}
+                onChange={(e) => setPreco(e.target.value)}
+                required
+              />
+            </div>
           </div>
 
           {/* Botão Salvar */}
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white p-3 rounded font-bold hover:bg-blue-700 transition"
+            className="w-full bg-green-600 text-white p-4 rounded-lg font-bold hover:bg-green-500 transition-all transform hover:scale-[1.02] active:scale-[0.98] shadow-lg hover:shadow-green-500/20"
           >
-            Salvar
+            Salvar Produto
           </button>
         </form>
       </div>

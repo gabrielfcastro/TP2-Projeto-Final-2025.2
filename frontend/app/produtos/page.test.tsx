@@ -14,11 +14,15 @@ global.fetch = jest.fn(() =>
   })
 ) as jest.Mock;
 
+// 2. MOCK DO WINDOW.CONFIRM (A CORREÇÃO ESTÁ AQUI)
+// O Jest não tem janela de alerta, então criamos uma falsa que sempre retorna "true" (Sim)
+global.confirm = jest.fn(() => true);
+
 describe("Página de Listagem de Produtos", () => {
   it("deve excluir um item quando o botão for clicado", async () => {
     render(<ProdutosPage />);
 
-    // A. Espera o produto aparecer na tela (pois o fetch é assíncrono)
+    // A. Espera o produto aparecer na tela
     await waitFor(() => {
       expect(screen.getByText("Produto Para Excluir")).toBeInTheDocument();
     });
@@ -27,13 +31,13 @@ describe("Página de Listagem de Produtos", () => {
     const botoesExcluir = screen.getAllByText("Excluir");
     const botaoDoSegundoItem = botoesExcluir[1]; // Pega o botão do segundo item
 
-    // C. Clica no botão
+    // C. Clica no botão (Agora o confirm vai retornar true automaticamente)
     fireEvent.click(botaoDoSegundoItem);
 
     // D. Verifica se chamou a API com DELETE no ID certo (ID 2)
     await waitFor(() => {
       expect(global.fetch).toHaveBeenCalledWith(
-        expect.stringContaining("/api/produtos/2"), // Verifica se a URL tem o ID 2
+        expect.stringContaining("/api/produtos/2"),
         expect.objectContaining({
           method: "DELETE",
         })

@@ -62,17 +62,6 @@ def criar_produto():
     produtos_db.append(novo_produto)
     return jsonify(novo_produto), 201
 
-# 4. ATUALIZAR (PUT) - Necessário para salvar a Edição
-@app.route('/api/produtos/<int:id_produto>', methods=['PUT'])
-def atualizar_produto(id_produto):
-    dados = request.json
-    for prod in produtos_db:
-        if prod['id'] == id_produto:
-            prod['nome'] = dados.get('nome', prod['nome'])
-            prod['descricao'] = dados.get('descricao', prod['descricao'])
-            prod['preco'] = float(dados.get('preco', prod['preco']))
-            return jsonify(prod), 200
-    return jsonify({"erro": "Produto não encontrado"}), 404
 
 # 5. DELETAR (DELETE)
 @app.route('/api/produtos/<int:id_produto>', methods=['DELETE'])

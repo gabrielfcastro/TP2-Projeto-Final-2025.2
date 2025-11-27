@@ -78,12 +78,6 @@ export default function ProdutosPage() {
                 </div>
 
                 <div className="flex gap-3 pt-4 border-t border-zinc-800">
-                  <Link
-                    href={`/produtos/${prod.id}`}
-                    className="flex-1 bg-zinc-800 text-zinc-300 py-2 px-4 rounded hover:bg-zinc-700 hover:text-white transition text-center text-sm font-medium"
-                  >
-                    Editar
-                  </Link>
                   <button
                     onClick={() => handleDelete(prod.id)}
                     className="flex-1 bg-red-900/30 text-red-400 py-2 px-4 rounded hover:bg-red-900/50 hover:text-red-300 transition text-sm font-medium border border-red-900/50"

@@ -5,6 +5,7 @@ import { useState } from "react"
 export default function Login() {
   const [showRegister, setShowRegister] = useState(false)
   const [userType, setUserType] = useState("")
+  const [errors, setErrors] = useState<string[]>([])
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -12,6 +13,47 @@ export default function Login() {
     nomeBanca: "",
     localizacao: ""
   })
+
+  // Função de validação
+  const validateForm = () => {
+    const newErrors: string[] = []
+    
+    if (!formData.email) newErrors.push('Email é obrigatório')
+    if (!formData.password) newErrors.push('Senha é obrigatória')
+    if (showRegister && !formData.nome) newErrors.push('Nome é obrigatório')
+    if (showRegister && userType === "vendor" && !formData.nomeBanca) {
+      newErrors.push('Nome da banca é obrigatório')
+    }
+    if (showRegister && userType === "vendor" && !formData.localizacao) {
+      newErrors.push('Localização é obrigatória')
+    }
+    
+    setErrors(newErrors)
+    return newErrors.length === 0
+  }
+
+  // Função de submissão do formulário
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    
+    if (!validateForm()) return
+    
+    if (showRegister) {
+      console.log("Cadastro:", { ...formData, userType })
+      alert(`Cadastro realizado como ${userType}!`)
+    } else {
+      console.log("Login:", formData)
+      alert("Login realizado com sucesso!")
+    }
+  }
+
+  // Função para atualizar os campos do formulário
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target
+    setFormData(prev => ({ ...prev, [name]: value }))
+    // Limpa erros quando usuário começa a digitar
+    if (errors.length > 0) setErrors([])
+  }
 
   return (
     <div className="min-h-screen flex flex-col items-center bg-white p-4 pt-12 relative">    
@@ -24,8 +66,19 @@ export default function Login() {
         <h2 className="text-2xl font-bold text-black mb-8 text-center">
           {showRegister ? "Criar Conta" : "Entrar na Plataforma"}
         </h2>
+
+        {/* Mensagens de Erro */}
+        {errors.length > 0 && (
+          <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+            <ul className="list-disc list-inside space-y-1">
+              {errors.map((error, index) => (
+                <li key={index} className="text-sm">{error}</li>
+              ))}
+            </ul>
+          </div>
+        )}
       
-        <form className="flex flex-col gap-6">
+        <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
           {/* Seção de Seleção de Tipo de Usuário (apenas no cadastro) */}
           {showRegister && (
             <div className="mb-4">
@@ -78,7 +131,7 @@ export default function Login() {
               <input 
                 name="nome"
                 value={formData.nome}
-                onChange={(e) => setFormData({...formData, nome: e.target.value})}
+                onChange={handleInputChange}
                 placeholder="Nome completo" 
                 className="w-full h-14 text-lg px-4 bg-gray-100 rounded border border-gray-200 focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent text-black placeholder-gray-500"
               />
@@ -87,6 +140,9 @@ export default function Login() {
           
           <div>
             <input 
+              name="email"
+              value={formData.email}
+              onChange={handleInputChange}
               placeholder="E-mail" 
               className="w-full h-14 text-lg px-4 bg-gray-100 rounded border border-gray-200 focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent text-black placeholder-gray-500"
               type="email"
@@ -100,39 +156,48 @@ export default function Login() {
                 <input 
                   name="nomeBanca"
                   value={formData.nomeBanca}
-                  onChange={(e) => setFormData({...formData, nomeBanca: e.target.value})}
+                  onChange={handleInputChange}
                   placeholder="Nome da banca" 
                   className="w-full h-14 text-lg px-4 bg-gray-100 rounded border border-gray-200 focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent text-black placeholder-gray-500"
                 />
               </div>
               <div>
-                    <input 
-                      name="localizacao"
-                      value={formData.localizacao}
-                      onChange={(e) => setFormData({...formData, localizacao: e.target.value})}
-                      placeholder="Localização da banca" 
-                      className="w-full h-14 text-lg px-4 bg-gray-100 rounded border border-gray-200 focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent text-black placeholder-gray-500"
-                    />
+                <input 
+                  name="localizacao"
+                  value={formData.localizacao}
+                  onChange={handleInputChange}
+                  placeholder="Localização da banca" 
+                  className="w-full h-14 text-lg px-4 bg-gray-100 rounded border border-gray-200 focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent text-black placeholder-gray-500"
+                />
               </div>
             </>
           )}
 
           <div>
             <input 
+              name="password"
+              value={formData.password}
+              onChange={handleInputChange}
               type="password" 
               placeholder="Senha" 
               className="w-full h-14 text-lg px-4 bg-gray-100 rounded border border-gray-200 focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent text-black placeholder-gray-500"
             />
           </div>
 
-          <button className="w-full h-14 text-lg font-bold bg-black text-white rounded hover:bg-gray-800 shadow-md transition-colors mt-4">
+          <button 
+            type="submit"
+            className="w-full h-14 text-lg font-bold bg-black text-white rounded hover:bg-gray-800 shadow-md transition-colors mt-4"
+          >
             {showRegister ? "CRIAR CONTA" : "ENTRAR"}
           </button>
         </form>
 
         <div className="mt-6 text-center">
           <button
-            onClick={() => setShowRegister(!showRegister)}
+            onClick={() => {
+              setShowRegister(!showRegister)
+              setErrors([]) // Limpa erros ao alternar
+            }}
             className="text-black font-semibold hover:text-gray-800 underline"
           >
             {showRegister ? "Já tem uma conta? Faça login" : "Não tem uma conta? Cadastre-se"}

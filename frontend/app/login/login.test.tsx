@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor} from '@testing-library/react';
 import Login from '@/app/login/page';
 
 // Mock do Next.js
@@ -61,7 +61,7 @@ test('Teste 5/6 : Mostrar erro ao tentar login com campos vazios', async () => {
   });
 });
 
-test('Teste 5/6 : Mostrarostrar erro ao tentar cadastro com campos vazios', async () => {
+test('Teste 5/6 : Mostrar erro ao tentar cadastro com campos vazios', async () => {
   render(<Login />);
   
   fireEvent.click(screen.getByText('Não tem uma conta? Cadastre-se'));
@@ -74,6 +74,7 @@ test('Teste 5/6 : Mostrarostrar erro ao tentar cadastro com campos vazios', asyn
     expect(screen.getByText('Senha é obrigatória')).toBeInTheDocument();
   });
 });
+
 
 });
 

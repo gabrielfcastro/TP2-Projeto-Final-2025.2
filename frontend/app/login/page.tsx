@@ -93,6 +93,30 @@ export default function Login() {
             />
           </div>
 
+          {/* Campos específicos para feirante */}
+          {showRegister && userType === "vendor" && (
+            <>
+              <div>
+                <input 
+                  name="nomeBanca"
+                  value={formData.nomeBanca}
+                  onChange={(e) => setFormData({...formData, nomeBanca: e.target.value})}
+                  placeholder="Nome da banca" 
+                  className="w-full h-14 text-lg px-4 bg-gray-100 rounded border border-gray-200 focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent text-black placeholder-gray-500"
+                />
+              </div>
+              <div>
+                    <input 
+                      name="localizacao"
+                      value={formData.localizacao}
+                      onChange={(e) => setFormData({...formData, localizacao: e.target.value})}
+                      placeholder="Localização da banca" 
+                      className="w-full h-14 text-lg px-4 bg-gray-100 rounded border border-gray-200 focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent text-black placeholder-gray-500"
+                    />
+              </div>
+            </>
+          )}
+
           <div>
             <input 
               type="password" 

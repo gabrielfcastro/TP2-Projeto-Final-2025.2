@@ -71,7 +71,7 @@ class CriadorBancoDados:
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     usuario_id INTEGER,
                     nome_estabelecimento VARCHAR NOT NULL,
-                    link_wpp VARCHAR(255) NOT NULL
+                    link_wpp VARCHAR(255) NOT NULL,
                     avaliacao_media DECIMAL(3,2) DEFAULT 0.00,
                     total_avaliacoes INTEGER DEFAULT 0,
                     FOREIGN KEY (usuario_id) REFERENCES usuarios(id)

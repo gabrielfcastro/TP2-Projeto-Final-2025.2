@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import Login from '@/app/login/page';
 
 // Mock do Next.js
@@ -47,6 +47,32 @@ test('Teste 4: Mostrar campos específicos para feirante', () => {
   
   expect(screen.getByPlaceholderText('Nome da banca')).toBeInTheDocument();
   expect(screen.getByPlaceholderText('Localização da banca')).toBeInTheDocument();
+});
+
+test('Teste 5/6 : Mostrar erro ao tentar login com campos vazios', async () => {
+  render(<Login />);
+  
+  const submitButton = screen.getByRole('button', { name: 'ENTRAR' });
+  fireEvent.click(submitButton);
+  
+  await waitFor(() => {
+    expect(screen.getByText('Email é obrigatório')).toBeInTheDocument();
+    expect(screen.getByText('Senha é obrigatória')).toBeInTheDocument();
+  });
+});
+
+test('Teste 5/6 : Mostrarostrar erro ao tentar cadastro com campos vazios', async () => {
+  render(<Login />);
+  
+  fireEvent.click(screen.getByText('Não tem uma conta? Cadastre-se'));
+  const submitButton = screen.getByRole('button', { name: 'CRIAR CONTA' });
+  fireEvent.click(submitButton);
+  
+  await waitFor(() => {
+    expect(screen.getByText('Nome é obrigatório')).toBeInTheDocument();
+    expect(screen.getByText('Email é obrigatório')).toBeInTheDocument();
+    expect(screen.getByText('Senha é obrigatória')).toBeInTheDocument();
+  });
 });
 
 });

@@ -4,6 +4,13 @@ import { useState } from "react"
 
 export default function Login() {
   const [showRegister, setShowRegister] = useState(false)
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+    nome: "",
+    nomeBanca: "",
+    localizacao: ""
+  })
 
   return (
     <div className="min-h-screen flex flex-col items-center bg-white p-4 pt-12 relative">    
@@ -18,6 +25,19 @@ export default function Login() {
         </h2>
       
         <form className="flex flex-col gap-6">
+          {/* Campo Nome Completo - aparece apenas no cadastro */}
+          {showRegister && (
+            <div>
+              <input 
+                name="nome"
+                value={formData.nome}
+                onChange={(e) => setFormData({...formData, nome: e.target.value})}
+                placeholder="Nome completo" 
+                className="w-full h-14 text-lg px-4 bg-gray-100 rounded border border-gray-200 focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent text-black placeholder-gray-500"
+              />
+            </div>
+          )}
+          
           <div>
             <input 
               placeholder="E-mail" 
@@ -35,7 +55,7 @@ export default function Login() {
           </div>
 
           <button className="w-full h-14 text-lg font-bold bg-black text-white rounded hover:bg-gray-800 shadow-md transition-colors mt-4">
-            ENTRAR
+            {showRegister ? "CRIAR CONTA" : "ENTRAR"}
           </button>
         </form>
 

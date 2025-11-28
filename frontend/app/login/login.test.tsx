@@ -28,5 +28,16 @@ test('Alternar para cadastro quando clicar em Cadastre-se', () => {
   expect(screen.getByPlaceholderText('Nome completo')).toBeInTheDocument();
 });
 
+test('Seção de tipo de usuário no cadastro', () => {
+  render(<Login />);
+  
+  fireEvent.click(screen.getByText('Não tem uma conta? Cadastre-se'));
+  
+  expect(screen.getByText('Tipo de Conta:')).toBeInTheDocument();
+  expect(screen.getByText('Usuário')).toBeInTheDocument();
+  expect(screen.getByText('Feirante')).toBeInTheDocument();
+  expect(screen.getByText('Administrador')).toBeInTheDocument();
+});
+
 });
 

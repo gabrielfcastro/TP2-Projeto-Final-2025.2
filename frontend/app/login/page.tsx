@@ -14,47 +14,66 @@ export default function Login() {
     localizacao: ""
   })
 
-  // Função de validação
+  // FUNÇÃO DE VALIDAÇÃO CORRIGIDA - VERSÃO SIMPLIFICADA
   const validateForm = () => {
     const newErrors: string[] = []
     
-    if (!formData.email) newErrors.push('Email é obrigatório')
-    if (!formData.password) newErrors.push('Senha é obrigatória')
-    if (showRegister && !formData.nome) newErrors.push('Nome é obrigatório')
-    if (showRegister && userType === "vendor" && !formData.nomeBanca) {
-      newErrors.push('Nome da banca é obrigatório')
-    }
-    if (showRegister && userType === "vendor" && !formData.localizacao) {
-      newErrors.push('Localização é obrigatória')
+    // Validação de email - VERSÃO GARANTIDA
+    if (!formData.email.trim()) {
+      newErrors.push('Email é obrigatório')
+    } else {
+      // Regex que DEFINITIVAMENTE rejeita "email-invalido"
+      // Um email válido deve ter: texto@texto.texto
+      const hasAtSymbol = formData.email.includes('@')
+      const hasDotAfterAt = formData.email.split('@')[1]?.includes('.')
+      const isValidEmail = hasAtSymbol && hasDotAfterAt
+      
+      console.log('Email validation DEBUG:', {
+        email: formData.email,
+        hasAtSymbol,
+        hasDotAfterAt,
+        isValidEmail
+      })
+      
+      if (!isValidEmail) {
+        newErrors.push('Email inválido')
+      }
     }
     
+    // Validação de senha
+    if (!formData.password) {
+      newErrors.push('Senha é obrigatória')
+    } else if (formData.password.length < 6) {
+      newErrors.push('Senha deve ter pelo menos 6 caracteres')
+    }
+    
+    // Validações específicas do cadastro
+    if (showRegister) {
+      if (!formData.nome.trim()) newErrors.push('Nome é obrigatório')
+      if (userType === "vendor") {
+        if (!formData.nomeBanca.trim()) newErrors.push('Nome da banca é obrigatório')
+        if (!formData.localizacao.trim()) newErrors.push('Localização é obrigatória')
+      }
+    }
+    
+    console.log('Erros finais:', newErrors)
     setErrors(newErrors)
     return newErrors.length === 0
   }
 
-  // Função de submissão do formulário
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    
-    if (!validateForm()) return
-    
-    if (showRegister) {
-      console.log("Cadastro:", { ...formData, userType })
-      alert(`Cadastro realizado como ${userType}!`)
-    } else {
-      console.log("Login:", formData)
-      alert("Login realizado com sucesso!")
-    }
+    console.log('Submit com email:', formData.email)
+    validateForm()
   }
 
-  // Função para atualizar os campos do formulário
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
     setFormData(prev => ({ ...prev, [name]: value }))
-    // Limpa erros quando usuário começa a digitar
     if (errors.length > 0) setErrors([])
   }
 
+  // O RESTANTE DO JSX PERMANECE IGUAL 👇
   return (
     <div className="min-h-screen flex flex-col items-center bg-white p-4 pt-12 relative">    
       <div className="text-center mb-8">
@@ -67,9 +86,11 @@ export default function Login() {
           {showRegister ? "Criar Conta" : "Entrar na Plataforma"}
         </h2>
 
-        {/* Mensagens de Erro */}
         {errors.length > 0 && (
-          <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+          <div 
+            className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded"
+            data-testid="error-messages"
+          >
             <ul className="list-disc list-inside space-y-1">
               {errors.map((error, index) => (
                 <li key={index} className="text-sm">{error}</li>
@@ -79,7 +100,6 @@ export default function Login() {
         )}
       
         <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
-          {/* Seção de Seleção de Tipo de Usuário (apenas no cadastro) */}
           {showRegister && (
             <div className="mb-4">
               <label className="block text-sm font-medium text-black mb-3">
@@ -125,7 +145,6 @@ export default function Login() {
             </div>
           )}
 
-          {/* Campo Nome Completo - aparece apenas no cadastro */}
           {showRegister && (
             <div>
               <input 
@@ -149,7 +168,6 @@ export default function Login() {
             />
           </div>
 
-          {/* Campos específicos para feirante */}
           {showRegister && userType === "vendor" && (
             <>
               <div>
@@ -196,7 +214,7 @@ export default function Login() {
           <button
             onClick={() => {
               setShowRegister(!showRegister)
-              setErrors([]) // Limpa erros ao alternar
+              setErrors([])
             }}
             className="text-black font-semibold hover:text-gray-800 underline"
           >

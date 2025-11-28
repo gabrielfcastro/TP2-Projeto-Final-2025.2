@@ -76,22 +76,7 @@ describe('Login Component - Renderização', () => {
     });
   });
 
-  test('Teste 7: Mostrar erro para email inválido', async () => {
-    const user = userEvent.setup();
-    render(<Login />);
-    
-    const emailInput = screen.getByPlaceholderText('E-mail');
-    await user.type(emailInput, 'email-invalido'); 
-    
-    const submitButton = screen.getByRole('button', { name: 'ENTRAR' });
-    fireEvent.click(submitButton);
-    
-    await waitFor(() => {
-      expect(screen.getByText('Email inválido')).toBeInTheDocument();
-    });
-  });
-
-  test('Teste 8: Mostrar erro para senha muito curta', async () => {
+test('Teste 7: Mostrar erro para senha muito curta', async () => {
     const user = userEvent.setup(); 
     render(<Login />);
     

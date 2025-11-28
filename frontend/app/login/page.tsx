@@ -4,6 +4,7 @@ import { useState } from "react"
 
 export default function Login() {
   const [showRegister, setShowRegister] = useState(false)
+  const [userType, setUserType] = useState("")
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -25,6 +26,52 @@ export default function Login() {
         </h2>
       
         <form className="flex flex-col gap-6">
+          {/* Seção de Seleção de Tipo de Usuário (apenas no cadastro) */}
+          {showRegister && (
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-black mb-3">
+                Tipo de Conta:
+              </label>
+              <div className="grid grid-cols-1 gap-3">
+                <button
+                  type="button"
+                  onClick={() => setUserType("user")}
+                  className={`p-4 border-2 rounded-lg text-center transition-colors ${
+                    userType === "user" 
+                    ? "border-black bg-black text-white" 
+                    : "border-gray-300 bg-white text-black hover:border-gray-400"
+                  }`}
+                >
+                  <div className="font-semibold">Usuário</div>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setUserType("vendor")}
+                  className={`p-4 border-2 rounded-lg text-center transition-colors ${
+                    userType === "vendor" 
+                    ? "border-black bg-black text-white" 
+                    : "border-gray-300 bg-white text-black hover:border-gray-400"
+                  }`}
+                >
+                  <div className="font-semibold">Feirante</div>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setUserType("admin")}
+                  className={`p-4 border-2 rounded-lg text-center transition-colors ${
+                    userType === "admin" 
+                    ? "border-black bg-black text-white" 
+                    : "border-gray-300 bg-white text-black hover:border-gray-400"
+                  }`}
+                >
+                  <div className="font-semibold">Administrador</div>
+                </button>
+              </div>
+            </div>
+          )}
+
           {/* Campo Nome Completo - aparece apenas no cadastro */}
           {showRegister && (
             <div>

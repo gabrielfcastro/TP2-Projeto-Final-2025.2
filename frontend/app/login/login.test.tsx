@@ -7,7 +7,7 @@ jest.mock('next/link', () => {
 });
 
 describe('Login Component - Renderização', () => {
-  test('Renderizar o formulário de login inicial', () => {
+  test('Teste 1: Renderizar o formulário de login inicial', () => {
     render(<Login />);
     
     expect(screen.getByText('iFeiranet')).toBeInTheDocument();
@@ -18,7 +18,7 @@ describe('Login Component - Renderização', () => {
     expect(screen.getByText('Não tem uma conta? Cadastre-se')).toBeInTheDocument();
   });
 
-test('Alternar para cadastro quando clicar em Cadastre-se', () => {
+test('Teste 2: Alternar para cadastro quando clicar em Cadastre-se', () => {
   render(<Login />);
   
   const cadastroLink = screen.getByText('Não tem uma conta? Cadastre-se');
@@ -28,7 +28,7 @@ test('Alternar para cadastro quando clicar em Cadastre-se', () => {
   expect(screen.getByPlaceholderText('Nome completo')).toBeInTheDocument();
 });
 
-test('Seção de tipo de usuário no cadastro', () => {
+test('Teste 3: Seção de tipo de usuário no cadastro', () => {
   render(<Login />);
   
   fireEvent.click(screen.getByText('Não tem uma conta? Cadastre-se'));
@@ -37,6 +37,16 @@ test('Seção de tipo de usuário no cadastro', () => {
   expect(screen.getByText('Usuário')).toBeInTheDocument();
   expect(screen.getByText('Feirante')).toBeInTheDocument();
   expect(screen.getByText('Administrador')).toBeInTheDocument();
+});
+
+test('Teste 4: Mostrar campos específicos para feirante', () => {
+  render(<Login />);
+  
+  fireEvent.click(screen.getByText('Não tem uma conta? Cadastre-se'));
+  fireEvent.click(screen.getByText('Feirante'));
+  
+  expect(screen.getByPlaceholderText('Nome da banca')).toBeInTheDocument();
+  expect(screen.getByPlaceholderText('Localização da banca')).toBeInTheDocument();
 });
 
 });

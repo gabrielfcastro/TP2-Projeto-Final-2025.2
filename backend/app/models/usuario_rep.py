@@ -6,7 +6,7 @@ import bcrypt
 PADRAO_NOME = r"^[a-zA-Z\s]{2,20}$"
 PADRAO_SENHA = r"^(?=.*[A-Z])(?=.*[!@#$%&*])(?=.*[0-9])(?=.*[a-z]).{8,16}$"
 PADRAO_EMAIL = r"^[A-Za-z0-9.-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{,65}$"
-PADRAO_PAPEL = r"^(Cliente|Feirante|Admin)$"
+PADRAO_PAPEL = r"^(Usuario|Cliente|Feirante|Admin)$"
 
 usuario = metadata.tables.get("usuarios")
 if usuario is None:

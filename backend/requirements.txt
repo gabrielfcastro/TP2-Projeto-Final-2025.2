@@ -4,3 +4,5 @@ Flask-JWT-Extended
 pylint
 pytest-cov
 SQLAlchemy
+python-dotenv
+flask_cors

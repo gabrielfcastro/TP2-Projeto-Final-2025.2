@@ -1,9 +1,18 @@
 # -*- coding: utf-8 -*-
 from flask import Flask, jsonify, request
 from flask_cors import CORS
+from flask_jwt_extended import JWTManager
+from datetime import timedelta
+from dotenv import load_dotenv
+import os
+
+dir = os.path.abspath(os.path.dirname(__file__))
+load_dotenv(os.path.join(dir, ".env"))
 
 app = Flask(__name__)
 CORS(app) # Permite que o Next.js acesse o Python
+app.config["JWT_SECRET_KEY"] = os.environ.get('JWT_KEY')
+app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=1)
 
 # --- BANCO DE DADOS EM MEMÓRIA (Global) ---
 # Fica fora das funções para guardar as alterações enquanto o servidor roda

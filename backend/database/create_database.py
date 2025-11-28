@@ -168,8 +168,8 @@ class CriadorBancoDados:
                 CREATE TABLE IF NOT EXISTS historico_buscas (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     usuario_id INTEGER,
-                    produto_buscado VARCHAR NOT NULL,
-                    feirante_buscado VARCHAR NOT NULL,
+                    produto_buscado TEXT,
+                    feirante_buscado TEXT,
                     FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
                 )
             ''')

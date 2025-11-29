@@ -85,3 +85,16 @@ test('não deve adicionar produto sem nome e preço', () => {
   // Quantidade deve permanecer a mesma
   expect(screen.getAllByText('Excluir Produto')).toHaveLength(quantidadeInicial);
 });
+
+test('deve mostrar confirmação ao excluir produto', () => {
+  // Mock do window.confirm
+  window.confirm = jest.fn(() => true);
+  
+  render(<LojaFeirantePage />);
+  fireEvent.click(screen.getByText('Feirante'));
+  
+  const botoesExcluir = screen.getAllByText('Excluir Produto');
+  fireEvent.click(botoesExcluir[0]);
+  
+  expect(window.confirm).toHaveBeenCalledWith('Tem certeza que deseja excluir este produto?');
+});

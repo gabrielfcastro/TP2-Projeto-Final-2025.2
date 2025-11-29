@@ -87,7 +87,7 @@ export default function LojaFeirantePage() {
                   : "bg-zinc-100 text-zinc-600 hover:bg-zinc-200"
               }`}
             >
-              👤 Usuário
+              Usuário
             </button>
             <button
               onClick={() => setTipoUsuario("feirante")}
@@ -97,7 +97,7 @@ export default function LojaFeirantePage() {
                   : "bg-zinc-100 text-zinc-600 hover:bg-zinc-200"
               }`}
             >
-              👨‍🌾 Feirante
+              Feirante
             </button>
           </div>
         </div>
@@ -106,7 +106,7 @@ export default function LojaFeirantePage() {
         <div className="bg-white rounded-2xl shadow-lg p-8 mb-8 border border-zinc-200">
           <div className="flex items-center gap-6">
             <div className="bg-green-100 p-4 rounded-full">
-              <span className="text-4xl">👨‍🌾</span>
+              <span className="text-4xl">F</span>
             </div>
             <div className="flex-1">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-2">
@@ -125,10 +125,10 @@ export default function LojaFeirantePage() {
               
               <div className="flex flex-wrap gap-4 text-zinc-500">
                 <div className="flex items-center gap-2">
-                  📍 {feirante.localizacao}
+                  Local: {feirante.localizacao}
                 </div>
                 <div className="flex items-center gap-2">
-                  📞 {feirante.telefone}
+                  Tel: {feirante.telefone}
                 </div>
               </div>
             </div>
@@ -239,7 +239,7 @@ export default function LojaFeirantePage() {
                 >
                   <div className="mb-4">
                     <div className="bg-green-50 w-12 h-12 rounded-lg flex items-center justify-center mb-3">
-                      <span className="text-xl">🛒</span>
+                      <span className="text-xl">P</span>
                     </div>
                     
                     <h3 className="text-xl font-semibold text-zinc-900 mb-2">

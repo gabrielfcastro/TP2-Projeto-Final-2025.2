@@ -72,3 +72,26 @@ test('não deve adicionar conta sem nome e email', () => {
   
   expect(screen.getAllByText(/Remover Conta/)).toHaveLength(contasIniciais);
 });
+
+// Teste 7: Verifica filtro de contas
+test('deve filtrar contas por tipo', () => {
+  render(<RelatoriosPage />);
+  
+  const filtroSelect = screen.getByDisplayValue('todos');
+  fireEvent.change(filtroSelect, { target: { value: 'feirante' } });
+  
+  expect(screen.getByText('Feirantes (2)')).toBeInTheDocument();
+  expect(screen.getByText('Maria Santos')).toBeInTheDocument();
+  expect(screen.getByText('Carlos Oliveira')).toBeInTheDocument();
+});
+
+// Teste 8: Verifica confirmação de remoção
+test('deve mostrar confirmação ao remover conta', () => {
+  window.confirm = jest.fn(() => true);
+  render(<RelatoriosPage />);
+  
+  const botoesRemover = screen.getAllByText('Remover Conta');
+  fireEvent.click(botoesRemover[0]);
+  
+  expect(window.confirm).toHaveBeenCalledWith('Tem certeza que deseja remover esta conta?');
+});

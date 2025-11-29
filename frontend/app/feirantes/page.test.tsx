@@ -44,3 +44,13 @@ test('deve alternar entre visão do usuário e feirante', () => {
   fireEvent.click(screen.getByText('Usuário'));
   expect(screen.getByText('Produtos Disponíveis')).toBeInTheDocument();
 });
+
+test('deve exibir formulário de cadastro na visão feirante', () => {
+  render(<LojaFeirantePage />);
+  fireEvent.click(screen.getByText('Feirante'));
+  
+  expect(screen.getByPlaceholderText('Ex: Tomate Italiano')).toBeInTheDocument();
+  expect(screen.getByPlaceholderText('Ex: Produto fresco colhido hoje')).toBeInTheDocument();
+  expect(screen.getByPlaceholderText('Ex: 8.90')).toBeInTheDocument();
+  expect(screen.getByDisplayValue('kg')).toBeInTheDocument();
+});

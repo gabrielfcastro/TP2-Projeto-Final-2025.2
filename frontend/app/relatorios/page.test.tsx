@@ -117,3 +117,21 @@ test('deve exibir relatório de uso do sistema', () => {
   expect(screen.getAllByText('1247').length).toBeGreaterThan(0); // Buscas realizadas
   expect(screen.getByText('Uso do Sistema')).toBeInTheDocument();
 });
+
+// Teste 12: Verifica tipos de conta
+test('deve exibir tipos de conta corretamente', () => {
+  render(<RelatoriosPage />);
+  
+  expect(screen.getAllByText('usuario').length).toBeGreaterThan(0);
+  expect(screen.getAllByText('feirante').length).toBeGreaterThan(0);
+  expect(screen.getAllByText('admin').length).toBeGreaterThan(0);
+});
+
+// Teste 13: Verifica informações completas da conta
+test('deve exibir informações completas das contas', () => {
+  render(<RelatoriosPage />);
+  
+  expect(screen.getByText('joao@email.com')).toBeInTheDocument();
+  expect(screen.getByText('(11) 99999-9999')).toBeInTheDocument();
+  expect(screen.getByText('Cadastro: 2024-01-15')).toBeInTheDocument();
+});

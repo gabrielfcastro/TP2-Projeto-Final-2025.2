@@ -21,3 +21,12 @@ test('deve exibir informações completas do feirante', () => {
   expect(screen.getByText(/Barraca 15/)).toBeInTheDocument(); // Regex para parte do texto
   expect(screen.getByText(/\(11\) 99999-9999/)).toBeInTheDocument(); // Regex para telefone
 });
+
+test('deve exibir lista de produtos para usuários', () => {
+  render(<LojaFeirantePage />);
+  
+  expect(screen.getByText('Tomate Italiano')).toBeInTheDocument();
+  expect(screen.getByText('Alface Crespa')).toBeInTheDocument();
+  expect(screen.getByText('Cenoura')).toBeInTheDocument();
+  expect(screen.getAllByText('Ver Produto')).toHaveLength(3);
+});

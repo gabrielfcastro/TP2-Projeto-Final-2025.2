@@ -6,6 +6,7 @@ export default function Login() {
   const [showRegister, setShowRegister] = useState(false)
   const [userType, setUserType] = useState("")
   const [errors, setErrors] = useState<string[]>([])
+  const [isLoading, setIsLoading] = useState(false)
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -61,10 +62,32 @@ export default function Login() {
     return newErrors.length === 0
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // ATUALIZAR handleSubmit com estado de loading
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    console.log('Submit com email:', formData.email)
-    validateForm()
+    setIsLoading(true)
+
+    if (!validateForm()) {
+      setIsLoading(false)
+      return
+    }
+
+    try {
+      // Simular chamada API
+      await new Promise(resolve => setTimeout(resolve, 1000))
+      
+      if (showRegister) {
+        console.log("Cadastro:", { ...formData, userType })
+        alert(`Cadastro realizado como ${userType}!`)
+      } else {
+        console.log("Login:", formData)
+        alert("Login realizado com sucesso!")
+      }
+    } catch (error) {
+      setErrors(['Erro ao processar solicitação'])
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -73,7 +96,6 @@ export default function Login() {
     if (errors.length > 0) setErrors([])
   }
 
-  // O RESTANTE DO JSX PERMANECE IGUAL 👇
   return (
     <div className="min-h-screen flex flex-col items-center bg-white p-4 pt-12 relative">    
       <div className="text-center mb-8">
@@ -202,11 +224,13 @@ export default function Login() {
             />
           </div>
 
+          {/* ATUALIZAR BOTÃO COM ESTADO DE LOADING */}
           <button 
             type="submit"
-            className="w-full h-14 text-lg font-bold bg-black text-white rounded hover:bg-gray-800 shadow-md transition-colors mt-4"
+            disabled={isLoading}
+            className="w-full h-14 text-lg font-bold bg-black text-white rounded hover:bg-gray-800 shadow-md transition-colors mt-4 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {showRegister ? "CRIAR CONTA" : "ENTRAR"}
+            {isLoading ? "PROCESSANDO..." : (showRegister ? "CRIAR CONTA" : "ENTRAR")}
           </button>
         </form>
 

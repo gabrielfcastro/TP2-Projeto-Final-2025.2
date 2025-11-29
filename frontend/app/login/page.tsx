@@ -1,84 +1,41 @@
 "use client"
 
 import { useState } from "react"
+import { UserType, FormData } from './components/types/user'
+import { useFormValidation } from './components/hooks/useFormValidation'
 
 export default function Login() {
   const [showRegister, setShowRegister] = useState(false)
-  const [userType, setUserType] = useState("")
+  const [userType, setUserType] = useState<UserType>("user")
   const [errors, setErrors] = useState<string[]>([])
   const [isLoading, setIsLoading] = useState(false)
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-    nome: "",
-    nomeBanca: "",
-    localizacao: ""
+  const [formData, setFormData] = useState<FormData>({
+    email: "", password: "", nome: "", nomeBanca: "", localizacao: ""
   })
 
-  // FUNÇÃO DE VALIDAÇÃO CORRIGIDA - VERSÃO SIMPLIFICADA
-  const validateForm = () => {
-    const newErrors: string[] = []
-    
-    // Validação de email - VERSÃO GARANTIDA
-    if (!formData.email.trim()) {
-      newErrors.push('Email é obrigatório')
-    } else {
-      // Regex que DEFINITIVAMENTE rejeita "email-invalido"
-      // Um email válido deve ter: texto@texto.texto
-      const hasAtSymbol = formData.email.includes('@')
-      const hasDotAfterAt = formData.email.split('@')[1]?.includes('.')
-      const isValidEmail = hasAtSymbol && hasDotAfterAt
-      
-      console.log('Email validation DEBUG:', {
-        email: formData.email,
-        hasAtSymbol,
-        hasDotAfterAt,
-        isValidEmail
-      })
-      
-      if (!isValidEmail) {
-        newErrors.push('Email inválido')
-      }
-    }
-    
-    // Validação de senha
-    if (!formData.password) {
-      newErrors.push('Senha é obrigatória')
-    } else if (formData.password.length < 6) {
-      newErrors.push('Senha deve ter pelo menos 6 caracteres')
-    }
-    
-    // Validações específicas do cadastro
-    if (showRegister) {
-      if (!formData.nome.trim()) newErrors.push('Nome é obrigatório')
-      if (userType === "vendor") {
-        if (!formData.nomeBanca.trim()) newErrors.push('Nome da banca é obrigatório')
-        if (!formData.localizacao.trim()) newErrors.push('Localização é obrigatória')
-      }
-    }
-    
-    console.log('Erros finais:', newErrors)
-    setErrors(newErrors)
-    return newErrors.length === 0
-  }
+  const { validateForm } = useFormValidation()
 
-  // ATUALIZAR handleSubmit com estado de loading
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
 
-    if (!validateForm()) {
+    const validationErrors = validateForm(formData, showRegister, userType)
+    
+    if (validationErrors.length > 0) {
+      setErrors(validationErrors)
       setIsLoading(false)
       return
     }
 
+    setErrors([])
+
     try {
-      // Simular chamada API
       await new Promise(resolve => setTimeout(resolve, 1000))
       
       if (showRegister) {
         console.log("Cadastro:", { ...formData, userType })
-        alert(`Cadastro realizado como ${userType}!`)
+        alert(`Cadastro realizado como ${userType === 'vendor' ? 'Feirante' : 'Usuário'}!`)
+        setShowRegister(false)
       } else {
         console.log("Login:", formData)
         alert("Login realizado com sucesso!")
@@ -96,154 +53,189 @@ export default function Login() {
     if (errors.length > 0) setErrors([])
   }
 
+  const resetForm = () => {
+    setShowRegister(!showRegister)
+    setErrors([])
+    setUserType("user")
+    setFormData({ email: "", password: "", nome: "", nomeBanca: "", localizacao: "" })
+  }
+
   return (
-    <div className="min-h-screen flex flex-col items-center bg-white p-4 pt-12 relative">    
-      <div className="text-center mb-8">
-        <h1 className="text-4xl font-bold text-black mb-2">iFeiranet</h1>
-        <p className="text-gray-600">Seu sistema de Compras e busca em Feiras</p>
-      </div>
-
-      <div className="w-full max-w-md bg-white rounded-lg shadow-lg border border-gray-200 p-8">
-        <h2 className="text-2xl font-bold text-black mb-8 text-center">
-          {showRegister ? "Criar Conta" : "Entrar na Plataforma"}
-        </h2>
-
-        {errors.length > 0 && (
-          <div 
-            className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded"
-            data-testid="error-messages"
-          >
-            <ul className="list-disc list-inside space-y-1">
-              {errors.map((error, index) => (
-                <li key={index} className="text-sm">{error}</li>
-              ))}
-            </ul>
+    <div className="min-h-screen bg-zinc-950 flex items-center justify-center p-4">
+      <div className="w-full max-w-md">
+        {/* Card Principal */}
+        <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-8 shadow-2xl">
+          {/* Header */}
+          <div className="text-center mb-8">
+            <h1 className="text-3xl font-bold text-white mb-2">
+              {showRegister ? 'Criar Conta' : 'iFeiranet'}
+            </h1>
+            <p className="text-zinc-400">
+              {showRegister ? 'Preencha seus dados para começar' : 'Entre na sua conta para continuar'}
+            </p>
           </div>
-        )}
-      
-        <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
-          {showRegister && (
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-black mb-3">
-                Tipo de Conta:
-              </label>
-              <div className="grid grid-cols-1 gap-3">
-                <button
-                  type="button"
-                  onClick={() => setUserType("user")}
-                  className={`p-4 border-2 rounded-lg text-center transition-colors ${
-                    userType === "user" 
-                    ? "border-black bg-black text-white" 
-                    : "border-gray-300 bg-white text-black hover:border-gray-400"
-                  }`}
-                >
-                  <div className="font-semibold">Usuário</div>
-                </button>
 
-                <button
-                  type="button"
-                  onClick={() => setUserType("vendor")}
-                  className={`p-4 border-2 rounded-lg text-center transition-colors ${
-                    userType === "vendor" 
-                    ? "border-black bg-black text-white" 
-                    : "border-gray-300 bg-white text-black hover:border-gray-400"
-                  }`}
-                >
-                  <div className="font-semibold">Feirante</div>
-                </button>
+          {/* Formulário */}
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Campos de Cadastro */}
+            {showRegister && (
+              <>
+                {/* Nome Completo */}
+                <div>
+                  <label className="block text-zinc-400 text-sm font-medium mb-2">
+                    Nome completo
+                  </label>
+                  <input
+                    type="text"
+                    name="nome"
+                    placeholder="Digite seu nome completo"
+                    value={formData.nome}
+                    onChange={handleInputChange}
+                    className="w-full bg-zinc-800 text-white placeholder-zinc-500 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500 transition-all duration-200"
+                  />
+                </div>
 
-                <button
-                  type="button"
-                  onClick={() => setUserType("admin")}
-                  className={`p-4 border-2 rounded-lg text-center transition-colors ${
-                    userType === "admin" 
-                    ? "border-black bg-black text-white" 
-                    : "border-gray-300 bg-white text-black hover:border-gray-400"
-                  }`}
-                >
-                  <div className="font-semibold">Administrador</div>
-                </button>
-              </div>
-            </div>
-          )}
+                {/* Tipo de Conta */}
+                <div>
+                  <label className="block text-zinc-400 text-sm font-medium mb-3">
+                    Tipo de Conta
+                  </label>
+                  <div className="grid grid-cols-3 gap-2">
+                    {[
+                      { value: 'user', label: 'Usuário' },
+                      { value: 'vendor', label: 'Feirante' },
+                      { value: 'admin', label: 'Admin' }
+                    ].map((type) => (
+                      <button
+                        key={type.value}
+                        type="button"
+                        onClick={() => setUserType(type.value as UserType)}
+                        className={`py-2 px-3 rounded-lg text-sm font-medium transition-all duration-200 ${
+                          userType === type.value
+                            ? 'bg-blue-600 text-white ring-2 ring-blue-500'
+                            : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700'
+                        }`}
+                      >
+                        {type.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
 
-          {showRegister && (
+                {/* Campos específicos para Feirante */}
+                {userType === 'vendor' && (
+                  <div className="space-y-4 p-4 bg-zinc-800/50 rounded-lg border border-zinc-700">
+                    <div>
+                      <label className="block text-zinc-400 text-sm font-medium mb-2">
+                        Nome da banca
+                      </label>
+                      <input
+                        type="text"
+                        name="nomeBanca"
+                        placeholder="Digite o nome da sua banca"
+                        value={formData.nomeBanca}
+                        onChange={handleInputChange}
+                        className="w-full bg-zinc-800 text-white placeholder-zinc-500 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500 transition-all duration-200"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-zinc-400 text-sm font-medium mb-2">
+                        Localização da banca
+                      </label>
+                      <input
+                        type="text"
+                        name="localizacao"
+                        placeholder="Digite a localização da banca"
+                        value={formData.localizacao}
+                        onChange={handleInputChange}
+                        className="w-full bg-zinc-800 text-white placeholder-zinc-500 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500 transition-all duration-200"
+                      />
+                    </div>
+                  </div>
+                )}
+              </>
+            )}
+
+            {/* Email */}
             <div>
-              <input 
-                name="nome"
-                value={formData.nome}
+              <label className="block text-zinc-400 text-sm font-medium mb-2">
+                E-mail
+              </label>
+              <input
+                type="email"
+                name="email"
+                placeholder="seu@email.com"
+                value={formData.email}
                 onChange={handleInputChange}
-                placeholder="Nome completo" 
-                className="w-full h-14 text-lg px-4 bg-gray-100 rounded border border-gray-200 focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent text-black placeholder-gray-500"
+                className="w-full bg-zinc-800 text-white placeholder-zinc-500 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500 transition-all duration-200"
               />
             </div>
-          )}
-          
-          <div>
-            <input 
-              name="email"
-              value={formData.email}
-              onChange={handleInputChange}
-              placeholder="E-mail" 
-              className="w-full h-14 text-lg px-4 bg-gray-100 rounded border border-gray-200 focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent text-black placeholder-gray-500"
-              type="email"
-            />
+
+            {/* Senha */}
+            <div>
+              <label className="block text-zinc-400 text-sm font-medium mb-2">
+                Senha
+              </label>
+              <input
+                type="password"
+                name="password"
+                placeholder="Digite sua senha"
+                value={formData.password}
+                onChange={handleInputChange}
+                className="w-full bg-zinc-800 text-white placeholder-zinc-500 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500 transition-all duration-200"
+              />
+            </div>
+
+            {/* Botão Principal */}
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="w-full bg-green-600 hover:bg-green-500 disabled:bg-zinc-600 disabled:cursor-not-allowed text-white font-semibold py-3 px-4 rounded-lg transition-all duration-200 flex items-center justify-center"
+            >
+              {isLoading ? (
+                <>
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                  PROCESSANDO...
+                </>
+              ) : (
+                showRegister ? 'CRIAR CONTA' : 'ENTRAR'
+              )}
+            </button>
+          </form>
+
+          {/* Alternar entre Login e Cadastro */}
+          <div className="mt-6 text-center">
+            <button
+              type="button"
+              onClick={resetForm}
+              className="text-blue-400 hover:text-blue-300 font-medium transition-colors duration-200"
+            >
+              {showRegister ? 'Já tem uma conta? Faça login' : 'Não tem uma conta? Cadastre-se'}
+            </button>
           </div>
 
-          {showRegister && userType === "vendor" && (
-            <>
-              <div>
-                <input 
-                  name="nomeBanca"
-                  value={formData.nomeBanca}
-                  onChange={handleInputChange}
-                  placeholder="Nome da banca" 
-                  className="w-full h-14 text-lg px-4 bg-gray-100 rounded border border-gray-200 focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent text-black placeholder-gray-500"
-                />
+          {/* Mensagens de Erro */}
+          {errors.length > 0 && (
+            <div className="mt-6 p-4 bg-red-900/20 border border-red-800/50 rounded-lg">
+              <div className="space-y-2">
+                {errors.map((error, index) => (
+                  <p key={index} className="text-red-400 text-sm flex items-center">
+                    <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                    </svg>
+                    {error}
+                  </p>
+                ))}
               </div>
-              <div>
-                <input 
-                  name="localizacao"
-                  value={formData.localizacao}
-                  onChange={handleInputChange}
-                  placeholder="Localização da banca" 
-                  className="w-full h-14 text-lg px-4 bg-gray-100 rounded border border-gray-200 focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent text-black placeholder-gray-500"
-                />
-              </div>
-            </>
+            </div>
           )}
+        </div>
 
-          <div>
-            <input 
-              name="password"
-              value={formData.password}
-              onChange={handleInputChange}
-              type="password" 
-              placeholder="Senha" 
-              className="w-full h-14 text-lg px-4 bg-gray-100 rounded border border-gray-200 focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent text-black placeholder-gray-500"
-            />
-          </div>
-
-          {/* ATUALIZAR BOTÃO COM ESTADO DE LOADING */}
-          <button 
-            type="submit"
-            disabled={isLoading}
-            className="w-full h-14 text-lg font-bold bg-black text-white rounded hover:bg-gray-800 shadow-md transition-colors mt-4 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {isLoading ? "PROCESSANDO..." : (showRegister ? "CRIAR CONTA" : "ENTRAR")}
-          </button>
-        </form>
-
-        <div className="mt-6 text-center">
-          <button
-            onClick={() => {
-              setShowRegister(!showRegister)
-              setErrors([])
-            }}
-            className="text-black font-semibold hover:text-gray-800 underline"
-          >
-            {showRegister ? "Já tem uma conta? Faça login" : "Não tem uma conta? Cadastre-se"}
-          </button>
+        {/* Footer */}
+        <div className="text-center mt-6">
+          <p className="text-zinc-600 text-sm">
+            © 2025 iFeiranet - Plataforma de Feiras
+          </p>
         </div>
       </div>
     </div>

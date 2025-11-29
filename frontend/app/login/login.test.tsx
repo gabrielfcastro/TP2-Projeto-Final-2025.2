@@ -1,5 +1,5 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event'; // ✅ Adicione esta importação
+import userEvent from '@testing-library/user-event'; 
 import Login from '@/app/login/page';
 
 // Mock do Next.js

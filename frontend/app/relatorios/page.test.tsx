@@ -97,3 +97,23 @@ test('deve exibir mensagem quando não há contas', () => {
   
   expect(screen.getByText('Nenhuma conta encontrada')).toBeInTheDocument();
 });
+
+// Teste 9: Verifica relatório de feirantes
+test('deve exibir relatório de desempenho dos feirantes', () => {
+  render(<RelatoriosPage />);
+  
+  expect(screen.getByText('Feira do Seu Zé')).toBeInTheDocument();
+  expect(screen.getByText('45 produtos vendidos')).toBeInTheDocument();
+  expect(screen.getByText('R$ 1250.00')).toBeInTheDocument();
+  expect(screen.getByText('Hortifruti Fresco')).toBeInTheDocument();
+  expect(screen.getByText('28 produtos vendidos')).toBeInTheDocument();
+});
+
+// Teste 10: Verifica relatório de uso do sistema
+test('deve exibir relatório de uso do sistema', () => {
+  render(<RelatoriosPage />);
+  
+  // Verifica apenas o que sabemos que existe
+  expect(screen.getAllByText('1247').length).toBeGreaterThan(0); // Buscas realizadas
+  expect(screen.getByText('Uso do Sistema')).toBeInTheDocument();
+});

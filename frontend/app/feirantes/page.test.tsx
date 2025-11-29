@@ -1,16 +1,15 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import LojaFeirantePage from './page';
+
+// Mock do window.confirm para testes
+beforeEach(() => {
+  window.confirm = jest.fn(() => true);
+});
 
 test('deve renderizar a página do feirante', () => {
   render(<LojaFeirantePage />);
   expect(screen.getByText('Feira do Seu Zé')).toBeInTheDocument();
 });
-
-import { render, screen } from '@testing-library/react';
-import LojaFeirantePage from './page';
-
-import { render, screen } from '@testing-library/react';
-import LojaFeirantePage from './page';
 
 test('deve exibir informações completas do feirante', () => {
   render(<LojaFeirantePage />);
@@ -18,8 +17,8 @@ test('deve exibir informações completas do feirante', () => {
   expect(screen.getByText('Feira do Seu Zé')).toBeInTheDocument();
   expect(screen.getByText('2.5 km de você')).toBeInTheDocument();
   expect(screen.getByText('Produtos frescos direto da roça')).toBeInTheDocument();
-  expect(screen.getByText(/Barraca 15/)).toBeInTheDocument(); // Regex para parte do texto
-  expect(screen.getByText(/\(11\) 99999-9999/)).toBeInTheDocument(); // Regex para telefone
+  expect(screen.getByText(/Barraca 15/)).toBeInTheDocument();
+  expect(screen.getByText(/\(11\) 99999-9999/)).toBeInTheDocument();
 });
 
 test('deve exibir lista de produtos para usuários', () => {
@@ -29,4 +28,19 @@ test('deve exibir lista de produtos para usuários', () => {
   expect(screen.getByText('Alface Crespa')).toBeInTheDocument();
   expect(screen.getByText('Cenoura')).toBeInTheDocument();
   expect(screen.getAllByText('Ver Produto')).toHaveLength(3);
+});
+
+test('deve alternar entre visão do usuário e feirante', () => {
+  render(<LojaFeirantePage />);
+  
+  // Inicia na visão do usuário
+  expect(screen.getByText('Produtos Disponíveis')).toBeInTheDocument();
+  
+  // Alterna para feirante
+  fireEvent.click(screen.getByText('Feirante'));
+  expect(screen.getByText('Meus Produtos')).toBeInTheDocument();
+  
+  // Volta para usuário
+  fireEvent.click(screen.getByText('Usuário'));
+  expect(screen.getByText('Produtos Disponíveis')).toBeInTheDocument();
 });

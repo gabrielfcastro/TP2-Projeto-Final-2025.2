@@ -73,18 +73,18 @@ export default function LojaFeirantePage() {
   };
 
   return (
-    <main className="min-h-screen bg-zinc-50 p-6">
+    <main className="min-h-screen bg-zinc-950 p-6">
       <div className="max-w-6xl mx-auto">
 
         {/* Seletor de Tipo de Usuário (apenas para demonstração) */}
         <div className="flex justify-center mb-6">
-          <div className="bg-white p-2 rounded-lg shadow-md flex gap-2">
+          <div className="bg-zinc-900 p-2 rounded-lg border border-zinc-800 flex gap-2">
             <button
               onClick={() => setTipoUsuario("usuario")}
               className={`px-4 py-2 rounded-md transition-colors ${
                 tipoUsuario === "usuario" 
                   ? "bg-green-600 text-white" 
-                  : "bg-zinc-100 text-zinc-600 hover:bg-zinc-200"
+                  : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700"
               }`}
             >
               Usuário
@@ -94,7 +94,7 @@ export default function LojaFeirantePage() {
               className={`px-4 py-2 rounded-md transition-colors ${
                 tipoUsuario === "feirante" 
                   ? "bg-green-600 text-white" 
-                  : "bg-zinc-100 text-zinc-600 hover:bg-zinc-200"
+                  : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700"
               }`}
             >
               Feirante
@@ -103,23 +103,23 @@ export default function LojaFeirantePage() {
         </div>
         
         {/* Cabeçalho da Loja */}
-        <div className="bg-white rounded-2xl shadow-lg p-8 mb-8 border border-zinc-200">
+        <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-8 mb-8">
           <div className="flex items-center gap-6">
-            <div className="bg-green-100 p-4 rounded-full">
-              <span className="text-4xl">F</span>
+            <div className="bg-green-900/50 p-4 rounded-full border border-green-800/50">
+              <span className="text-4xl text-green-400">F</span>
             </div>
             <div className="flex-1">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-2">
-                <h1 className="text-3xl font-bold text-zinc-900">
+                <h1 className="text-3xl font-bold text-white">
                   {feirante.nome}
                 </h1>
-                <div className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-medium flex items-center gap-1">
+                <div className="bg-blue-900/50 text-blue-400 border border-blue-800/50 px-3 py-1 rounded-full text-sm font-medium flex items-center gap-1">
                   <span>📍</span>
                   {feirante.distancia}
                 </div>
               </div>
               
-              <p className="text-zinc-600 text-lg mb-3">
+              <p className="text-zinc-400 text-lg mb-3">
                 {feirante.descricao}
               </p>
               
@@ -137,40 +137,40 @@ export default function LojaFeirantePage() {
 
         {/* VISÃO DO FEIRANTE - Formulário para adicionar produtos */}
         {tipoUsuario === "feirante" && (
-          <div className="bg-white rounded-2xl shadow-lg p-6 mb-8 border border-zinc-200">
-            <h2 className="text-2xl font-bold text-zinc-900 mb-4">
+          <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 mb-8">
+            <h2 className="text-2xl font-bold text-white mb-4">
               Adicionar Novo Produto
             </h2>
             <form onSubmit={adicionarProduto} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               <div>
-                <label className="block text-sm font-medium text-zinc-700 mb-1">
+                <label className="block text-sm font-medium text-zinc-400 mb-1">
                   Nome do Produto
                 </label>
                 <input
                   type="text"
                   value={novoProduto.nome}
                   onChange={(e) => setNovoProduto({...novoProduto, nome: e.target.value})}
-                  className="w-full p-3 border border-zinc-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 text-zinc-900"
+                  className="w-full p-3 bg-zinc-800 rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none text-white placeholder-zinc-500"
                   placeholder="Ex: Tomate Italiano"
                   required
                 />
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-zinc-700 mb-1">
+                <label className="block text-sm font-medium text-zinc-400 mb-1">
                   Descrição
                 </label>
                 <input
                   type="text"
                   value={novoProduto.descricao}
                   onChange={(e) => setNovoProduto({...novoProduto, descricao: e.target.value})}
-                  className="w-full p-3 border border-zinc-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 text-zinc-900"
+                  className="w-full p-3 bg-zinc-800 rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none text-white placeholder-zinc-500"
                   placeholder="Ex: Produto fresco colhido hoje"
                 />
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-zinc-700 mb-1">
+                <label className="block text-sm font-medium text-zinc-400 mb-1">
                   Preço
                 </label>
                 <input
@@ -178,20 +178,20 @@ export default function LojaFeirantePage() {
                   step="0.01"
                   value={novoProduto.preco}
                   onChange={(e) => setNovoProduto({...novoProduto, preco: e.target.value})}
-                  className="w-full p-3 border border-zinc-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 text-zinc-900"
+                  className="w-full p-3 bg-zinc-800 rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none text-white placeholder-zinc-500"
                   placeholder="Ex: 8.90"
                   required
                 />
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-zinc-700 mb-1">
+                <label className="block text-sm font-medium text-zinc-400 mb-1">
                   Unidade
                 </label>
                 <select
                   value={novoProduto.unidade}
                   onChange={(e) => setNovoProduto({...novoProduto, unidade: e.target.value})}
-                  className="w-full p-3 border border-zinc-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 text-zinc-900"
+                  className="w-full p-3 bg-zinc-800 rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none text-white"
                 >
                   <option value="kg">kg</option>
                   <option value="un">un</option>
@@ -214,15 +214,15 @@ export default function LojaFeirantePage() {
 
         {/* Lista de Produtos */}
         <div>
-          <h2 className="text-2xl font-bold text-zinc-900 mb-6">
+          <h2 className="text-2xl font-bold text-white mb-6">
             {tipoUsuario === "usuario" ? "Produtos Disponíveis" : "Meus Produtos"}
           </h2>
           
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {produtos.length === 0 ? (
               <div className="col-span-full text-center py-16">
-                <div className="text-zinc-400 text-6xl mb-4">🥬</div>
-                <h3 className="text-xl font-semibold text-zinc-600 mb-2">
+                <div className="text-zinc-600 text-6xl mb-4">🥬</div>
+                <h3 className="text-xl font-semibold text-zinc-400 mb-2">
                   Nenhum produto disponível
                 </h3>
                 <p className="text-zinc-500">
@@ -235,26 +235,26 @@ export default function LojaFeirantePage() {
               produtos.map((produto) => (
                 <div
                   key={produto.id}
-                  className="bg-white rounded-xl shadow-md border border-zinc-200 p-6 hover:shadow-lg transition-shadow duration-300"
+                  className="bg-zinc-900 border border-zinc-800 rounded-xl p-6 hover:border-zinc-700 transition-colors duration-300"
                 >
                   <div className="mb-4">
-                    <div className="bg-green-50 w-12 h-12 rounded-lg flex items-center justify-center mb-3">
-                      <span className="text-xl">P</span>
+                    <div className="bg-green-900/50 w-12 h-12 rounded-lg flex items-center justify-center mb-3 border border-green-800/50">
+                      <span className="text-xl text-green-400">P</span>
                     </div>
                     
-                    <h3 className="text-xl font-semibold text-zinc-900 mb-2">
+                    <h3 className="text-xl font-semibold text-white mb-2">
                       {produto.nome}
                     </h3>
                     
-                    <p className="text-zinc-600 text-sm mb-4">
+                    <p className="text-zinc-400 text-sm mb-4">
                       {produto.descricao}
                     </p>
                     
                     <div className="flex items-center justify-between">
-                      <span className="text-2xl font-bold text-green-600">
+                      <span className="text-2xl font-bold text-green-400">
                         R$ {produto.preco.toFixed(2)}
                       </span>
-                      <span className="text-zinc-500 text-sm bg-zinc-100 px-2 py-1 rounded">
+                      <span className="text-zinc-500 text-sm bg-zinc-800 px-2 py-1 rounded border border-zinc-700">
                         /{produto.unidade}
                       </span>
                     </div>
@@ -267,7 +267,7 @@ export default function LojaFeirantePage() {
                   ) : (
                     <button 
                       onClick={() => excluirProduto(produto.id)}
-                      className="w-full bg-red-600 text-white py-3 rounded-lg hover:bg-red-500 transition-colors duration-300 font-medium"
+                      className="w-full text-red-400 border border-red-900/50 py-3 rounded-lg hover:bg-red-900/50 transition-colors duration-300 font-medium"
                     >
                       Excluir Produto
                     </button>

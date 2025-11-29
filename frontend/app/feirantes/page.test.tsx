@@ -98,3 +98,21 @@ test('deve mostrar confirmação ao excluir produto', () => {
   
   expect(window.confirm).toHaveBeenCalledWith('Tem certeza que deseja excluir este produto?');
 });
+
+test('deve exibir mensagem quando não há produtos', () => {
+  render(<LojaFeirantePage />);
+  fireEvent.click(screen.getByText('Feirante'));
+  
+  // Remove todos os produtos
+  const botoesExcluir = screen.getAllByText('Excluir Produto');
+  
+  // Mock do confirm para sempre retornar true
+  window.confirm = jest.fn(() => true);
+  
+  botoesExcluir.forEach(botao => {
+    fireEvent.click(botao);
+  });
+  
+  expect(screen.getByText('Nenhum produto disponível')).toBeInTheDocument();
+  expect(screen.getByText('Adicione seu primeiro produto!')).toBeInTheDocument();
+});

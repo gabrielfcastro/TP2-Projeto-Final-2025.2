@@ -32,3 +32,13 @@ test('deve exibir lista inicial de contas', () => {
   expect(screen.getByText('Admin Sistema')).toBeInTheDocument();
   expect(screen.getByText('Carlos Oliveira')).toBeInTheDocument();
 });
+
+// Teste 4: Verifica formulário de adicionar conta
+test('deve exibir formulário de adicionar conta', () => {
+  render(<RelatoriosPage />);
+  expect(screen.getByPlaceholderText('Nome completo')).toBeInTheDocument();
+  expect(screen.getByPlaceholderText('E-mail')).toBeInTheDocument();
+  expect(screen.getByPlaceholderText('Telefone')).toBeInTheDocument();
+  expect(screen.getByPlaceholderText('Cidade, Estado')).toBeInTheDocument();
+  expect(screen.getByText('Adicionar Conta')).toBeInTheDocument();
+});

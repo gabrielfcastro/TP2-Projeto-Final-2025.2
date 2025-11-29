@@ -23,3 +23,12 @@ test('deve exibir estatísticas corretas', () => {
   expect(screen.getAllByText('Administradores').length).toBeGreaterThan(0);
   expect(screen.getAllByText('Buscas Realizadas').length).toBeGreaterThan(0);
 });
+
+// Teste 3: Verifica lista de contas inicial
+test('deve exibir lista inicial de contas', () => {
+  render(<RelatoriosPage />);
+  expect(screen.getByText('João Silva')).toBeInTheDocument();
+  expect(screen.getByText('Maria Santos')).toBeInTheDocument();
+  expect(screen.getByText('Admin Sistema')).toBeInTheDocument();
+  expect(screen.getByText('Carlos Oliveira')).toBeInTheDocument();
+});

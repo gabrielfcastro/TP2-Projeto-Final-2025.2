@@ -54,3 +54,21 @@ test('deve exibir formulário de cadastro na visão feirante', () => {
   expect(screen.getByPlaceholderText('Ex: 8.90')).toBeInTheDocument();
   expect(screen.getByDisplayValue('kg')).toBeInTheDocument();
 });
+
+test('deve adicionar novo produto como feirante', () => {
+  render(<LojaFeirantePage />);
+  fireEvent.click(screen.getByText('Feirante'));
+  
+  const nomeInput = screen.getByPlaceholderText('Ex: Tomate Italiano');
+  const descInput = screen.getByPlaceholderText('Ex: Produto fresco colhido hoje');
+  const precoInput = screen.getByPlaceholderText('Ex: 8.90');
+  
+  fireEvent.change(nomeInput, { target: { value: 'Maçã Verde' } });
+  fireEvent.change(descInput, { target: { value: 'Maçãs frescas da serra' } });
+  fireEvent.change(precoInput, { target: { value: '6.75' } });
+  
+  fireEvent.click(screen.getByText('+ Adicionar Produto'));
+  
+  expect(screen.getByText('Maçã Verde')).toBeInTheDocument();
+  expect(screen.getByText('R$ 6.75')).toBeInTheDocument();
+});

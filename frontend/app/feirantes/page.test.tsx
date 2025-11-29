@@ -72,3 +72,16 @@ test('deve adicionar novo produto como feirante', () => {
   expect(screen.getByText('Maçã Verde')).toBeInTheDocument();
   expect(screen.getByText('R$ 6.75')).toBeInTheDocument();
 });
+
+test('não deve adicionar produto sem nome e preço', () => {
+  render(<LojaFeirantePage />);
+  fireEvent.click(screen.getByText('Feirante'));
+  
+  const quantidadeInicial = screen.getAllByText('Excluir Produto').length;
+  
+  // Tenta adicionar sem preencher
+  fireEvent.click(screen.getByText('+ Adicionar Produto'));
+  
+  // Quantidade deve permanecer a mesma
+  expect(screen.getAllByText('Excluir Produto')).toHaveLength(quantidadeInicial);
+});

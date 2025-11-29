@@ -42,3 +42,33 @@ test('deve exibir formulário de adicionar conta', () => {
   expect(screen.getByPlaceholderText('Cidade, Estado')).toBeInTheDocument();
   expect(screen.getByText('Adicionar Conta')).toBeInTheDocument();
 });
+
+// Teste 5: Verifica adição de nova conta
+test('deve adicionar nova conta', () => {
+  render(<RelatoriosPage />);
+  
+  const nomeInput = screen.getByPlaceholderText('Nome completo');
+  const emailInput = screen.getByPlaceholderText('E-mail');
+  const telefoneInput = screen.getByPlaceholderText('Telefone');
+  const localizacaoInput = screen.getByPlaceholderText('Cidade, Estado');
+  
+  fireEvent.change(nomeInput, { target: { value: 'Novo Usuário' } });
+  fireEvent.change(emailInput, { target: { value: 'novo@email.com' } });
+  fireEvent.change(telefoneInput, { target: { value: '(11) 95555-5555' } });
+  fireEvent.change(localizacaoInput, { target: { value: 'São Paulo, SP' } });
+  
+  fireEvent.click(screen.getByText('Adicionar Conta'));
+  
+  expect(screen.getByText('Novo Usuário')).toBeInTheDocument();
+  expect(screen.getByText('novo@email.com')).toBeInTheDocument();
+});
+
+// Teste 6: Verifica validação do formulário
+test('não deve adicionar conta sem nome e email', () => {
+  render(<RelatoriosPage />);
+  
+  const contasIniciais = screen.getAllByText(/Remover Conta/).length;
+  fireEvent.click(screen.getByText('Adicionar Conta'));
+  
+  expect(screen.getAllByText(/Remover Conta/)).toHaveLength(contasIniciais);
+});

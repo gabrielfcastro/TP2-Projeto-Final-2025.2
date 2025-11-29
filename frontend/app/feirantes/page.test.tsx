@@ -6,11 +6,13 @@ beforeEach(() => {
   window.confirm = jest.fn(() => true);
 });
 
+// Teste 1: Verifica se a página renderiza corretamente com o nome do feirante
 test('deve renderizar a página do feirante', () => {
   render(<LojaFeirantePage />);
   expect(screen.getByText('Feira do Seu Zé')).toBeInTheDocument();
 });
 
+// Teste 2: Verifica se todas as informações do feirante são exibidas corretamente
 test('deve exibir informações completas do feirante', () => {
   render(<LojaFeirantePage />);
   
@@ -21,6 +23,7 @@ test('deve exibir informações completas do feirante', () => {
   expect(screen.getByText(/\(11\) 99999-9999/)).toBeInTheDocument();
 });
 
+// Teste 3: Verifica se a lista de produtos é exibida para usuários com botão "Ver Produto"
 test('deve exibir lista de produtos para usuários', () => {
   render(<LojaFeirantePage />);
   
@@ -30,6 +33,7 @@ test('deve exibir lista de produtos para usuários', () => {
   expect(screen.getAllByText('Ver Produto')).toHaveLength(3);
 });
 
+// Teste 4: Verifica a alternância entre as visões de usuário e feirante
 test('deve alternar entre visão do usuário e feirante', () => {
   render(<LojaFeirantePage />);
   
@@ -45,6 +49,7 @@ test('deve alternar entre visão do usuário e feirante', () => {
   expect(screen.getByText('Produtos Disponíveis')).toBeInTheDocument();
 });
 
+// Teste 5: Verifica se o formulário de cadastro é exibido na visão do feirante
 test('deve exibir formulário de cadastro na visão feirante', () => {
   render(<LojaFeirantePage />);
   fireEvent.click(screen.getByText('Feirante'));
@@ -55,6 +60,7 @@ test('deve exibir formulário de cadastro na visão feirante', () => {
   expect(screen.getByDisplayValue('kg')).toBeInTheDocument();
 });
 
+// Teste 6: Verifica a funcionalidade de adicionar novo produto como feirante
 test('deve adicionar novo produto como feirante', () => {
   render(<LojaFeirantePage />);
   fireEvent.click(screen.getByText('Feirante'));
@@ -73,6 +79,7 @@ test('deve adicionar novo produto como feirante', () => {
   expect(screen.getByText('R$ 6.75')).toBeInTheDocument();
 });
 
+// Teste 7: Verifica a validação do formulário (não permite cadastro sem nome e preço)
 test('não deve adicionar produto sem nome e preço', () => {
   render(<LojaFeirantePage />);
   fireEvent.click(screen.getByText('Feirante'));
@@ -86,6 +93,7 @@ test('não deve adicionar produto sem nome e preço', () => {
   expect(screen.getAllByText('Excluir Produto')).toHaveLength(quantidadeInicial);
 });
 
+// Teste 8: Verifica se a confirmação de exclusão é acionada ao tentar excluir produto
 test('deve mostrar confirmação ao excluir produto', () => {
   // Mock do window.confirm
   window.confirm = jest.fn(() => true);
@@ -99,6 +107,7 @@ test('deve mostrar confirmação ao excluir produto', () => {
   expect(window.confirm).toHaveBeenCalledWith('Tem certeza que deseja excluir este produto?');
 });
 
+// Teste 9: Verifica a exibição da mensagem quando não há produtos cadastrados
 test('deve exibir mensagem quando não há produtos', () => {
   render(<LojaFeirantePage />);
   fireEvent.click(screen.getByText('Feirante'));

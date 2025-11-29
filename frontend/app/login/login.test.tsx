@@ -90,4 +90,19 @@ test('Teste 7: Mostrar erro para senha muito curta', async () => {
       expect(screen.getByText('Senha deve ter pelo menos 6 caracteres')).toBeInTheDocument();
     });
   });
+
+test('Teste 8: Mostrar estado de loading durante o envio', async () => {
+  render(<Login />);
+  
+  await userEvent.type(screen.getByPlaceholderText('E-mail'), 'teste@example.com');
+  await userEvent.type(screen.getByPlaceholderText('Senha'), '123456');
+  
+  const submitButton = screen.getByRole('button', { name: 'ENTRAR' });
+  fireEvent.click(submitButton);
+  
+  await waitFor(() => {
+    expect(screen.getByText('PROCESSANDO...')).toBeInTheDocument();
+  });
+});
+
 });

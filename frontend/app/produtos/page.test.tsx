@@ -11,7 +11,7 @@ global.fetch = jest.fn(() =>
         { id: 1, nome: "Produto Teste 1", descricao: "Desc 1", preco: 10 },
         { id: 2, nome: "Produto Para Excluir", descricao: "Desc 2", preco: 20 },
       ]),
-  })
+  }),
 ) as jest.Mock;
 
 // 2. MOCK DO WINDOW.CONFIRM (A CORREÇÃO ESTÁ AQUI)
@@ -40,7 +40,7 @@ describe("Página de Listagem de Produtos", () => {
         expect.stringContaining("/api/produtos/2"),
         expect.objectContaining({
           method: "DELETE",
-        })
+        }),
       );
     });
   });

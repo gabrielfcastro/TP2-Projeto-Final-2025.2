@@ -43,3 +43,19 @@ def test_hu02_listar_feirantes():
     assert isinstance(lista, list)
     assert len(lista) >= 0   # apenas garante que funciona
 
+
+# --------------------
+# HU03 — Buscar por ID
+# --------------------
+def test_hu03_buscar_feirante_por_id():
+    novo_id = feirantes_rep.criar_feirante(
+        usuario_id=1,
+        nome_estabelecimento="Barraca da Ana",
+        link_wpp="https://wa.me/555"
+    )
+
+    feirante = feirantes_rep.buscar_feirante_por_id(novo_id)
+
+    assert feirante is not None
+    assert feirante["nome_estabelecimento"] == "Barraca da Ana"
+

@@ -81,3 +81,18 @@ def test_hu04_atualizar_feirante():
     assert atualizado["nome_estabelecimento"] == "Feira da Tati Atualizada"
     assert atualizado["link_wpp"] == "https://wa.me/000"
 
+
+# --------------------
+# HU05 — Excluir feirante
+# --------------------
+def test_hu05_deletar_feirante():
+    novo_id = feirantes_rep.criar_feirante(
+        usuario_id=3,
+        nome_estabelecimento="Barraca Temporária",
+        link_wpp="https://wa.me/111"
+    )
+
+    feirantes_rep.deletar_feirante(novo_id)
+
+    feirante = feirantes_rep.buscar_feirante_por_id(novo_id)
+    assert feirante is None

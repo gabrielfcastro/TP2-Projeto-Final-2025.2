@@ -14,9 +14,15 @@ HU04 - Como feirante, quero atualizar meu nome ou link para manter meus dados co
 HU05 - Como feirante, quero excluir meu cadastro caso eu não participe mais da feira.
 """
 
+import sys
+import os
 import pytest
-from app.models import feirantes_rep
 
+current_dir = os.path.dirname(os.path.abspath(__file__))
+backend_dir = os.path.abspath(os.path.join(current_dir, ".."))
+sys.path.insert(0, backend_dir)
+
+from app.models import feirantes_rep
 
 # --------------------
 # HU01 — Criar feirante

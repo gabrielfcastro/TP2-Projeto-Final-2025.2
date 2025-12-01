@@ -4,6 +4,9 @@ import { useState } from "react"
 import { UserType, FormData } from './components/types/user'
 import { useFormValidation } from './components/hooks/useFormValidation'
 
+// URL base da API - ajuste conforme necessário
+const API_BASE_URL = 'http://localhost:5000/api'
+
 export default function Login() {
   const [showRegister, setShowRegister] = useState(false)
   const [userType, setUserType] = useState<UserType>("user")
@@ -30,18 +33,54 @@ export default function Login() {
     setErrors([])
 
     try {
-      await new Promise(resolve => setTimeout(resolve, 1000))
+      const url = showRegister ? `${API_BASE_URL}/register` : `${API_BASE_URL}/login`
       
+      const requestBody = showRegister 
+        ? {
+            email: formData.email,
+            password: formData.password,
+            nome: formData.nome,
+            user_type: userType,
+            nome_banca: formData.nomeBanca,
+            localizacao: formData.localizacao
+          }
+        : {
+            email: formData.email,
+            password: formData.password
+          }
+
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestBody),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Erro ao processar solicitação')
+      }
+
+      // Sucesso no login/cadastro
       if (showRegister) {
-        console.log("Cadastro:", { ...formData, userType })
+        console.log("Cadastro realizado:", data.user)
         alert(`Cadastro realizado como ${userType === 'vendor' ? 'Feirante' : 'Usuário'}!`)
         setShowRegister(false)
+        // Limpar formulário após cadastro bem-sucedido
+        setFormData({ email: "", password: "", nome: "", nomeBanca: "", localizacao: "" })
       } else {
-        console.log("Login:", formData)
+        console.log("Login realizado:", data.user)
         alert("Login realizado com sucesso!")
+        // Aqui você pode redirecionar o usuário ou salvar o token
+        // Exemplo: salvar no localStorage
+        localStorage.setItem('user', JSON.stringify(data.user))
+        // Redirecionar para a página principal
+        // window.location.href = '/dashboard'
       }
     } catch (error) {
-      setErrors(['Erro ao processar solicitação'])
+      setErrors([error instanceof Error ? error.message : 'Erro ao processar solicitação'])
     } finally {
       setIsLoading(false)
     }

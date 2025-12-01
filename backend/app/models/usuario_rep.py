@@ -44,12 +44,12 @@ def adicionar_usuario(email: str, senha: str, nome: str, tipo_usuario: str):
             return result.inserted_primary_key[0]
         return None
 
-def listar_usuarios(id):
+def listar_usuarios(email):
 
     stmt = select(usuario.c.id, usuario.c.email, usuario.c.nome, usuario.c.tipo_usuario)
 
     if id:
-        stmt = stmt.where(usuario.c.id == id)
+        stmt = stmt.where(usuario.c.email == email)
         
     with engine.connect() as conn:
         result = conn.execute(stmt)
@@ -59,9 +59,9 @@ def listar_usuarios(id):
         raise LookupError("Usuario não encontrado")
     return usuarios
 
-def verificar_credenciais(id: int, senha_enviada: str):
+def verificar_credenciais(email: str, senha_enviada: str):
 
-    stmt = select(usuario).where(usuario.c.id == id)
+    stmt = select(usuario).where(usuario.c.email == email)
     
     with engine.connect() as conn:
         resultado = conn.execute(stmt).mappings().first()
@@ -82,11 +82,11 @@ def verificar_credenciais(id: int, senha_enviada: str):
     
     return usuario_encontrado 
 
-def deletar_usuario(id: int):
-    stmt = delete(usuario).where(usuario.c.id == id)
+def deletar_usuario(email:str):
+    stmt = delete(usuario).where(usuario.c.email == email)
 
     with engine.begin() as conn:
         result = conn.execute(stmt)
         if result.rowcount == 0:
-            raise LookupError("Nenhum usuário encontrado com esse CPF.")
-    print(f"Usuário com ID {id} removido com sucesso!")
+            raise LookupError("Nenhum usuário encontrado com esse id.")
+    print(f"Usuário com email {email} removido com sucesso!")

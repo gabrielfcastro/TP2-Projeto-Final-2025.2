@@ -33,3 +33,13 @@ def test_hu01_criar_feirante():
     feirante = feirantes_rep.buscar_feirante_por_id(novo_id)
     assert feirante["nome_estabelecimento"] == "Barraca do Zé"
     assert feirante["link_wpp"] == "https://wa.me/123"
+
+# --------------------
+# HU02 — Listar feirantes
+# --------------------
+def test_hu02_listar_feirantes():
+    lista = feirantes_rep.listar_feirantes()
+
+    assert isinstance(lista, list)
+    assert len(lista) >= 0   # apenas garante que funciona
+

@@ -44,3 +44,33 @@ def criar_usuario():
         return jsonify({"erro": str(e)}), 400
     except ConnectionError as e:
         return jsonify({"erro": str(e)}), 500
+    
+@usuario_bp.route("/login", methods= ['POST'])
+def login():
+    
+    dados = request.json
+    if not dados:
+        return jsonify({'erro':'JSON ausente'}),400
+    
+    email = dados.get('email')
+    senha = dados.get('senha')
+
+    if not all([email,senha]):
+        return jsonify({'erro': 'Dados ausentes'}),400
+    
+    try:
+        usuario = usuario_rep.verificar_credenciais(email,senha)
+        access_token = create_access_token(identity=usuario['email'])
+
+        json = {"email": usuario['email'],
+                "access_token": access_token}
+        return jsonify(json), 200
+    
+    except LookupError as e:
+        return jsonify({"erro": str(e)}), 401
+    
+    except ValueError as e:
+        return jsonify({"erro": str(e)}), 400
+    
+    except ConnectionError as e:
+        return jsonify({"erro": str(e)}), 500   

@@ -59,3 +59,25 @@ def test_hu03_buscar_feirante_por_id():
     assert feirante is not None
     assert feirante["nome_estabelecimento"] == "Barraca da Ana"
 
+
+# --------------------
+# HU04 — Atualizar feirante
+# --------------------
+def test_hu04_atualizar_feirante():
+    novo_id = feirantes_rep.criar_feirante(
+        usuario_id=2,
+        nome_estabelecimento="Feira da Tati",
+        link_wpp="https://wa.me/999"
+    )
+
+    feirantes_rep.atualizar_feirante(
+        novo_id,
+        novo_nome="Feira da Tati Atualizada",
+        novo_link="https://wa.me/000"
+    )
+
+    atualizado = feirantes_rep.buscar_feirante_por_id(novo_id)
+
+    assert atualizado["nome_estabelecimento"] == "Feira da Tati Atualizada"
+    assert atualizado["link_wpp"] == "https://wa.me/000"
+

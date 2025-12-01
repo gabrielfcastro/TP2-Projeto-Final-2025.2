@@ -2,12 +2,12 @@ import pytest
 import sys
 import os
 
+current_dir = os.path.dirname(os.path.abspath(__file__))
+root_dir = os.path.abspath(os.path.join(current_dir, ".."))
+sys.path.insert(0, root_dir)
+
 from app.models.connection import engine
 from app.models import usuario_rep
-
-current_dir = os.path.dirname(os.path.abspath(__file__))
-root_dir = os.path.abspath(os.path.join(current_dir))
-sys.path.insert(0, root_dir)
 
 def test_criar_deletar_usuario():
     try:
@@ -24,11 +24,11 @@ def test_criar_deletar_usuario():
         assert usuario_db['nome'] == "Paulo Alves"
         assert usuario_db['tipo_usuario'] == "Cliente"
         assert usuario_rep.verificar_credenciais(
-                usuario_id, 
+                usuario_id,
                 senha_enviada="!PauloAlves123"
             ) is not None
-            
-    finally:      
+
+    finally:
         try:
             usuario_rep.deletar_usuario(usuario_id)
             print(f"Usuário de ID {usuario_id} removido com sucesso.")

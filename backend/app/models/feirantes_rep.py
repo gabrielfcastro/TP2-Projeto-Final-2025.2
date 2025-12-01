@@ -10,10 +10,12 @@ feirantes = metadata.tables.get("feirantes")
 if feirantes is None:
     raise Exception("Tabela 'feirantes' não encontrada no banco.")
 
-# --- CRUD ---
 
-def criar_feirante(usuario_id: int, nome_estabelecimento: str, link_wpp: str):
-    
+# ============================================================
+#   CRUD com suporte a conexão externa (para testes)
+# ============================================================
+
+def criar_feirante(usuario_id: int, nome_estabelecimento: str, link_wpp: str, conn=None):
     # Validações
     if not re.match(PADRAO_NOME_ESTAB, nome_estabelecimento):
         raise ValueError("Nome do estabelecimento inválido (mínimo 3 caracteres).")
@@ -27,27 +29,42 @@ def criar_feirante(usuario_id: int, nome_estabelecimento: str, link_wpp: str):
         link_wpp=link_wpp
     )
 
-    # Transação
-    with engine.begin() as conn:
+    # Se receber conexão externa (TESTES)
+    if conn is not None:
         result = conn.execute(stmt)
         return result.inserted_primary_key[0]
 
+    # Execução normal
+    with engine.begin() as conn2:
+        result = conn2.execute(stmt)
+        return result.inserted_primary_key[0]
 
-def listar_feirantes():
+
+def listar_feirantes(conn=None):
     stmt = select(feirantes)
-    with engine.connect() as conn:
+
+    if conn is not None:
         result = conn.execute(stmt)
         return [dict(row) for row in result.mappings()]
 
+    with engine.connect() as conn2:
+        result = conn2.execute(stmt)
+        return [dict(row) for row in result.mappings()]
 
-def buscar_feirante_por_id(id_feirante: int):
+
+def buscar_feirante_por_id(id_feirante: int, conn=None):
     stmt = select(feirantes).where(feirantes.c.id == id_feirante)
-    with engine.connect() as conn:
+
+    if conn is not None:
         result = conn.execute(stmt).mappings().first()
         return dict(result) if result else None
 
+    with engine.connect() as conn2:
+        result = conn2.execute(stmt).mappings().first()
+        return dict(result) if result else None
 
-def atualizar_feirante(id_feirante: int, novo_nome=None, novo_link=None):
+
+def atualizar_feirante(id_feirante: int, novo_nome=None, novo_link=None, conn=None):
     novos_valores = {}
 
     if novo_nome:
@@ -63,16 +80,32 @@ def atualizar_feirante(id_feirante: int, novo_nome=None, novo_link=None):
 
     stmt = update(feirantes).where(feirantes.c.id == id_feirante).values(**novos_valores)
 
-    with engine.begin() as conn:
+    # Testes
+    if conn is not None:
         result = conn.execute(stmt)
+        if result.rowcount == 0:
+            raise ValueError(f"Feirante {id_feirante} não encontrado.")
+        return
+
+    # Execução normal
+    with engine.begin() as conn2:
+        result = conn2.execute(stmt)
         if result.rowcount == 0:
             raise ValueError(f"Feirante {id_feirante} não encontrado.")
 
 
-def deletar_feirante(id_feirante: int):
+def deletar_feirante(id_feirante: int, conn=None):
     stmt = delete(feirantes).where(feirantes.c.id == id_feirante)
 
-    with engine.begin() as conn:
+    # Testes
+    if conn is not None:
         result = conn.execute(stmt)
+        if result.rowcount == 0:
+            raise ValueError(f"Feirante {id_feirante} não encontrado.")
+        return
+
+    # Execução normal
+    with engine.begin() as conn2:
+        result = conn2.execute(stmt)
         if result.rowcount == 0:
             raise ValueError(f"Feirante {id_feirante} não encontrado.")

@@ -10,6 +10,7 @@ from app.models.usuario_rep import listar_usuarios
 
 from app.routes.usuario_routes import usuario_bp
 from app.routes.feirante_routes import feirante_bp
+from app.routes.produto_route import produto_bp
 
 dir = os.path.abspath(os.path.dirname(__file__))
 load_dotenv(os.path.join(dir, ".env"))
@@ -36,6 +37,7 @@ def create_app():
 
     app.register_blueprint(usuario_bp)
     app.register_blueprint(feirante_bp)
+    app.register_blueprint(produto_bp)
 
     return app
 

@@ -7,7 +7,9 @@ from dotenv import load_dotenv
 import os
 
 from app.models.usuario_rep import listar_usuarios
+
 from app.routes.usuario_routes import usuario_bp
+from app.routes.feirante_routes import feirante_bp
 
 dir = os.path.abspath(os.path.dirname(__file__))
 load_dotenv(os.path.join(dir, ".env"))
@@ -31,9 +33,10 @@ def create_app():
         if not usuario:
             return None
         return usuario[0]
-    
-    app.register_blueprint(usuario_bp)  
-    
+
+    app.register_blueprint(usuario_bp)
+    app.register_blueprint(feirante_bp)
+
     return app
 
 if __name__ == "__main__":

@@ -9,34 +9,28 @@ parent_dir = os.path.dirname(current_dir)
 sys.path.insert(0, parent_dir)
 
 from run import create_app
-from app.models import produtos_rep, feirantes_rep, usuario_rep
+from app.models import historico_busca_rep, usuario_rep
 
-DADOS_USUARIO = {
-    "email": "produtor.teste@gmail.com",
-    "nome": "Produtor Teste",
-    "senha": "$ProdutorSenh4",
-    "tipo_usuario": "Feirante"
+DADOS_USUARIO_TESTE = {
+    "email": "usuario.historico@teste.com",
+    "nome": "Usuário Histórico",
+    "senha": "$SenhaTeste123",
+    "tipo_usuario": "Usuario"
 }
 
-DADOS_FEIRANTE = {
-    "nome_estabelecimento": "Barraca do Produtor",
-    "link_wpp": "https://wa.me/556177777777"
+DADOS_BUSCA_PRODUTO = {
+    "produto_buscado": "Tomate Cereja",
+    "feirante_buscado": ""
 }
 
-DADOS_PRODUTO_1 = {
-    "nome": "Tomate Cereja",
-    "descricao": "Bandeja 250g",
-    "preco": 8.50,
-    "latitude": -15.7942,
-    "longitude": -47.8822
+DADOS_BUSCA_FEIRANTE = {
+    "produto_buscado": "",
+    "feirante_buscado": "Barraca do João"
 }
 
-DADOS_PRODUTO_2 = {
-    "nome": "Alface Americana",
-    "descricao": "Unidade hidropônica",
-    "preco": 4.00,
-    "latitude": -15.7940,
-    "longitude": -47.8820
+DADOS_BUSCA_COMPLETA = {
+    "produto_buscado": "Alface",
+    "feirante_buscado": "Feira do Produtor"
 }
 
 @pytest.fixture
@@ -46,179 +40,191 @@ def client():
         yield client
 
 @pytest.fixture
-def setup_para_produto(client):
-    email_usuario = DADOS_USUARIO["email"]
+def setup_usuario_token(client):
+    email_usuario = DADOS_USUARIO_TESTE["email"]
     usuario_id = None
-    feirante_id = None
     token_de_acesso = None
-
+    
     try:
         try:
-            usuario_rep.adicionar_usuario(**DADOS_USUARIO)
+            usuario_id = usuario_rep.adicionar_usuario(**DADOS_USUARIO_TESTE)
         except ValueError as e:
             if "UNIQUE constraint" not in str(e) and "já existe" not in str(e):
                 print(f"AVISO SETUP: Erro ao criar usuário: {e}")
-
+            usuario = usuario_rep.listar_usuarios(email=email_usuario)
+            if usuario:
+                usuario_id = usuario[0]['id']
+        
         with client.application.app_context():
-            token_de_acesso = create_access_token(identity = email_usuario)
-
-        usuario = usuario_rep.listar_usuarios(email = email_usuario)
-        if usuario:
-            usuario_id = usuario[0]['id']
-
-        try:
-            feirante_id = feirantes_rep.criar_feirante(
-                usuario_id=usuario_id,
-                **DADOS_FEIRANTE
-            )
-        except Exception:
-            lista = feirantes_rep.listar_feirantes()
-            for f in lista:
-                if f['usuario_id'] == usuario_id:
-                    feirante_id = f['id']
-                    break
-
+            token_de_acesso = create_access_token(identity=usuario_id)
+        
         yield {
             "token": token_de_acesso,
-            "feirante_id": feirante_id,
-            "usuario_id": usuario_id
+            "usuario_id": usuario_id,
+            "email": email_usuario
         }
-
+    
     finally:
         try:
-            if feirante_id:
-                feirantes_rep.deletar_feirante(feirante_id)
+            if usuario_id:
+                historico_busca_rep.deletar_historico_por_usuario(usuario_id)
             if email_usuario:
                 usuario_rep.deletar_usuario(email_usuario)
         except Exception as e:
             print(f"AVISO [LIMPEZA SETUP]: {e}")
 
-
-def test_criar_produto(client, setup_para_produto):
-    id_produto_criado = None
-    token = setup_para_produto["token"]
-    feirante_id = setup_para_produto["feirante_id"]
-
+def test_criar_historico_busca(client, setup_usuario_token):
+    token = setup_usuario_token["token"]
+    usuario_id = setup_usuario_token["usuario_id"]
+    historico_id = None
+    
     try:
         headers = {'Authorization': f'Bearer {token}'}
-
-        payload = DADOS_PRODUTO_1.copy()
-        payload['feirante_id'] = feirante_id
-
-        response = client.post('/api/produtos/', json=payload, headers=headers)
-
+        
+        response = client.post('/api/historico_busca/', 
+                             json=DADOS_BUSCA_PRODUTO, 
+                             headers=headers)
+        
         assert response.status_code == 201, (
-            f"Esperado 201, obteve {response.status_code}. Body: {response.get_data(as_text = True)}"
+            f"Esperado 201, obteve {response.status_code}. Body: {response.get_data(as_text=True)}"
         )
-
+        
         data = response.get_json()
-        id_produto_criado = data.get('id')
-
-        assert id_produto_criado is not None
-        assert data.get('nome') == DADOS_PRODUTO_1['nome']
-        assert float(data.get('preco')) == DADOS_PRODUTO_1['preco']
-        assert data.get('feirante_id') == feirante_id
-
+        historico_id = data.get('historico_id')
+        
+        assert historico_id is not None
+        assert data.get('mensagem') == 'Busca salva no histórico'
+        
+        historico = historico_busca_rep.buscar_historico_por_id(historico_id)
+        assert historico is not None
+        assert historico['produto_buscado'] == DADOS_BUSCA_PRODUTO['produto_buscado']
+        assert historico['user_id'] == usuario_id
+    
     finally:
-        if id_produto_criado:
+        if historico_id:
             try:
-                produtos_rep.deletar_produto(id_produto_criado)
+                historico_busca_rep.deletar_historico_busca(historico_id)
             except Exception as e:
-                print(f"AVISO: Falha ao limpar produto {id_produto_criado}: {e}")
+                print(f"AVISO: Falha ao limpar histórico {historico_id}: {e}")
 
-
-def test_listar_produtos(client, setup_para_produto):
-    ids_criados = []
-    feirante_id = setup_para_produto["feirante_id"]
-
+def test_criar_historico_apenas_feirante(client, setup_usuario_token):
+    token = setup_usuario_token["token"]
+    usuario_id = setup_usuario_token["usuario_id"]
+    historico_id = None
+    
     try:
-        id1 = produtos_rep.adicionar_produto(feirante_id=feirante_id, **DADOS_PRODUTO_1)
-        ids_criados.append(id1)
-
-        id2 = produtos_rep.adicionar_produto(feirante_id=feirante_id, **DADOS_PRODUTO_2)
-        ids_criados.append(id2)
-
-        response = client.get('/api/produtos/')
-        assert response.status_code == 200
-
-        lista = response.get_json()
-        assert isinstance(lista, list)
-        assert len(lista) >= 2
-
-        ids_na_lista = [p['id'] for p in lista]
-        assert id1 in ids_na_lista
-        assert id2 in ids_na_lista
-
-        response_filtro = client.get(f'/api/produtos/?feirante_id={feirante_id}')
-        assert response_filtro.status_code == 200
-        lista_filtro = response_filtro.get_json()
-        assert len(lista_filtro) >= 2
-        assert lista_filtro[0]['feirante_id'] == feirante_id
-
-    finally:
-        for p_id in ids_criados:
-            try:
-                produtos_rep.deletar_produto(p_id)
-            except Exception:
-                pass
-
-
-def test_buscar_produto_por_id(client, setup_para_produto):
-    id_produto_criado = None
-    feirante_id = setup_para_produto["feirante_id"]
-
-    try:
-        id_produto_criado = produtos_rep.adicionar_produto(
-            feirante_id=feirante_id,
-            **DADOS_PRODUTO_1
-        )
-
-        response = client.get(f'/api/produtos/{id_produto_criado}')
-        assert response.status_code == 200
-
+        headers = {'Authorization': f'Bearer {token}'}
+        
+        response = client.post('/api/historico_busca/', 
+                             json=DADOS_BUSCA_FEIRANTE, 
+                             headers=headers)
+        
+        assert response.status_code == 201
+        
         data = response.get_json()
-        assert data['id'] == id_produto_criado
-        assert data['nome'] == DADOS_PRODUTO_1['nome']
-
-        response_404 = client.get('/api/produtos/999999')
-        assert response_404.status_code == 404
-
+        historico_id = data.get('historico_id')
+        
+        historico = historico_busca_rep.buscar_historico_por_id(historico_id)
+        assert historico['feirante_buscado'] == DADOS_BUSCA_FEIRANTE['feirante_buscado']
+        assert historico['produto_buscado'] == ""
+    
     finally:
-        if id_produto_criado:
+        if historico_id:
             try:
-                produtos_rep.deletar_produto(id_produto_criado)
+                historico_busca_rep.deletar_historico_busca(historico_id)
             except Exception:
                 pass
 
-
-def test_deletar_produto(client, setup_para_produto):
-    id_produto = None
-    token = setup_para_produto["token"]
-    feirante_id = setup_para_produto["feirante_id"]
+def test_criar_historico_busca_sem_dados(client, setup_usuario_token):
+    token = setup_usuario_token["token"]
     headers = {'Authorization': f'Bearer {token}'}
+    
+    response = client.post('/api/historico_busca/', 
+                         json={"produto_buscado": "", "feirante_buscado": ""}, 
+                         headers=headers)
+    
+    assert response.status_code == 400
+    data = response.get_json()
+    assert "produto ou feirante" in data.get('erro', '').lower()
 
+def test_criar_historico_sem_token(client):
+    response = client.post('/api/historico_busca/', 
+                         json=DADOS_BUSCA_PRODUTO)
+    
+    assert response.status_code == 401  
+
+def test_listar_historico_busca(client, setup_usuario_token):
+    token = setup_usuario_token["token"]
+    usuario_id = setup_usuario_token["usuario_id"]
+    ids_criados = []
+    
     try:
-        id_produto = produtos_rep.adicionar_produto(
-            feirante_id=feirante_id,
-            **DADOS_PRODUTO_1
-        )
-        assert id_produto is not None
-
-        response = client.delete(f'/api/produtos/{id_produto}', headers=headers)
+        headers = {'Authorization': f'Bearer {token}'}
+        
+        for i in range(3):
+            historico_id = historico_busca_rep.adicionar_historico_busca(
+                usuario_id=usuario_id,
+                produto_buscado=f"Produto Teste {i+1}",
+                feirante_buscado=""
+            )
+            ids_criados.append(historico_id)
+        
+        response = client.get('/api/historico_busca/', headers=headers)
+        
         assert response.status_code == 200
-        assert "deletado com sucesso" in response.get_json().get("mensagem", "")
-
-        busca = produtos_rep.buscar_produto_por_id(id_produto)
-        assert busca is None, "Produto ainda existe no banco após delete"
-
-        response_404 = client.delete(f'/api/produtos/{id_produto}', headers=headers)
-        assert response_404.status_code == 404
-
-        id_produto = None
-
+        
+        data = response.get_json()
+        assert data['usuario_id'] == usuario_id
+        assert data['total_buscas'] >= 3
+        assert isinstance(data['historicos'], list)
+        
+        produtos_listados = [h['produto_buscado'] for h in data['historicos']]
+        assert "Produto Teste 1" in produtos_listados
+        assert "Produto Teste 2" in produtos_listados
+    
     finally:
-        if id_produto:
+        for h_id in ids_criados:
             try:
-                produtos_rep.deletar_produto(id_produto)
+                historico_busca_rep.deletar_historico_busca(h_id)
             except Exception:
                 pass
+
+def test_deletar_historico_inexistente(client, setup_usuario_token):
+    token = setup_usuario_token["token"]
+    headers = {'Authorization': f'Bearer {token}'}
+    
+    response = client.delete('/api/historico_busca/999999', headers=headers)
+    
+    assert response.status_code == 404
+
+def test_limpar_todo_historico(client, setup_usuario_token):
+    token = setup_usuario_token["token"]
+    usuario_id = setup_usuario_token["usuario_id"]
+    
+    try:
+        headers = {'Authorization': f'Bearer {token}'}
+        
+        for i in range(3):
+            historico_busca_rep.adicionar_historico_busca(
+                usuario_id=usuario_id,
+                produto_buscado=f"Produto {i+1}",
+                feirante_buscado=""
+            )
+        
+        response = client.delete('/api/historico_busca/', headers=headers)
+        
+        assert response.status_code == 200
+        
+        data = response.get_json()
+        assert data['registros_removidos'] >= 3
+        
+        historicos = historico_busca_rep.listar_historico_busca(user_id=usuario_id)
+        assert len(historicos) == 0
+    
+    finally:
+        historico_busca_rep.deletar_historico_por_usuario(usuario_id)
+
+def test_listar_sem_token(client):
+    response = client.get('/api/historico_busca/')
+    
+    assert response.status_code == 401 

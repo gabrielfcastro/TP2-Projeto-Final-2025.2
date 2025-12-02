@@ -44,11 +44,13 @@ def adicionar_usuario(email: str, senha: str, nome: str, tipo_usuario: str):
             return result.inserted_primary_key[0]
         return None
 
-def listar_usuarios(email):
+def listar_usuarios(email = None, id = None):
 
     stmt = select(usuario.c.id, usuario.c.email, usuario.c.nome, usuario.c.tipo_usuario)
 
     if id:
+        stmt = stmt.where(usuario.c.id == id)
+    elif email:
         stmt = stmt.where(usuario.c.email == email)
         
     with engine.connect() as conn:

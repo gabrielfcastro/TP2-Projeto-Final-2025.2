@@ -170,7 +170,7 @@ def test_listar_historico_busca(client, setup_usuario_token):
             )
             ids_criados.append(historico_id)
         
-        response = client.get('/api/historico_busca/', json={"usuario_id": usuario_id}, headers=headers)
+        response = client.get(f'/api/historico_busca/?usuario_id={usuario_id}', headers=headers)
         
         assert response.status_code == 200
         
@@ -187,7 +187,7 @@ def test_listar_historico_busca(client, setup_usuario_token):
         for h_id in ids_criados:
             try:
                 historico_busca_rep.deletar_historico_busca(h_id)
-            except Exception:
+            except:
                 pass
 
 def test_deletar_historico_inexistente(client, setup_usuario_token):

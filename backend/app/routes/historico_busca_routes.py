@@ -42,7 +42,10 @@ def criar_historico():
 @historico_busca_bp.route('/', methods=['GET'])
 def listar_historico():
     try:
-        current_user_id = dados.get('usuario_id')
+        current_user_id = request.args.get('usuario_id', type=int)
+        
+        if not current_user_id:
+            return jsonify({'erro': 'ID do usuário é obrigatório'}), 400
         
         limit = request.args.get('limit', default=None, type=int)
         
@@ -52,7 +55,7 @@ def listar_historico():
                 limite=limit
             )
         else:
-            historicos = historico_busca_rep.listar_historico_busca(
+            historicos = historico_busca_rep.listar_historico_buscas(
                 usuario_id=current_user_id
             )
         
@@ -63,6 +66,7 @@ def listar_historico():
         }), 200
     
     except Exception as e:
+        print(f"Error in listar_historico: {e}")
         return jsonify({"erro": "Erro interno no servidor"}), 500
 
 @historico_busca_bp.route('/', methods=['DELETE'])

@@ -52,7 +52,7 @@ def setup_produto():  # pylint: disable=redefined-outer-name
     yield ID_PRODUTO_TESTE
 
     with engine.begin() as conn:
-        conn.execute(text(f"DELETE FROM avaliacoes_produto WHERE produto_id = {ID_PRODUTO_TESTE}"))
+        conn.execute(text(f"DELETE FROM avaliacoes_produtos WHERE produto_id = {ID_PRODUTO_TESTE}"))
         conn.execute(text(f"DELETE FROM produtos WHERE id = {ID_PRODUTO_TESTE}"))
         conn.execute(text(f"DELETE FROM feirantes WHERE id = {ID_FEIRANTE_TESTE}"))
 
@@ -67,7 +67,9 @@ def test_adicionar_avaliacao_produto_sucesso(setup_produto):  # pylint: disable=
         produto_id, nota, comentario
     )
 
+    print(nova_avaliacao.nota)
     assert nova_avaliacao is not None
     assert nova_avaliacao.produto_id == produto_id
     assert nova_avaliacao.nota == nota
+    assert nova_avaliacao.nota is not None
     assert nova_avaliacao.comentario == comentario

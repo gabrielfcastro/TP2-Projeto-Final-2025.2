@@ -21,66 +21,117 @@ export default function Login() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
+    setErrors([]) // Limpa erros anteriores
 
-    const validationErrors = validateForm(formData, showRegister, userType)
+    // Validação MANUAL
+    const newErrors: string[] = []
     
-    if (validationErrors.length > 0) {
-      setErrors(validationErrors)
-      setIsLoading(false)
-      return
+    console.log("Validando:", formData.email)
+    
+    if (!formData.email || !formData.email.includes('@')) {
+      newErrors.push('Email inválido')
+    }
+    
+    if (!formData.password || formData.password.length < 6) {
+      newErrors.push('Senha deve ter pelo menos 6 caracteres')
+    }
+    
+    if (showRegister) {
+      if (!formData.nome) {
+        newErrors.push('Nome é obrigatório')
+      }
+      
+      if (userType === 'vendor' && (!formData.nomeBanca || !formData.localizacao)) {
+        newErrors.push('Preencha todos os campos do feirante')
+      }
     }
 
-    setErrors([])
+    console.log("Erros encontrados:", newErrors)
+
+    if (newErrors.length > 0) {
+      setErrors(newErrors)
+      setIsLoading(false)
+      await new Promise(resolve => setTimeout(resolve, 0))
+      return
+    }
 
     try {
       const url = showRegister ? `${API_BASE_URL}/register` : `${API_BASE_URL}/login`
       
+      // Converter os dados para o formato esperado pelo backend
       const requestBody = showRegister 
         ? {
-            email: formData.email,
-            password: formData.password,
             nome: formData.nome,
-            user_type: userType,
-            nome_banca: formData.nomeBanca,
-            localizacao: formData.localizacao
+            email: formData.email,
+            senha: formData.password,  // Backend espera 'senha', não 'password'
+            tipo: userType === 'vendor' ? 'feirante' : userType,  // Converter 'vendor' para 'feirante'
+            ...(userType === 'vendor' && {
+              nomeBanca: formData.nomeBanca,
+              localizacao: formData.localizacao
+            })
           }
         : {
             email: formData.email,
-            password: formData.password
+            senha: formData.password  // Backend espera 'senha'
           }
+
+      console.log(`Enviando para ${url}:`, requestBody)
 
       const response = await fetch(url, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(requestBody),
+        body: JSON.stringify(requestBody)
       })
 
       const data = await response.json()
+      
+      console.log("Resposta do servidor:", data)
 
       if (!response.ok) {
-        throw new Error(data.message || 'Erro ao processar solicitação')
+        // Erro do servidor
+        throw new Error(data.error || `Erro ${response.status}: ${response.statusText}`)
       }
 
       // Sucesso no login/cadastro
       if (showRegister) {
-        console.log("Cadastro realizado:", data.user)
-        alert(`Cadastro realizado como ${userType === 'vendor' ? 'Feirante' : 'Usuário'}!`)
+        console.log("Cadastro realizado:", data)
+        alert(`Cadastro realizado como ${userType === 'vendor' ? 'Feirante' : userType === 'admin' ? 'Administrador' : 'Usuário'}!`)
         setShowRegister(false)
         // Limpar formulário após cadastro bem-sucedido
         setFormData({ email: "", password: "", nome: "", nomeBanca: "", localizacao: "" })
       } else {
-        console.log("Login realizado:", data.user)
+        console.log("Login realizado:", data)
         alert("Login realizado com sucesso!")
-        // Aqui você pode redirecionar o usuário ou salvar o token
-        // Exemplo: salvar no localStorage
-        localStorage.setItem('user', JSON.stringify(data.user))
-        // Redirecionar para a página principal
-        // window.location.href = '/dashboard'
+        
+        // Salvar o token JWT e dados do usuário
+        if (data.access_token) {
+          localStorage.setItem('token', data.access_token)
+        }
+        if (data.usuario) {
+          localStorage.setItem('user', JSON.stringify(data.usuario))
+        }
+        
+        // Redirecionar baseado no tipo de usuário
+        setTimeout(() => {
+          switch(data.usuario?.tipo) {
+            case 'admin':
+              window.location.href = '/admin/produtos'
+              break
+            case 'feirante':
+              window.location.href = '/vendor/produtos'
+              break
+            default:
+              window.location.href = '/produtos'
+          }
+        }, 500)
       }
+      
+      setErrors([])
     } catch (error) {
-      setErrors([error instanceof Error ? error.message : 'Erro ao processar solicitação'])
+      console.error("Erro na requisição:", error)
+      setErrors([error instanceof Error ? error.message : 'Erro ao conectar com o servidor. Verifique se o backend está rodando.'])
     } finally {
       setIsLoading(false)
     }
@@ -112,10 +163,13 @@ export default function Login() {
             <p className="text-zinc-400">
               {showRegister ? 'Preencha seus dados para começar' : 'Entre na sua conta para continuar'}
             </p>
+            <p className="text-zinc-500 text-sm mt-2">
+              Backend: {API_BASE_URL}
+            </p>
           </div>
 
           {/* Formulário */}
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-6" noValidate>
             {/* Campos de Cadastro */}
             {showRegister && (
               <>
@@ -184,7 +238,7 @@ export default function Login() {
                       <input
                         type="text"
                         name="localizacao"
-                        placeholder="Digite a localização da banca"
+                        placeholder="Ex: Feira da 408 Sul, box 15"
                         value={formData.localizacao}
                         onChange={handleInputChange}
                         className="w-full bg-zinc-800 text-white placeholder-zinc-500 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500 transition-all duration-200"
@@ -218,7 +272,7 @@ export default function Login() {
               <input
                 type="password"
                 name="password"
-                placeholder="Digite sua senha"
+                placeholder="Digite sua senha (mínimo 6 caracteres)"
                 value={formData.password}
                 onChange={handleInputChange}
                 className="w-full bg-zinc-800 text-white placeholder-zinc-500 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500 transition-all duration-200"
@@ -234,7 +288,7 @@ export default function Login() {
               {isLoading ? (
                 <>
                   <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                  PROCESSANDO...
+                  {showRegister ? 'CRIANDO CONTA...' : 'ENTRANDO...'}
                 </>
               ) : (
                 showRegister ? 'CRIAR CONTA' : 'ENTRAR'
@@ -253,7 +307,7 @@ export default function Login() {
             </button>
           </div>
 
-          {/* Mensagens de Erro */}
+          {/* Mensagens de Erro/Sucesso */}
           {errors.length > 0 && (
             <div className="mt-6 p-4 bg-red-900/20 border border-red-800/50 rounded-lg">
               <div className="space-y-2">
@@ -268,12 +322,22 @@ export default function Login() {
               </div>
             </div>
           )}
+
+          {/* Dica para testes */}
+          <div className="mt-6 p-3 bg-zinc-800/30 rounded-lg border border-zinc-700/50">
+            <p className="text-zinc-400 text-xs">
+              💡 <strong>Para testar:</strong> Use joao@feira.com / 123 para usuario
+            </p>
+          </div>
         </div>
 
         {/* Footer */}
         <div className="text-center mt-6">
           <p className="text-zinc-600 text-sm">
             © 2025 iFeiranet - Plataforma de Feiras
+          </p>
+          <p className="text-zinc-700 text-xs mt-1">
+            Conectando frontend com backend real
           </p>
         </div>
       </div>

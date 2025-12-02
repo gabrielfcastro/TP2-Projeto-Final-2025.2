@@ -11,6 +11,8 @@ DATABASE_DIR = database
 PYLINTFILE ?= $(APP_DIR)
 TESTFILE ?= $(TEST_DIR) 
 
+.PHONY: all install init_db pylint test run docs clean
+
 all: install init_db pylint test
 
 install:
@@ -28,11 +30,12 @@ pylint:
 	$(PYTHON) -m pylint $(PYLINTFILE)
 	@echo "Verificação Concluída."
 
-test:
+test: clean
 	@echo "Executando Testes..."
 	COVERAGE_FILE=$(TEST_DIR)/.coverage PYTHONPATH=. $(PYTHON) -m pytest -v --cov=$(APP_DIR) $(TESTFILE)
 	@echo "Testes Concluídos."
 
+	
 run:
 	$(PYTHON) $(APP_DIR)/run.py
 
@@ -40,7 +43,8 @@ docs:
 	$(DOXYGEN) Doxyfile
 
 clean:
-	find . -type d -name "__pycache__" -exec $(RM) {} +
+	find . -type d -name "__pycache__" -exec rm -rf {} +
 	find . -type f -name "*.pyc" -delete
-	$(RM) .pytest_cache
-	$(RM) $(TEST_DIR)/.coverage
+	rm -f $(TEST_DIR)/.coverage
+	rm -f .coverage
+	rm -rf .pytest_cache

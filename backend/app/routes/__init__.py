@@ -1,0 +1,1 @@
+from .usuario_routes import usuario_bp, criar_usuario

@@ -127,3 +127,22 @@ def test_adicionar_avaliacao_produto_comentario_longo(setup_produto):  # pylint:
         )
     assert f"O comentário não pode exceder {avaliacoes_produtos_rep.TAMANHO_MAX_COMENTARIO} caracteres." in str(error_info.value)
 
+def test_deletar_avaliacao_produto(setup_produto):  # pylint: disable=redefined-outer-name
+    """Teste para deletar uma avaliação de produto."""
+    produto_id = setup_produto
+    nota = Decimal('5.0')
+    comentario = "Excelente!"
+    data_avaliacao = datetime.now()
+
+    nova_avaliacao = avaliacoes_produtos_rep.adicionar_avaliacao_produto(
+        produto_id, nota, comentario, data_avaliacao
+    )
+
+    assert nova_avaliacao is not None
+
+    avaliacoes_produtos_rep.deletar_avaliacao_produto(nova_avaliacao.id)
+
+    with engine.connect() as conn:
+        stmt = text(f"SELECT * FROM avaliacoes_produtos WHERE id = {nova_avaliacao.id}")
+        result = conn.execute(stmt).first()
+        assert result is None

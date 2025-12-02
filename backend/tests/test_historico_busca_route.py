@@ -19,6 +19,7 @@ DADOS_USUARIO_TESTE = {
 }
 
 DADOS_BUSCA_PRODUTO = {
+    "usuario_id": None,
     "produto_buscado": "Tomate Cereja",
     "feirante_buscado": ""
 }
@@ -81,10 +82,14 @@ def test_criar_historico_busca(client, setup_usuario_token):
     
     try:
         headers = {'Authorization': f'Bearer {token}'}
+
+        request_data = {
+            "usuario_id": usuario_id,
+            "produto_buscado": "Tomate Cereja",
+            "feirante_buscado": ""
+        }
         
-        response = client.post('/api/historico_busca/', 
-                             json=DADOS_BUSCA_PRODUTO, 
-                             headers=headers)
+        response = client.post('/api/historico_busca/', json=request_data, headers=headers)
         
         assert response.status_code == 201, (
             f"Esperado 201, obteve {response.status_code}. Body: {response.get_data(as_text=True)}"

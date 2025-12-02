@@ -14,7 +14,7 @@ export default function SearchPage() {
             <label htmlFor="produto-name">
              Pesquisar Produto
             </label>
-            <input type="text" name="produto-name" id="produto-name" />
+            <input type="text" name="produto-name" id="produto-name" placeholder="Pesquisar produto" />
 
             <button type="submit">Buscar</button>
         </form>

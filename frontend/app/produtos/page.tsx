@@ -16,7 +16,7 @@ export default function ProdutosPage() {
   useEffect(() => {
     async function carregarDados() {
       try {
-        const res = await fetch("http://127.0.0.1:5000/api/produtos");
+        const res = await fetch("http://127.0.0.1:5000/api/produtos/");
         const dados = await res.json();
         setProdutos(dados);
       } catch (error) {
@@ -73,7 +73,7 @@ export default function ProdutosPage() {
                     {prod.descricao}
                   </p>
                   <p className="text-3xl font-bold text-green-400">
-                    R$ {prod.preco.toFixed(2)}
+                    R$ {Number(prod.preco).toFixed(2)}
                   </p>
                 </div>
 

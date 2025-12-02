@@ -19,8 +19,7 @@ load_dotenv(os.path.join(dir, ".env"))
 def create_app():
     app = Flask(__name__)
 
-    cors = os.environ.get('CORS_ORIGIN')
-    CORS(app, origins=cors)
+    CORS(app, resources={r"/*": {"origins": "*"}})
     app.config["JWT_SECRET_KEY"] = os.environ.get('JWT_KEY')
     app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=1)
 

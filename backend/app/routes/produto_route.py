@@ -5,7 +5,7 @@ from flask_jwt_extended import jwt_required
 produto_bp = Blueprint('produto_bp', __name__, url_prefix = '/api/produtos')
 
 @produto_bp.route('/', methods = ['POST'])
-@jwt_required()
+#@jwt_required()
 def criar_produto():
     dados = request.json
 
@@ -70,7 +70,7 @@ def listar_produto_por_id(id_produto):
         return jsonify({"erro": str(e)}), 500
 
 @produto_bp.route('/<int:id_produto>', methods = ['DELETE'])
-@jwt_required()
+#@jwt_required()
 def deletar_produto(id_produto):
     try:
         produtos_rep.deletar_produto(id_produto)

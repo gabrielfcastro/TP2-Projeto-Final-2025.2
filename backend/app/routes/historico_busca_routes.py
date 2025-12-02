@@ -5,13 +5,13 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 historico_busca_bp = Blueprint('historico_busca_bp', __name__, url_prefix='/api/historico_busca')
 
 @historico_busca_bp.route('/', methods=['POST'])
-@jwt_required()
 def criar_historico():
     dados = request.json
 
     if not dados:
         return jsonify({'erro': 'JSON ausente'}), 400
     
+    current_user_id = dados.get('usuario_id')
     produto_buscado = dados.get('produto_buscado')
     feirante_buscado = dados.get('feirante_buscado')
 
@@ -19,7 +19,6 @@ def criar_historico():
         return jsonify({'erro': 'Digite um produto ou feirante para buscar'}), 400
     
     try:
-        current_user_id = get_jwt_identity()
         
         historico_id = historico_busca_rep.adicionar_historico_busca(
             usuario_id=current_user_id,
@@ -41,10 +40,9 @@ def criar_historico():
         return jsonify({"erro": "Erro interno no servidor"}), 500
 
 @historico_busca_bp.route('/', methods=['GET'])
-@jwt_required()
 def listar_historico():
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = dados.get('usuario_id')
         
         limit = request.args.get('limit', default=None, type=int)
         
@@ -68,10 +66,9 @@ def listar_historico():
         return jsonify({"erro": "Erro interno no servidor"}), 500
 
 @historico_busca_bp.route('/', methods=['DELETE'])
-@jwt_required()
 def limpar_historico():
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = dados.get('usuario_id')
         
         registros_deletados = historico_busca_rep.deletar_historico_por_usuario(
             user_id=current_user_id

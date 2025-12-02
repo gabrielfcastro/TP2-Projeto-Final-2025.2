@@ -29,21 +29,27 @@ def adicionar_avaliacao_produto(produto_id: int, nota: str, comentario: str) -> 
         Se a nota estiver fora do intervalo permitido ou
         se o comentário exceder o tamanho máximo.
     """
-    # if nota is None:
-    #     raise ValueError("A nota não pode ser nula.")
+    if nota is None:
+        raise ValueError("A nota não pode ser nula.")
 
     try:
         nota_decimal = Decimal(nota)
     except Exception as exc:
         raise ValueError("O valor fornecido não é um número decimal válido.") from exc
 
-    # #verifica se a nota está entre 1.0 e 5.0
-    # if nota_decimal.as_tuple().exponent < -1:
+    #verifica se a nota está entre 1.0 e 5.0
+    if nota_decimal < Decimal('1.0'):
+        raise ValueError("A nota não pode ser menor que 1.0.")
+    
+    if nota_decimal > Decimal('5.0'):
+        raise ValueError("A nota não pode ser maior que 5.0.")
+    
+    #verifica se a nota tem mais de 1 casa decimal
+    if nota_decimal.as_tuple().exponent < -1:
+        raise ValueError("A nota não pode ter mais de 1 casa decimal.")
 
-    #     raise ValueError("A nota não pode ter mais de 1 casa decimal.")
-
-    # if len(comentario) > TAMANHO_MAX_COMENTARIO:
-    #     raise ValueError(f"O comentário não pode exceder {TAMANHO_MAX_COMENTARIO} caracteres.")
+    if len(comentario) > TAMANHO_MAX_COMENTARIO:
+        raise ValueError(f"O comentário não pode exceder {TAMANHO_MAX_COMENTARIO} caracteres.")
 
     # Inserir a avaliação no banco de dados
     with engine.begin() as conn:

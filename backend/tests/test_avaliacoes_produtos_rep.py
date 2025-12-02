@@ -82,17 +82,27 @@ def test_adicionar_avaliacao_produto_nota_invalida(setup_produto):  # pylint: di
 
     with pytest.raises(ValueError) as error_info:
         avaliacoes_produtos_rep.adicionar_avaliacao_produto(
-            produto_id, Decimal('6.0'), comentario
+            produto_id, None, comentario
         )
-    assert "A nota não pode ser maior que 5.0." in str(error_info.value)
+    assert "A nota não pode ser nula." in str(error_info.value)
+
+    with pytest.raises(ValueError) as error_info:
+        avaliacoes_produtos_rep.adicionar_avaliacao_produto(
+            produto_id, Decimal('3.14'), comentario
+        )
+    assert "A nota não pode ter mais de 1 casa decimal." in str(error_info.value)
+
     with pytest.raises(ValueError) as error_info:
         avaliacoes_produtos_rep.adicionar_avaliacao_produto(
             produto_id, Decimal('0.0'), comentario
         )
     assert "A nota não pode ser menor que 1.0." in str(error_info.value)
+
     with pytest.raises(ValueError) as error_info:
         avaliacoes_produtos_rep.adicionar_avaliacao_produto(
-            produto_id, None, comentario
+            produto_id, Decimal('6.0'), comentario
         )
-    assert "A nota não pode ser nula." in str(error_info.value)
-    
+    assert "A nota não pode ser maior que 5.0." in str(error_info.value)
+
+
+

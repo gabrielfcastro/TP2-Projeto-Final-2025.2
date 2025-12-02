@@ -1,39 +1,37 @@
 "use client";
 
-import { ProductService } from "@/services/Product/ProductService";
-import Product from "@/types/ProductType";
-import { useState } from "react";
+import { useProductSearch } from "@/hooks/useProductSearch";
 
 export default function SearchPage() {
-	const [products, setProducts] = useState<Product[]>([]);
+  const { products, query, loading, error, setQuery, handleSearch } = useProductSearch();
 
-	const handlerBuscarProduto = async (
-		e: React.FormEvent<HTMLFormElement>
-	) => {
-		e.preventDefault();
-		const response = await ProductService.getProducts();
-		setProducts(response);
-	};
+  return (
+    <>
+      <h1>Lista de Produtos</h1>
 
-	return (
-		<>
-			Lista de Produtos
-			<form onSubmit={handlerBuscarProduto}>
-				<label htmlFor="produto-name">Pesquisar Produto</label>
-				<input
-					type="text"
-					name="produto-name"
-					id="produto-name"
-					placeholder="Pesquisar produto"
-				/>
+      <form onSubmit={handleSearch}>
+        <label htmlFor="produto-name">Pesquisar Produto</label>
 
-				<button type="submit">Buscar</button>
-			</form>
-			<ul>
-				{products.map((product) => (
-					<li key={product.id}>{product.nome}</li>
-				))}
-			</ul>
-		</>
-	);
+        <input
+          type="text"
+          id="produto-name"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder="Pesquisar produto"
+        />
+
+        <button type="submit" disabled={loading}>
+          {loading ? "Buscando..." : "Buscar"}
+        </button>
+      </form>
+
+      {error && <p style={{ color: "red" }}>{error}</p>}
+
+      <ul>
+        {products.map((product) => (
+          <li key={product.id}>{product.nome}</li>
+        ))}
+      </ul>
+    </>
+  );
 }

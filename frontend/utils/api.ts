@@ -1,110 +1,172 @@
 // utils/api.ts
-import { getMockResponse, isNetworkError } from "./mockHandler";
+import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
+import { getMockResponse } from "./mockHandler";
 
-type RequestInterceptor = (
-	url: string,
-	options: RequestInit
-) => Promise<void> | void;
-type ResponseInterceptor = (response: Response) => Promise<void> | void;
+interface MockConfig extends AxiosRequestConfig {
+	__isMock?: boolean;
+}
 
-class Api {
-	private baseUrl: string;
-	private defaultHeaders: Record<string, string> = {};
-	private requestInterceptors: RequestInterceptor[] = [];
-	private responseInterceptors: ResponseInterceptor[] = [];
-	private useMock: boolean;
+interface ApiResponse {
+	redirect_url?: string;
+	[key: string]: unknown;
+}
 
-	constructor() {
-		const baseUrl =
-			process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:5000/api";
-		this.baseUrl = baseUrl;
-		this.useMock =
-			process.env.NEXT_PUBLIC_USE_MOCK === "true" ||
-			(typeof window !== "undefined" &&
-				localStorage.getItem("useMock") === "true");
+let cachedToken: string | null = null;
+let tokenPromise: Promise<string | null> | null = null;
 
-		// interceptors globais já definidos aqui
-		this.addRequestInterceptor(async (url, options) => {
-			const token = localStorage.getItem("token");
-			if (token) {
-				options.headers = {
-					...options.headers,
-					Authorization: `Bearer ${token}`,
-				};
-			}
+export function clearCachedToken() {
+	cachedToken = null;
+	tokenPromise = null;
+}
+
+const baseURL =
+	process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:5000/api";
+
+function getUseMock(): boolean {
+	return (
+		process.env.NEXT_PUBLIC_USE_MOCK === "true" ||
+		(typeof window !== "undefined" &&
+			localStorage.getItem("useMock") === "true")
+	);
+}
+
+async function getToken(): Promise<string | null> {
+	if (cachedToken) {
+		return cachedToken;
+	}
+
+	if (!tokenPromise) {
+		tokenPromise = Promise.resolve(
+			typeof window !== "undefined"
+				? localStorage.getItem("token")
+				: process.env.NEXT_PUBLIC_API_TOKEN || null
+		).then((token) => {
+			cachedToken = token;
+			return token;
 		});
-
-		this.addResponseInterceptor((response) => {
-			console.log("Response global:", response.status, response.url);
-		});
 	}
 
-	setDefaultHeaders(headers: Record<string, string>) {
-		this.defaultHeaders = headers;
-	}
+	const token = await tokenPromise;
+	tokenPromise = null;
 
-	addRequestInterceptor(interceptor: RequestInterceptor) {
-		this.requestInterceptors.push(interceptor);
-	}
+	return token;
+}
 
-	addResponseInterceptor(interceptor: ResponseInterceptor) {
-		this.responseInterceptors.push(interceptor);
-	}
+// Função para obter dados mockados
+async function getMockData<T>(endpoint: string): Promise<T> {
+	const response = await getMockResponse(endpoint);
+	return (await response.json()) as T;
+}
 
-	async request(
-		endpoint: string,
-		options: RequestInit = {}
-	): Promise<Response> {
-		if (this.useMock) {
-			console.log(`[MOCK] ${options.method || "GET"} ${endpoint}`);
-			return getMockResponse(endpoint);
+const api = axios.create({
+	baseURL,
+	headers: {
+		"Content-Type": "application/json",
+	},
+});
+
+// Interceptor de request
+api.interceptors.request.use(
+	async (config) => {
+		if (getUseMock()) {
+			console.log(`[MOCK] ${config.method?.toUpperCase() || "GET"} ${config.url}`);
+			// Para mock, não fazemos a requisição real
+			// Retornamos um config especial que será tratado no interceptor de response
+			(config as MockConfig).__isMock = true;
+			return config;
 		}
 
-		const url = `${this.baseUrl}${endpoint}`;
-		const requestOptions: RequestInit = {
-			...options,
-			headers: { ...this.defaultHeaders, ...(options.headers || {}) },
-		};
-
-		for (const interceptor of this.requestInterceptors) {
-			await interceptor(url, requestOptions);
+		const token = await getToken();
+		if (token) {
+			config.headers.Authorization = `Bearer ${token}`;
 		}
 
-		try {
-			const response = await fetch(url, requestOptions);
+		return config;
+	},
+	(error) => {
+		return Promise.reject(error);
+	}
+);
 
-			for (const interceptor of this.responseInterceptors) {
-				await interceptor(response);
+// Interceptor de response
+api.interceptors.response.use(
+	(response: AxiosResponse) => {
+		// Se for mock, substitui a resposta
+		if ((response.config as MockConfig).__isMock) {
+			return getMockData(response.config.url || "").then((data) => ({
+				...response,
+				data,
+			}));
+		}
+
+		// Verifica redirect_url na resposta
+		const apiResponse = response.data as ApiResponse;
+		if (apiResponse?.redirect_url && typeof window !== "undefined") {
+			window.location.href = apiResponse.redirect_url;
+		}
+
+		return response;
+	},
+	async (error: AxiosError) => {
+		// Se for mock, retorna dados mockados mesmo em caso de erro
+		if ((error.config as MockConfig)?.__isMock) {
+			const data = await getMockData(error.config?.url || "");
+			return Promise.resolve({
+				...error.response,
+				data,
+			} as AxiosResponse);
+		}
+
+		// Trata redirect_url em erros
+		const errorData = error.response?.data as ApiResponse | undefined;
+		const redirectUrl = errorData?.redirect_url;
+
+		if (redirectUrl && typeof window !== "undefined") {
+			window.location.href = redirectUrl;
+		}
+
+		// Trata 401
+		if (error.response?.status === 401) {
+			clearCachedToken();
+			if (typeof window !== "undefined") {
+				window.location.href = "/agente/login";
 			}
-
-			return response;
-		} catch (error) {
-			if (isNetworkError(error)) {
-				console.warn(
-					`[API] Network error, using mock for ${endpoint}. Set localStorage.setItem("useMock", "true") to always use mock.`
-				);
-				return getMockResponse(endpoint);
-			}
-			throw error;
 		}
-	}
 
-	// Método para alternar entre mock e API real
-	setUseMock(useMock: boolean) {
-		this.useMock = useMock;
-		if (typeof window !== "undefined") {
-			if (useMock) {
-				localStorage.setItem("useMock", "true");
-			} else {
-				localStorage.removeItem("useMock");
-			}
+		// Se for erro de rede, tenta usar mock
+		if (
+			!error.response &&
+			(error.code === "ERR_NETWORK" ||
+				error.message.includes("Network Error"))
+		) {
+			console.warn(
+				`[API] Network error, using mock for ${error.config?.url}. Set localStorage.setItem("useMock", "true") to always use mock.`
+			);
+			const data = await getMockData(error.config?.url || "");
+			return Promise.resolve({
+				data,
+				status: 200,
+				statusText: "OK",
+				headers: {},
+				config: error.config || {},
+			} as AxiosResponse);
 		}
-	}
 
-	getUseMock(): boolean {
-		return this.useMock;
+		return Promise.reject(error);
+	}
+);
+
+// Funções auxiliares para mock
+export function setUseMock(useMock: boolean) {
+	if (typeof window !== "undefined") {
+		if (useMock) {
+			localStorage.setItem("useMock", "true");
+		} else {
+			localStorage.removeItem("useMock");
+		}
 	}
 }
 
-// instância global já com interceptors configurados
-export const api = new Api();
+export { getUseMock };
+
+export default api;

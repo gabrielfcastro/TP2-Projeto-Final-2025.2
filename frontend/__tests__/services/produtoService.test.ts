@@ -1,14 +1,13 @@
 // services/ProductService.test.ts
 import { ProductService } from "@/services/Product/ProductService";
 import type Product from "@/types/ProductType";
-import { api } from "@/utils/api";
+import api from "@/utils/api";
+import type { AxiosRequestConfig } from "axios";
 
 jest.mock("@/utils/api"); // mocka o módulo api
 
 describe("ProductService", () => {
-	const mockedApiRequest = api.request as jest.MockedFunction<
-		typeof api.request
-	>;
+	const mockedApi = api as jest.Mocked<typeof api>;
 
 	const productsMock: Product[] = [
 		{
@@ -55,45 +54,57 @@ describe("ProductService", () => {
 	});
 
 	it("GET products list", async () => {
-		const mockResponse = {
-			ok: true,
-			json: jest.fn().mockResolvedValue(productsMock),
-		} as unknown as Response;
-
-		mockedApiRequest.mockResolvedValue(mockResponse);
+		mockedApi.get.mockResolvedValue({
+			data: productsMock,
+			status: 200,
+			statusText: "OK",
+			headers: {},
+			config: {} as AxiosRequestConfig,
+		});
 
 		const products = await ProductService.getProducts();
 
 		expect(products).toEqual(productsMock);
-		expect(mockedApiRequest).toHaveBeenCalledWith("/produtos");
-		expect(mockResponse.json).toHaveBeenCalled();
+		expect(mockedApi.get).toHaveBeenCalledWith("/produtos");
+	});
+
+	it("GET products list with nome filter", async () => {
+		const filteredProducts = [productsMock[0]];
+		mockedApi.get.mockResolvedValue({
+			data: filteredProducts,
+			status: 200,
+			statusText: "OK",
+			headers: {},
+			config: {} as AxiosRequestConfig,
+		});
+
+		const products = await ProductService.getProducts("Produto 1");
+
+		expect(products).toEqual(filteredProducts);
+		expect(mockedApi.get).toHaveBeenCalledWith("/produtos?nome=Produto%201");
 	});
 
 	it("GET product details", async () => {
-		const mockResponse = {
-			ok: true,
-			json: jest.fn().mockResolvedValue(productsMock[0]),
-		} as unknown as Response;
-
-		mockedApiRequest.mockResolvedValue(mockResponse);
+		mockedApi.get.mockResolvedValue({
+			data: productsMock[0],
+			status: 200,
+			statusText: "OK",
+			headers: {},
+			config: {} as AxiosRequestConfig,
+		});
 
 		const product = await ProductService.getProduct(1);
 
 		expect(product).toEqual(productsMock[0]);
-		expect(mockedApiRequest).toHaveBeenCalledWith("/produtos/1");
-		expect(mockResponse.json).toHaveBeenCalled();
+		expect(mockedApi.get).toHaveBeenCalledWith("/produtos/1");
 	});
 
 	it("GET product details with invalid id", async () => {
-		const mockResponse = {
-			ok: false,
-			json: jest.fn().mockResolvedValue(null),
-		} as unknown as Response;
-
-		mockedApiRequest.mockResolvedValue(mockResponse);
-
-		await expect(ProductService.getProduct(999)).rejects.toThrow(
-			"Failed to fetch product"
+		mockedApi.get.mockRejectedValue(
+			new Error("Request failed with status code 404")
 		);
+
+		await expect(ProductService.getProduct(999)).rejects.toThrow();
+		expect(mockedApi.get).toHaveBeenCalledWith("/produtos/999");
 	});
 });

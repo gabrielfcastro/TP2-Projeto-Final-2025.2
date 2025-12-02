@@ -48,8 +48,8 @@ def adicionar_avaliacao_produto(produto_id: int, nota: str, comentario: str) -> 
     if nota_decimal.as_tuple().exponent < -1:
         raise ValueError("A nota não pode ter mais de 1 casa decimal.")
 
-    # if len(comentario) > TAMANHO_MAX_COMENTARIO:
-    #     raise ValueError(f"O comentário não pode exceder {TAMANHO_MAX_COMENTARIO} caracteres.")
+    if len(comentario) > TAMANHO_MAX_COMENTARIO:
+        raise ValueError(f"O comentário não pode exceder {TAMANHO_MAX_COMENTARIO} caracteres.")
 
     # Inserir a avaliação no banco de dados
     with engine.begin() as conn:

@@ -80,8 +80,6 @@ def test_adicionar_avaliacao_produto_sucesso(setup_produto):  # pylint: disable=
     assert nova_avaliacao.comentario == comentario
     assert nova_avaliacao.data_avaliacao == data_avaliacao
 
-    #avaliacao_media_produto = avaliacoes_produtos_rep.calcular_media_avaliacoes_produto(produto_id)
-
 def test_adicionar_avaliacao_produto_nota_invalida(setup_produto):  # pylint: disable=redefined-outer-name
     """Teste para adicionar uma avaliação de produto com nota inválida."""
     produto_id = setup_produto
@@ -198,3 +196,31 @@ def test_calcular_media_avaliacoes_produto(setup_produto):  # pylint: disable=re
 
     expected_media = (nota1 + nota2) / Decimal('2')
     assert media == expected_media
+
+def test_atualizar_media_avaliacoes_tabela_produtos(setup_produto):  # pylint: disable=redefined-outer-name
+    """Teste para atualizar a média das avaliações na tabela de produtos."""
+    produto_id = setup_produto
+    nota1 = Decimal('3.0')
+    comentario1 = "Produto razoável."
+    data_avaliacao1 = datetime.now()
+
+    nota2 = Decimal('5.0')
+    comentario2 = "Produto excelente!"
+    data_avaliacao2 = datetime.now()
+
+    avaliacoes_produtos_rep.adicionar_avaliacao_produto(
+        produto_id, nota1, comentario1, data_avaliacao1
+    )
+    avaliacoes_produtos_rep.adicionar_avaliacao_produto(
+        produto_id, nota2, comentario2, data_avaliacao2
+    )
+
+    avaliacoes_produtos_rep.atualizar_media_avaliacoes_tabela_produtos(produto_id)
+
+    with engine.connect() as conn:
+        stmt = text(f"SELECT media_avaliacoes FROM produtos WHERE id = {produto_id}")
+        result = conn.execute(stmt).first()
+        media_atualizada = result['media_avaliacoes']
+
+    expected_media = (nota1 + nota2) / Decimal('2')
+    assert media_atualizada == expected_media.quantize(Decimal('0.10'))

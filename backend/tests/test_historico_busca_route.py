@@ -98,7 +98,7 @@ def test_criar_historico_busca(client, setup_usuario_token):
         historico = historico_busca_rep.buscar_historico_por_id(historico_id)
         assert historico is not None
         assert historico['produto_buscado'] == DADOS_BUSCA_PRODUTO['produto_buscado']
-        assert historico['user_id'] == usuario_id
+        assert historico['usuario_id'] == usuario_id
     
     finally:
         if historico_id:
@@ -218,7 +218,7 @@ def test_limpar_todo_historico(client, setup_usuario_token):
         data = response.get_json()
         assert data['registros_removidos'] >= 3
         
-        historicos = historico_busca_rep.listar_historico_busca(user_id=usuario_id)
+        historicos = historico_busca_rep.listar_historico_busca(usuario_id=usuario_id)
         assert len(historicos) == 0
     
     finally:

@@ -48,12 +48,12 @@ def listar_historico():
         
         if limit:
             historicos = historico_busca_rep.buscar_historico_recente(
-                user_id=current_user_id, 
+                usuario_id=current_user_id, 
                 limite=limit
             )
         else:
             historicos = historico_busca_rep.listar_historico_busca(
-                user_id=current_user_id
+                usuario_id=current_user_id
             )
         
         return jsonify({
@@ -71,7 +71,7 @@ def limpar_historico():
         current_user_id = dados.get('usuario_id')
         
         registros_deletados = historico_busca_rep.deletar_historico_por_usuario(
-            user_id=current_user_id
+            usuario_id=current_user_id
         )
         
         return jsonify({

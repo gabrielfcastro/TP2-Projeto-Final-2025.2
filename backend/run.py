@@ -7,7 +7,10 @@ from dotenv import load_dotenv
 import os
 
 from app.models.usuario_rep import listar_usuarios
+
 from app.routes.usuario_routes import usuario_bp
+from app.routes.feirante_routes import feirante_bp
+from app.routes.produto_route import produto_bp
 
 dir = os.path.abspath(os.path.dirname(__file__))
 load_dotenv(os.path.join(dir, ".env"))
@@ -16,8 +19,7 @@ load_dotenv(os.path.join(dir, ".env"))
 def create_app():
     app = Flask(__name__)
 
-    cors = os.environ.get('CORS_ORIGIN')
-    CORS(app, origins=cors)
+    CORS(app, resources={r"/*": {"origins": "*"}})
     app.config["JWT_SECRET_KEY"] = os.environ.get('JWT_KEY')
     app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=1)
 
@@ -31,9 +33,11 @@ def create_app():
         if not usuario:
             return None
         return usuario[0]
-    
-    app.register_blueprint(usuario_bp)  
-    
+
+    app.register_blueprint(usuario_bp)
+    app.register_blueprint(feirante_bp)
+    app.register_blueprint(produto_bp)
+
     return app
 
 if __name__ == "__main__":

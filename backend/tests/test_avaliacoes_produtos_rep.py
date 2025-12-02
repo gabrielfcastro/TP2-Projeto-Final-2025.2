@@ -74,3 +74,25 @@ def test_adicionar_avaliacao_produto_sucesso(setup_produto):  # pylint: disable=
     assert nova_avaliacao.nota == nota
     assert nova_avaliacao.nota is not None
     assert nova_avaliacao.comentario == comentario
+
+def test_adicionar_avaliacao_produto_nota_invalida(setup_produto):  # pylint: disable=redefined-outer-name
+    """Teste para adicionar uma avaliação de produto com nota inválida."""
+    produto_id = setup_produto
+    comentario = "Bom produto."
+
+    with pytest.raises(ValueError) as error_info:
+        avaliacoes_produtos_rep.adicionar_avaliacao_produto(
+            produto_id, Decimal('6.0'), comentario
+        )
+    assert "A nota não pode ser maior que 5.0." in str(error_info.value)
+    with pytest.raises(ValueError) as error_info:
+        avaliacoes_produtos_rep.adicionar_avaliacao_produto(
+            produto_id, Decimal('0.0'), comentario
+        )
+    assert "A nota não pode ser menor que 1.0." in str(error_info.value)
+    with pytest.raises(ValueError) as error_info:
+        avaliacoes_produtos_rep.adicionar_avaliacao_produto(
+            produto_id, None, comentario
+        )
+    assert "A nota não pode ser nula." in str(error_info.value)
+    

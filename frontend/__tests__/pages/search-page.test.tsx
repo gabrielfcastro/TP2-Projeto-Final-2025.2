@@ -12,5 +12,10 @@ describe("Página de pesquisa", () => {
         expect(screen.getByText("Buscar")).toBeInTheDocument();
     })
 
+    it("contem input de pesquisa", () => {
+        render(<SearchPage />)
+        expect(screen.getByPlaceholderText("Pesquisar produto")).toBeInTheDocument();
+    })
+
     
 })

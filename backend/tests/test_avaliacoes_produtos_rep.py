@@ -6,6 +6,7 @@ de avaliações de produtos.
 """
 
 #Inicie o WSL na pasta backend antes de rodar:
+#source .env/bin/activate
 #make pylint PYLINTFILE=tests/test_avaliacoes_produtos_rep.py
 #make test TESTFILE=tests/test_avaliacoes_produtos_rep.py
 
@@ -27,8 +28,9 @@ ID_FEIRANTE_TESTE = 8888
 NOME_PRODUTO_TESTE = "Produto Teste"
 
 
+#O comentário abaixo desabilita o aviso do pylint sobre variavel com mesmo nome
 @pytest.fixture()
-def setup_produto():
+def setup_produto():  # pylint: disable=redefined-outer-name
     """Fixture que configura dados de teste para avaliações de produtos.
     Cria um feirante e um produto antes do teste e os remove após o teste.
     """
@@ -53,3 +55,19 @@ def setup_produto():
         conn.execute(text(f"DELETE FROM avaliacoes_produto WHERE produto_id = {ID_PRODUTO_TESTE}"))
         conn.execute(text(f"DELETE FROM produtos WHERE id = {ID_PRODUTO_TESTE}"))
         conn.execute(text(f"DELETE FROM feirantes WHERE id = {ID_FEIRANTE_TESTE}"))
+
+
+def test_adicionar_avaliacao_produto_sucesso(setup_produto):  # pylint: disable=redefined-outer-name
+    """Teste para adicionar uma avaliação de produto corretamente."""
+    produto_id = setup_produto
+    nota = 4
+    comentario = "Ótimo produto!"
+
+    nova_avaliacao = avaliacoes_produtos_rep.adicionar_avaliacao_produto(
+        produto_id, nota, comentario
+    )
+
+    assert nova_avaliacao is not None
+    assert nova_avaliacao.produto_id == produto_id
+    assert nova_avaliacao.nota == nota
+    assert nova_avaliacao.comentario == comentario

@@ -4,7 +4,7 @@ import { useState } from "react"
 import { UserType, FormData } from './components/types/user'
 import { useFormValidation } from './components/hooks/useFormValidation'
 
-// URL base da API - ajuste conforme necessário
+
 const API_BASE_URL = 'http://localhost:5000/api'
 
 export default function Login() {
@@ -21,9 +21,9 @@ export default function Login() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
-    setErrors([]) // Limpa erros anteriores
+    setErrors([])
 
-    // Validação MANUAL
+    
     const newErrors: string[] = []
     
     console.log("Validando:", formData.email)
@@ -56,7 +56,10 @@ export default function Login() {
     }
 
     try {
-      const url = showRegister ? `${API_BASE_URL}/register` : `${API_BASE_URL}/login`
+    
+      const url = showRegister 
+        ? `${API_BASE_URL}/usuarios/`  // REGISTRO - POST para /api/usuarios/
+        : `${API_BASE_URL}/usuarios/login`  // LOGIN - POST para /api/usuarios/login
       
       // Converter os dados para o formato esperado pelo backend
       const requestBody = showRegister 
@@ -64,11 +67,7 @@ export default function Login() {
             nome: formData.nome,
             email: formData.email,
             senha: formData.password,  // Backend espera 'senha', não 'password'
-            tipo: userType === 'vendor' ? 'feirante' : userType,  // Converter 'vendor' para 'feirante'
-            ...(userType === 'vendor' && {
-              nomeBanca: formData.nomeBanca,
-              localizacao: formData.localizacao
-            })
+            tipo: userType === 'vendor' ? 'feirante' : userType  // Converter 'vendor' para 'feirante'
           }
         : {
             email: formData.email,
@@ -76,6 +75,7 @@ export default function Login() {
           }
 
       console.log(`Enviando para ${url}:`, requestBody)
+      console.log("URL completa:", url)
 
       const response = await fetch(url, {
         method: 'POST',
@@ -85,13 +85,22 @@ export default function Login() {
         body: JSON.stringify(requestBody)
       })
 
+      console.log("Status da resposta:", response.status)
+      console.log("Status OK?", response.ok)
+
+      // Primeiro verifique se a resposta é JSON
+      const contentType = response.headers.get("content-type")
+      if (!contentType || !contentType.includes("application/json")) {
+        throw new Error(`Resposta não é JSON. Status: ${response.status} ${response.statusText}`)
+      }
+
       const data = await response.json()
       
       console.log("Resposta do servidor:", data)
 
       if (!response.ok) {
         // Erro do servidor
-        throw new Error(data.error || `Erro ${response.status}: ${response.statusText}`)
+        throw new Error(data.error || data.erro || `Erro ${response.status}: ${response.statusText}`)
       }
 
       // Sucesso no login/cadastro
@@ -105,35 +114,43 @@ export default function Login() {
         console.log("Login realizado:", data)
         alert("Login realizado com sucesso!")
 
+        // IMPORTANTE: O backend NÃO retorna um campo "usuario", só retorna "email" e "access_token"
+        // Verifique a estrutura real da resposta no console.log acima
+
         // ========== PARTE CRÍTICA - SALVAMENTO NO LOCALSTORAGE ==========
         // Salvar o token JWT
         if (data.access_token) {
           localStorage.setItem("token", data.access_token)
         }
         
-        // Salvar os dados do usuário com DUAS chaves diferentes
-        if (data.usuario) {
-          // 1. Chave 'feiranet_usuario' - requisito do projeto
-          localStorage.setItem("feiranet_usuario", JSON.stringify(data.usuario))
-          
-          // 2. Chave 'user' - para compatibilidade com os testes
-          localStorage.setItem("user", JSON.stringify(data.usuario))
-          
-          console.log("Dados salvos no localStorage com chaves:", {
-            token: !!data.access_token,
-            feiranet_usuario: true,
-            user: true
-          })
+        // Salvar os dados do usuário (baseado na resposta real do backend)
+        // O backend atual só retorna email e token, então criamos um objeto básico
+        const userData = {
+          email: data.email,
+          nome: data.nome || data.email.split('@')[0], // Se não tiver nome, usa parte do email
+          tipo: userType // Como o backend não retorna tipo, usamos o selecionado
         }
+        
+        // 1. Chave 'feiranet_usuario' - requisito do projeto
+        localStorage.setItem("feiranet_usuario", JSON.stringify(userData))
+        
+        // 2. Chave 'user' - para compatibilidade com os testes
+        localStorage.setItem("user", JSON.stringify(userData))
+        
+        console.log("Dados salvos no localStorage:", {
+          token: !!data.access_token,
+          userData: userData
+        })
+
         // ========== FIM DA PARTE CRÍTICA ==========
 
-        // Redirecionar baseado no tipo de usuário
+        // Redirecionar baseado no tipo de usuário (usando userType já que backend não retorna)
         setTimeout(() => {
-          switch (data.usuario?.tipo) {
+          switch (userType) {
             case "admin":
               window.location.href = "/admin/products"
               break
-            case "feirante":
+            case "vendor":
               window.location.href = "/produtos"
               break
             default:
@@ -144,8 +161,8 @@ export default function Login() {
       
       setErrors([])
     } catch (error) {
-      console.error("Erro na requisição:", error)
-      setErrors([error instanceof Error ? error.message : 'Erro ao conectar com o servidor. Verifique se o backend está rodando.'])
+      console.error("Erro completo na requisição:", error)
+      setErrors([error instanceof Error ? error.message : 'Erro ao conectar com o servidor. Verifique se o backend está rodando na porta 5000.'])
     } finally {
       setIsLoading(false)
     }
@@ -283,7 +300,7 @@ export default function Login() {
               <input
                 type="password"
                 name="password"
-                placeholder="Digite sua senha (mínimo 6 caracteres)"
+                placeholder="Digite sua senha (leia a descrição)"
                 value={formData.password}
                 onChange={handleInputChange}
                 className="w-full bg-zinc-800 text-white placeholder-zinc-500 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500 transition-all duration-200"
@@ -337,7 +354,14 @@ export default function Login() {
           {/* Dica para testes */}
           <div className="mt-6 p-3 bg-zinc-800/30 rounded-lg border border-zinc-700/50">
             <p className="text-zinc-400 text-xs">
-              💡 <strong>Para testar:</strong> Use joao@feira.com / 123 para usuario
+              💡 <strong>Para testar:</strong> Use usuario / Senha. 
+            </p>
+            <p className="text-zinc-400 text-xs">
+             Senha deve conter pelo menos 1 letra Maiúscula, 1 letra Minúscula, 
+             1 numérico e 1 caractere especial e conter entre 8 à 15 caracteres.
+            </p>
+            <p className="text-zinc-500 text-xs mt-1">
+              Backend rodando em: http://localhost:5000
             </p>
           </div>
         </div>

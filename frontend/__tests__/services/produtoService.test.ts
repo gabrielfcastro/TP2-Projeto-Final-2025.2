@@ -1,9 +1,11 @@
+import { ProductService } from "@/services/ProductService";
+
 describe("Product Service", () => {
     let mockFetch: jest.Mock;
-    let service: ProdutoService
+    let service: ProductService
     
     
     it("Exist ProducService", () => {
-        expect(ProdutoService).toBeDefined();
+        expect(ProductService).toBeDefined();
     })
 })

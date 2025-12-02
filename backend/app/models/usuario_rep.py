@@ -62,6 +62,7 @@ def listar_usuarios(email = None, id = None):
     return usuarios
 
 def verificar_credenciais(email: str, senha_enviada: str):
+    usuario_encontrado = None
 
     stmt = select(usuario).where(usuario.c.email == email)
     
@@ -90,5 +91,5 @@ def deletar_usuario(email:str):
     with engine.begin() as conn:
         result = conn.execute(stmt)
         if result.rowcount == 0:
-            raise LookupError("Nenhum usuário encontrado com esse id.")
+            raise LookupError("Nenhum usuário encontrado com esse email.")
     print(f"Usuário com email {email} removido com sucesso!")

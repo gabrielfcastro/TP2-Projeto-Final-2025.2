@@ -60,7 +60,7 @@ def login():
     
     try:
         usuario = usuario_rep.verificar_credenciais(email,senha)
-        access_token = create_access_token(identity=usuario['email'])
+        access_token = create_access_token(identity=email)
 
         json = {"email": usuario['email'],
                 "access_token": access_token}

@@ -71,7 +71,7 @@ describe("ProductService", () => {
     expect(mockResponse.json).toHaveBeenCalled();
   });
 
-  it ("Show product details", async () => {
+  it ("GET product details", async () => {
     const mockResponse = {
       ok: true,
       json: jest.fn().mockResolvedValue(productsMock[0]),
@@ -84,5 +84,16 @@ describe("ProductService", () => {
     expect(product).toEqual(productsMock[0]);
     expect(mockedApiRequest).toHaveBeenCalledWith("/produtos/1");
     expect(mockResponse.json).toHaveBeenCalled();
+  });
+
+  it ("GET product details with invalid id", async () => {
+    const mockResponse = {
+      ok: false,
+      json: jest.fn().mockResolvedValue(null),
+    } as unknown as Response;
+
+    mockedApiRequest.mockResolvedValue(mockResponse);
+
+    await expect(serviceProduct.getProduct(999)).rejects.toThrow("Failed to fetch product");
   });
 });

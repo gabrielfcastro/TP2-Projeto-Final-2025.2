@@ -5,7 +5,20 @@ export class ProductService {
   async getProducts(): Promise<Product[]> {
     const response = await api.request("/produtos");
 
-    // return (await response.json()) as Product[];
+    if (!response.ok) {
+      throw new Error("Failed to fetch products");
+    }
+
+    return response.json();
+  }
+
+  async getProduct(id: number): Promise<Product> {
+    const response = await api.request(`/produtos/${id}`);
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch product");
+    }
+
     return response.json();
   }
 }

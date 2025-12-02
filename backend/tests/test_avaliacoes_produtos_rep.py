@@ -15,6 +15,7 @@ import os
 from decimal import Decimal
 from sqlalchemy import text
 import pytest
+from datetime import datetime
 
 from app.models.connection import engine
 from app.models import avaliacoes_produtos_rep
@@ -63,9 +64,10 @@ def test_adicionar_avaliacao_produto_sucesso(setup_produto):  # pylint: disable=
     produto_id = setup_produto
     nota = Decimal('4.5')
     comentario = "Ótimo produto!"
+    data_avaliacao = datetime.now()
 
     nova_avaliacao = avaliacoes_produtos_rep.adicionar_avaliacao_produto(
-        produto_id, nota, comentario
+        produto_id, nota, comentario, data_avaliacao
     )
 
     print(nova_avaliacao.nota)
@@ -74,33 +76,41 @@ def test_adicionar_avaliacao_produto_sucesso(setup_produto):  # pylint: disable=
     assert nova_avaliacao.nota == nota
     assert nova_avaliacao.nota is not None
     assert nova_avaliacao.comentario == comentario
+    assert nova_avaliacao.data_avaliacao == data_avaliacao
 
 def test_adicionar_avaliacao_produto_nota_invalida(setup_produto):  # pylint: disable=redefined-outer-name
     """Teste para adicionar uma avaliação de produto com nota inválida."""
     produto_id = setup_produto
     comentario = "Bom produto."
+    data_avaliacao = datetime.now()
 
     with pytest.raises(ValueError) as error_info:
         avaliacoes_produtos_rep.adicionar_avaliacao_produto(
-            produto_id, None, comentario
+            produto_id, None, comentario, data_avaliacao
         )
     assert "A nota não pode ser nula." in str(error_info.value)
 
     with pytest.raises(ValueError) as error_info:
         avaliacoes_produtos_rep.adicionar_avaliacao_produto(
-            produto_id, Decimal('3.14'), comentario
+            produto_id, "abc", comentario, data_avaliacao
+        )
+    assert "O valor fornecido não é um número decimal válido." in str(error_info.value)
+
+    with pytest.raises(ValueError) as error_info:
+        avaliacoes_produtos_rep.adicionar_avaliacao_produto(
+            produto_id, Decimal('3.14'), comentario, data_avaliacao
         )
     assert "A nota não pode ter mais de 1 casa decimal." in str(error_info.value)
 
     with pytest.raises(ValueError) as error_info:
         avaliacoes_produtos_rep.adicionar_avaliacao_produto(
-            produto_id, Decimal('0.0'), comentario
+            produto_id, Decimal('0.0'), comentario, data_avaliacao
         )
     assert "A nota não pode ser menor que 1.0." in str(error_info.value)
 
     with pytest.raises(ValueError) as error_info:
         avaliacoes_produtos_rep.adicionar_avaliacao_produto(
-            produto_id, Decimal('6.0'), comentario
+            produto_id, Decimal('6.0'), comentario, data_avaliacao
         )
     assert "A nota não pode ser maior que 5.0." in str(error_info.value)
 
@@ -109,10 +119,11 @@ def test_adicionar_avaliacao_produto_comentario_longo(setup_produto):  # pylint:
     produto_id = setup_produto
     nota = Decimal('4.0')
     comentario = "A" * (avaliacoes_produtos_rep.TAMANHO_MAX_COMENTARIO + 1)
+    data_avaliacao = datetime.now()
 
     with pytest.raises(ValueError) as error_info:
         avaliacoes_produtos_rep.adicionar_avaliacao_produto(
-            produto_id, nota, comentario
+            produto_id, nota, comentario, data_avaliacao
         )
     assert f"O comentário não pode exceder {avaliacoes_produtos_rep.TAMANHO_MAX_COMENTARIO} caracteres." in str(error_info.value)
 

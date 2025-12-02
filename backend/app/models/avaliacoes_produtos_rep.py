@@ -11,6 +11,7 @@ Pode criar, ler, atualizar e deletar avaliações de produtos.
 from decimal import Decimal
 from sqlalchemy import select, insert, update, delete
 from .connection import engine, metadata
+from datetime import datetime
 
 TAMANHO_MAX_COMENTARIO = 500
 
@@ -19,7 +20,7 @@ avaliacoes_produtos = metadata.tables.get("avaliacoes_produtos")
 if avaliacoes_produtos is None:
     raise Exception("Tabela 'avaliacoes_produtos' não encontrada no banco.")
 
-def adicionar_avaliacao_produto(produto_id: int, nota: str, comentario: str) -> None:
+def adicionar_avaliacao_produto(produto_id: int, nota: str, comentario: str, data: datetime) -> None:
     """Adiciona uma nova avaliação para um produto.
         Argumentos:
         produto_id (int): ID do produto
@@ -56,7 +57,8 @@ def adicionar_avaliacao_produto(produto_id: int, nota: str, comentario: str) -> 
         stmt = insert(avaliacoes_produtos).values(
             produto_id=produto_id,
             nota=nota_decimal,
-            comentario=comentario
+            comentario=comentario,
+            data_avaliacao=data
         )
         conn.execute(stmt)
 
@@ -65,7 +67,8 @@ def adicionar_avaliacao_produto(produto_id: int, nota: str, comentario: str) -> 
         stmt = select(avaliacoes_produtos).where(
             avaliacoes_produtos.c.produto_id == produto_id,
             avaliacoes_produtos.c.nota == nota_decimal,
-            avaliacoes_produtos.c.comentario == comentario
+            avaliacoes_produtos.c.comentario == comentario,
+            avaliacoes_produtos.c.data_avaliacao == data
         )
         result = conn.execute(stmt).first()
         return result

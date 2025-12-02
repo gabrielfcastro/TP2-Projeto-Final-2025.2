@@ -1,4 +1,5 @@
 from flask_jwt_extended import create_access_token
+from flask import Blueprint, request, jsonify
 import pytest
 import json
 import sys
@@ -169,7 +170,7 @@ def test_listar_historico_busca(client, setup_usuario_token):
             )
             ids_criados.append(historico_id)
         
-        response = client.get('/api/historico_busca/', headers=headers)
+        response = client.get('/api/historico_busca/', json={"usuario_id": usuario_id}, headers=headers)
         
         assert response.status_code == 200
         
@@ -200,7 +201,7 @@ def test_deletar_historico_inexistente(client, setup_usuario_token):
 def test_limpar_todo_historico(client, setup_usuario_token):
     token = setup_usuario_token["token"]
     usuario_id = setup_usuario_token["usuario_id"]
-    
+                
     try:
         headers = {'Authorization': f'Bearer {token}'}
         
@@ -211,14 +212,14 @@ def test_limpar_todo_historico(client, setup_usuario_token):
                 feirante_buscado=""
             )
         
-        response = client.delete('/api/historico_busca/', headers=headers)
+        response = client.delete('/api/historico_busca/', json={"usuario_id": usuario_id}, headers=headers)
         
         assert response.status_code == 200
         
         data = response.get_json()
         assert data['registros_removidos'] >= 3
         
-        historicos = historico_busca_rep.listar_historico_busca(usuario_id=usuario_id)
+        historicos = historico_busca_rep.listar_historico_buscas(usuario_id=usuario_id)
         assert len(historicos) == 0
     
     finally:

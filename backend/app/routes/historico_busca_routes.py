@@ -68,7 +68,14 @@ def listar_historico():
 @historico_busca_bp.route('/', methods=['DELETE'])
 def limpar_historico():
     try:
+        dados = request.json
+        if not dados:
+            return jsonify({'erro': 'JSON ausente'}), 400
+        
         current_user_id = dados.get('usuario_id')
+        
+        if not current_user_id:
+            return jsonify({'erro': 'ID do usuário é obrigatório'}), 400
         
         registros_deletados = historico_busca_rep.deletar_historico_por_usuario(
             usuario_id=current_user_id
@@ -80,4 +87,8 @@ def limpar_historico():
         }), 200
     
     except Exception as e:
+        # Add error logging for debugging
+        print(f"Error in limpar_historico: {e}")
+        import traceback
+        traceback.print_exc()
         return jsonify({"erro": "Erro interno no servidor"}), 500

@@ -5,15 +5,14 @@ import Product from "@/types/ProductType";
 import { useState } from "react";
 
 export default function SearchPage() {
-
-    const [products, setProducts] = useState<Product[]>([]);
+	const [products, setProducts] = useState<Product[]>([]);
 
 	const handlerBuscarProduto = async (
 		e: React.FormEvent<HTMLFormElement>
 	) => {
 		e.preventDefault();
 		const response = await ProductService.getProducts();
-        setProducts(response)
+		setProducts(response);
 	};
 
 	return (

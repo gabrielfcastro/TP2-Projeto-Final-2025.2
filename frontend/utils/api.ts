@@ -1,4 +1,6 @@
 // utils/api.ts
+import { getMockResponse, isNetworkError } from "./mockHandler";
+
 type RequestInterceptor = (
 	url: string,
 	options: RequestInit
@@ -10,15 +12,19 @@ class Api {
 	private defaultHeaders: Record<string, string> = {};
 	private requestInterceptors: RequestInterceptor[] = [];
 	private responseInterceptors: ResponseInterceptor[] = [];
+	private useMock: boolean;
 
 	constructor() {
 		const baseUrl =
 			process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:5000/api";
 		this.baseUrl = baseUrl;
+		this.useMock =
+			process.env.NEXT_PUBLIC_USE_MOCK === "true" ||
+			(typeof window !== "undefined" &&
+				localStorage.getItem("useMock") === "true");
 
 		// interceptors globais já definidos aqui
 		this.addRequestInterceptor(async (url, options) => {
-			// ex: adicionar token JWT automaticamente
 			const token = localStorage.getItem("token");
 			if (token) {
 				options.headers = {
@@ -29,7 +35,6 @@ class Api {
 		});
 
 		this.addResponseInterceptor((response) => {
-			// ex: log ou refresh token
 			console.log("Response global:", response.status, response.url);
 		});
 	}
@@ -50,6 +55,11 @@ class Api {
 		endpoint: string,
 		options: RequestInit = {}
 	): Promise<Response> {
+		if (this.useMock) {
+			console.log(`[MOCK] ${options.method || "GET"} ${endpoint}`);
+			return getMockResponse(endpoint);
+		}
+
 		const url = `${this.baseUrl}${endpoint}`;
 		const requestOptions: RequestInit = {
 			...options,
@@ -60,18 +70,39 @@ class Api {
 			await interceptor(url, requestOptions);
 		}
 
-		const response = await fetch(url, requestOptions);
+		try {
+			const response = await fetch(url, requestOptions);
 
-		for (const interceptor of this.responseInterceptors) {
-			await interceptor(response);
+			for (const interceptor of this.responseInterceptors) {
+				await interceptor(response);
+			}
+
+			return response;
+		} catch (error) {
+			if (isNetworkError(error)) {
+				console.warn(
+					`[API] Network error, using mock for ${endpoint}. Set localStorage.setItem("useMock", "true") to always use mock.`
+				);
+				return getMockResponse(endpoint);
+			}
+			throw error;
 		}
+	}
 
-		if (!response.ok) {
-			const text = await response.text();
-			throw new Error(`API request failed: ${response.status} ${text}`);
+	// Método para alternar entre mock e API real
+	setUseMock(useMock: boolean) {
+		this.useMock = useMock;
+		if (typeof window !== "undefined") {
+			if (useMock) {
+				localStorage.setItem("useMock", "true");
+			} else {
+				localStorage.removeItem("useMock");
+			}
 		}
+	}
 
-		return response;
+	getUseMock(): boolean {
+		return this.useMock;
 	}
 }
 

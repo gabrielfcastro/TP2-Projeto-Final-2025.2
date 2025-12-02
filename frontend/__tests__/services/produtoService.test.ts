@@ -1,15 +1,21 @@
-import { Product, ProductService } from "@/services/ProductService";
+// services/ProductService.test.ts
+import { Product, ProductService } from "@/services/Product/ProductService";
+import { api } from "@/utils/api";
 
-describe("Product Service", () => {
-  let mockFetch: jest.Mock;
+jest.mock("@/utils/api"); // mocka o módulo api
+
+describe("ProductService", () => {
   let serviceProduct: ProductService;
+  const mockedApiRequest = api.request as jest.MockedFunction<
+    typeof api.request
+  >;
 
   beforeEach(() => {
-    mockFetch = jest.fn();
-    serviceProduct = new ProductService(mockFetch);
+    serviceProduct = new ProductService();
+    jest.clearAllMocks();
   });
 
-  it("Exist ProducService", () => {
+  it("deve existir ProductService", () => {
     expect(ProductService).toBeDefined();
   });
 
@@ -20,14 +26,17 @@ describe("Product Service", () => {
       { id: 3, nome: "Produto 3", preco: 300 },
     ];
 
-    mockFetch.mockResolvedValue({
+    const mockResponse = {
       ok: true,
-      json: () => Promise.resolve(productsMock),
-    });
+      json: jest.fn().mockResolvedValue(productsMock),
+    } as unknown as Response;
+
+    mockedApiRequest.mockResolvedValue(mockResponse);
 
     const products = await serviceProduct.getProducts();
 
     expect(products).toEqual(productsMock);
-    expect(mockFetch).toHaveBeenCalledWith("/api/produtos");
+    expect(mockedApiRequest).toHaveBeenCalledWith("/api/produtos");
+    expect(mockResponse.json).toHaveBeenCalled();
   });
 });

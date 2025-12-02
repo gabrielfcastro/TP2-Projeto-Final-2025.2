@@ -7,11 +7,11 @@ Pode criar, ler, atualizar e deletar avaliações de produtos.
 #Garanta que está na pasta backend no terminal antes de rodar:
 #make pylint PYLINTFILE=app/models/avaliacoes_produtos_rep.py
 
-
 from decimal import Decimal
+from datetime import datetime
+
 from sqlalchemy import select, insert, update, delete
 from .connection import engine, metadata
-from datetime import datetime
 
 TAMANHO_MAX_COMENTARIO = 500
 
@@ -20,15 +20,20 @@ avaliacoes_produtos = metadata.tables.get("avaliacoes_produtos")
 if avaliacoes_produtos is None:
     raise Exception("Tabela 'avaliacoes_produtos' não encontrada no banco.")
 
-def adicionar_avaliacao_produto(produto_id: int, nota: str, comentario: str, data: datetime) -> None:
+def adicionar_avaliacao_produto(produto_id: int, nota: str, comentario: str, data: datetime):
     """Adiciona uma nova avaliação para um produto.
         Argumentos:
         produto_id (int): ID do produto
         nota (Decimal): Nota da avaliação (1.0 a 5.0)
         comentario (str): Comentário da avaliação
 
+        Lança:
         Se a nota estiver fora do intervalo permitido ou
         se o comentário exceder o tamanho máximo.
+        Lança ValueError.
+
+        Retorna:
+        A avaliação criada.
     """
     if nota is None:
         raise ValueError("A nota não pode ser nula.")
@@ -41,10 +46,10 @@ def adicionar_avaliacao_produto(produto_id: int, nota: str, comentario: str, dat
     #verifica se a nota está entre 1.0 e 5.0
     if nota_decimal < Decimal('1.0'):
         raise ValueError("A nota não pode ser menor que 1.0.")
-    
+
     if nota_decimal > Decimal('5.0'):
         raise ValueError("A nota não pode ser maior que 5.0.")
-    
+
     #verifica se a nota tem mais de 1 casa decimal
     if nota_decimal.as_tuple().exponent < -1:
         raise ValueError("A nota não pode ter mais de 1 casa decimal.")
@@ -74,7 +79,7 @@ def adicionar_avaliacao_produto(produto_id: int, nota: str, comentario: str, dat
         return result
     return None
 
-def deletar_avaliacao_produto(avaliacao_id: int) -> None:
+def deletar_avaliacao_produto(avaliacao_id: int):
     """Deleta uma avaliação de produto pelo seu ID.
         Argumentos:
         avaliacao_id (int): ID da avaliação a ser deletada.
@@ -84,8 +89,20 @@ def deletar_avaliacao_produto(avaliacao_id: int) -> None:
             avaliacoes_produtos.c.id == avaliacao_id
         )
         conn.execute(stmt)
-    return None
 
 def listar_avaliacoes_produtos(produto_id: int):
-    pass
+    """Lista todas as avaliações de um produto específico.
+        Argumentos:
+        produto_id (int): ID do produto cujas avaliações serão listadas.
 
+        Retorna:
+        Lista de avaliações do produto.
+    """
+    with engine.connect() as conn:
+        stmt = select(avaliacoes_produtos).where(
+            avaliacoes_produtos.c.produto_id == produto_id
+        )
+        result = conn.execute(stmt)
+        lista_avaliacoes = [dict(row) for row in result.mappings()]
+
+    return lista_avaliacoes

@@ -13,9 +13,10 @@ de avaliações de produtos.
 import sys
 import os
 from decimal import Decimal
+from datetime import datetime
+
 from sqlalchemy import text
 import pytest
-from datetime import datetime
 
 from app.models.connection import engine
 from app.models import avaliacoes_produtos_rep
@@ -125,7 +126,8 @@ def test_adicionar_avaliacao_produto_comentario_longo(setup_produto):  # pylint:
         avaliacoes_produtos_rep.adicionar_avaliacao_produto(
             produto_id, nota, comentario, data_avaliacao
         )
-    assert f"O comentário não pode exceder {avaliacoes_produtos_rep.TAMANHO_MAX_COMENTARIO} caracteres." in str(error_info.value)
+    assert f"""O comentário não pode exceder
+     {avaliacoes_produtos_rep.TAMANHO_MAX_COMENTARIO} caracteres.""" in str(error_info.value)
 
 def test_deletar_avaliacao_produto(setup_produto):  # pylint: disable=redefined-outer-name
     """Teste para deletar uma avaliação de produto."""
@@ -165,13 +167,9 @@ def test_listar_avaliacoes_produtos(setup_produto):  # pylint: disable=redefined
         produto_id, nota2, comentario2, data_avaliacao2
     )
 
-    avaliacoes = avaliacoes_produtos_rep.listar_avaliacoes_produto(produto_id)
+    avaliacoes = avaliacoes_produtos_rep.listar_avaliacoes_produtos(produto_id)
 
     assert len(avaliacoes) >= 2
     notas = [Decimal(str(avaliacao['nota'])) for avaliacao in avaliacoes]
     assert nota1 in notas
     assert nota2 in notas
-
-
-    
-

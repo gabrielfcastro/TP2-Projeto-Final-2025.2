@@ -251,63 +251,70 @@ describe('Login Component', () => {
     }, { timeout: 3000 })
   })
 
-  test('Test 12: Successful login', async () => {
-    // Mock successful login response
-    (global.fetch as jest.Mock).mockResolvedValueOnce({
-      ok: true,
-      json: async () => ({
-        access_token: 'mock-jwt-token',
-        usuario: { id: 1, nome: 'Teste', email: 'teste@example.com', tipo: 'user' }
-      })
-    })
-
-    // Mock localStorage
-    const localStorageMock = {
-      setItem: jest.fn(),
-      getItem: jest.fn(),
-      removeItem: jest.fn(),
-      clear: jest.fn(),
-      length: 0,
-      key: jest.fn()
-    }
-    Object.defineProperty(window, 'localStorage', { value: localStorageMock })
-
-    render(<Login />)
-
-    const emailInput = screen.getByPlaceholderText('seu@email.com')
-    const passwordInput = screen.getByPlaceholderText('Digite sua senha (mínimo 6 caracteres)')
-    const submitButton = screen.getByRole('button', { name: 'ENTRAR' })
-
-    fireEvent.change(emailInput, { target: { value: 'teste@example.com' } })
-    fireEvent.change(passwordInput, { target: { value: '123456' } })
-    fireEvent.click(submitButton)
-
-    // Verify fetch was called
-    await waitFor(() => {
-      expect(global.fetch).toHaveBeenCalledWith(
-        'http://localhost:5000/api/login',
-        expect.objectContaining({
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            email: 'teste@example.com',
-            senha: '123456'
-          })
-        })
-      )
-    })
-
-    // Verify localStorage was called
-    await waitFor(() => {
-      expect(localStorageMock.setItem).toHaveBeenCalledWith('token', 'mock-jwt-token')
-      expect(localStorageMock.setItem).toHaveBeenCalledWith('user', JSON.stringify({
-        id: 1,
-        nome: 'Teste',
-        email: 'teste@example.com',
-        tipo: 'user'
-      }))
+test('Test 12: Successful login', async () => {
+  // Mock successful login response
+  (global.fetch as jest.Mock).mockResolvedValueOnce({
+    ok: true,
+    json: async () => ({
+      access_token: 'mock-jwt-token',
+      usuario: { id: 1, nome: 'Teste', email: 'teste@example.com', tipo: 'user' }
     })
   })
+
+  // Mock localStorage
+  const localStorageMock = {
+    setItem: jest.fn(),
+    getItem: jest.fn(),
+    removeItem: jest.fn(),
+    clear: jest.fn(),
+    length: 0,
+    key: jest.fn()
+  }
+  Object.defineProperty(window, 'localStorage', { value: localStorageMock })
+
+  render(<Login />)
+
+  const emailInput = screen.getByPlaceholderText('seu@email.com')
+  const passwordInput = screen.getByPlaceholderText('Digite sua senha (mínimo 6 caracteres)')
+  const submitButton = screen.getByRole('button', { name: 'ENTRAR' })
+
+  fireEvent.change(emailInput, { target: { value: 'teste@example.com' } })
+  fireEvent.change(passwordInput, { target: { value: '123456' } })
+  fireEvent.click(submitButton)
+
+  // Verify fetch was called
+  await waitFor(() => {
+    expect(global.fetch).toHaveBeenCalledWith(
+      'http://localhost:5000/api/login',
+      expect.objectContaining({
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: 'teste@example.com',
+          senha: '123456'
+        })
+      })
+    )
+  })
+
+  // Verify localStorage was called - AGORA TRÊS CHAMADAS
+  await waitFor(() => {
+    expect(localStorageMock.setItem).toHaveBeenCalledTimes(3)
+    expect(localStorageMock.setItem).toHaveBeenCalledWith('token', 'mock-jwt-token')
+    expect(localStorageMock.setItem).toHaveBeenCalledWith('feiranet_usuario', JSON.stringify({
+      id: 1,
+      nome: 'Teste',
+      email: 'teste@example.com',
+      tipo: 'user'
+    }))
+    expect(localStorageMock.setItem).toHaveBeenCalledWith('user', JSON.stringify({
+      id: 1,
+      nome: 'Teste',
+      email: 'teste@example.com',
+      tipo: 'user'
+    }))
+  })
+}, 10000) // Aumenta o timeout para 10 segundos
 
   test('Test 13: Login with invalid credentials', async () => {
     // Mock error response

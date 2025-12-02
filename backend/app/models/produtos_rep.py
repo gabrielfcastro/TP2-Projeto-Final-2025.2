@@ -18,7 +18,7 @@ def adicionar_produto(feirante_id: int, nome: str, preco: float, descricao: str 
 
     if not re.match(PADRAO_NOME, nome):
         raise ValueError ("Nome do produto inválido :\n"
-                          "-Deve conter entre 5 e 50 caracteres.")
+                          "- Deve conter entre 5 e 50 caracteres.")
 
     if float(preco) <= 0:
         raise ValueError ("Preço Inválido : \n"
@@ -26,7 +26,7 @@ def adicionar_produto(feirante_id: int, nome: str, preco: float, descricao: str 
 
     if not re.match(PADRAO_PRECO, str(preco)):
         raise ValueError ("NPreço do produto inválido :\n"
-                          "-Deve conter EXATAMENTE duas casas decimais.")
+                          "- Deve conter EXATAMENTE duas casas decimais.")
 
     if descricao and len(descricao) > TAMANHO_MAX_DESCRICAO:
         raise ValueError (f"Descrição Inválida : \n"

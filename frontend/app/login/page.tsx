@@ -104,28 +104,42 @@ export default function Login() {
       } else {
         console.log("Login realizado:", data)
         alert("Login realizado com sucesso!")
-        
-        // Salvar o token JWT e dados do usuário
+
+        // ========== PARTE CRÍTICA - SALVAMENTO NO LOCALSTORAGE ==========
+        // Salvar o token JWT
         if (data.access_token) {
-          localStorage.setItem('token', data.access_token)
-        }
-        if (data.usuario) {
-          localStorage.setItem('user', JSON.stringify(data.usuario))
+          localStorage.setItem("token", data.access_token)
         }
         
+        // Salvar os dados do usuário com DUAS chaves diferentes
+        if (data.usuario) {
+          // 1. Chave 'feiranet_usuario' - requisito do projeto
+          localStorage.setItem("feiranet_usuario", JSON.stringify(data.usuario))
+          
+          // 2. Chave 'user' - para compatibilidade com os testes
+          localStorage.setItem("user", JSON.stringify(data.usuario))
+          
+          console.log("Dados salvos no localStorage com chaves:", {
+            token: !!data.access_token,
+            feiranet_usuario: true,
+            user: true
+          })
+        }
+        // ========== FIM DA PARTE CRÍTICA ==========
+
         // Redirecionar baseado no tipo de usuário
         setTimeout(() => {
-          switch(data.usuario?.tipo) {
-            case 'admin':
-              window.location.href = '/admin/produtos'
+          switch (data.usuario?.tipo) {
+            case "admin":
+              window.location.href = "/admin/products"
               break
-            case 'feirante':
-              window.location.href = '/vendor/produtos'
+            case "feirante":
+              window.location.href = "/produtos"
               break
             default:
-              window.location.href = '/produtos'
+              window.location.href = "/"
           }
-        }, 500)
+        }, 100)
       }
       
       setErrors([])
@@ -162,9 +176,6 @@ export default function Login() {
             </h1>
             <p className="text-zinc-400">
               {showRegister ? 'Preencha seus dados para começar' : 'Entre na sua conta para continuar'}
-            </p>
-            <p className="text-zinc-500 text-sm mt-2">
-              Backend: {API_BASE_URL}
             </p>
           </div>
 

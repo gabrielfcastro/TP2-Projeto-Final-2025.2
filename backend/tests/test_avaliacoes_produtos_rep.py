@@ -183,7 +183,7 @@ def test_calcular_media_avaliacoes_produto(setup_produto):  # pylint: disable=re
     comentario1 = "Bom produto."
     data_avaliacao1 = datetime.now()
 
-    nota2 = Decimal('5.0')
+    nota2 = Decimal('4.9')
     comentario2 = "Excelente!"
     data_avaliacao2 = datetime.now()
 

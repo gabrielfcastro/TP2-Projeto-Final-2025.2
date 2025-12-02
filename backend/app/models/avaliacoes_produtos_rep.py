@@ -110,3 +110,25 @@ def listar_avaliacoes_produtos(produto_id: int):
         lista_avaliacoes = [dict(row) for row in result.mappings()]
 
     return lista_avaliacoes
+
+def calcular_media_avaliacoes_produto(produto_id: int) -> Decimal:
+    """Calcula a média das avaliações de um produto específico.
+        Argumentos:
+        produto_id (int): ID do produto cujas avaliações serão consideradas.
+
+        Retorna:
+        A média das notas das avaliações do produto como Decimal.
+    """
+    with engine.connect() as conn:
+        stmt = select(avaliacoes_produtos.c.nota).where(
+            avaliacoes_produtos.c.produto_id == produto_id
+        )
+        result = conn.execute(stmt)
+        notas = [row['nota'] for row in result.mappings()]
+
+    if not notas:
+        return Decimal('0.0')
+
+    soma_notas = sum(notas)
+    media = soma_notas / Decimal(len(notas))
+    return media.quantize(Decimal('0.10')) 

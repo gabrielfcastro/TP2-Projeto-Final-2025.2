@@ -104,5 +104,15 @@ def test_adicionar_avaliacao_produto_nota_invalida(setup_produto):  # pylint: di
         )
     assert "A nota não pode ser maior que 5.0." in str(error_info.value)
 
+def test_adicionar_avaliacao_produto_comentario_longo(setup_produto):  # pylint: disable=redefined-outer-name
+    """Teste para adicionar uma avaliação de produto com comentário muito longo."""
+    produto_id = setup_produto
+    nota = Decimal('4.0')
+    comentario = "A" * (avaliacoes_produtos_rep.TAMANHO_MAX_COMENTARIO + 1)
 
+    with pytest.raises(ValueError) as error_info:
+        avaliacoes_produtos_rep.adicionar_avaliacao_produto(
+            produto_id, nota, comentario
+        )
+    assert f"O comentário não pode exceder {avaliacoes_produtos_rep.TAMANHO_MAX_COMENTARIO} caracteres." in str(error_info.value)
 

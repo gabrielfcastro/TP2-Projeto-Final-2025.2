@@ -13,7 +13,7 @@ from app.models import historico_busca_rep, usuario_rep
 
 DADOS_USUARIO_TESTE = {
     "email": "usuario.historico@teste.com",
-    "nome": "Usuário Histórico",
+    "nome": "Usuario Historico",
     "senha": "$SenhaTeste123",
     "tipo_usuario": "Usuario"
 }
@@ -53,7 +53,7 @@ def setup_usuario_token(client):
                 print(f"AVISO SETUP: Erro ao criar usuário: {e}")
         
         with client.application.app_context():
-            token_de_acesso = create_access_token(identity = email_usuario)
+            token_de_acesso = create_access_token(identity = str(usuario_id))
 
         usuario = usuario_rep.listar_usuarios(email = email_usuario)
         if usuario:
@@ -104,9 +104,9 @@ def test_criar_historico_busca(client, setup_usuario_token):
     finally:
         if historico_id:
             try:
-                historico_busca_rep.deletar_historico_busca(historico_id)
+                historico_busca_rep.deletar_historico_por_usuario(usuario_id)
             except Exception as e:
-                print(f"AVISO: Falha ao limpar histórico {historico_id}: {e}")
+                print(f"AVISO: Falha ao limpar histórico {usuario_id}: {e}")
 
 def test_criar_historico_apenas_feirante(client, setup_usuario_token):
     token = setup_usuario_token["token"]

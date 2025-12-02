@@ -53,6 +53,43 @@ def test_criar_usuario_e_limpar(client):
     finally:      
         try:
             usuario_rep.deletar_usuario(email)
-            print(f"Usuário de Id {usuario_id} removido com sucesso.")
+            print(f"Usuário de email {email} removido com sucesso.")
         except Exception as e:
             print(f"Falha ao limpar usuário {e}")
+
+def test_login_usuario(client):
+    
+    try:
+        
+        usuario_rep.adicionar_usuario(
+            email=DADOS_USUARIO_DONO['email'],
+            senha=DADOS_USUARIO_DONO['senha'],
+            nome=DADOS_USUARIO_DONO['nome'],
+            tipo_usuario=DADOS_USUARIO_DONO['tipo_usuario']
+        )
+
+        response = client.post('/api/usuarios/login', json={
+            "email": DADOS_USUARIO_DONO['email'],
+            "senha": DADOS_USUARIO_DONO['senha']
+        })
+        assert response.status_code == 200
+
+        dados= response.get_json()
+        assert dados is not None
+
+        email = dados.get('email')
+        token = dados.get('access_token')
+        assert email == DADOS_USUARIO_DONO['email']
+        assert token is not None
+
+        assert usuario_rep.verificar_credenciais(
+            email, 
+            senha_enviada=DADOS_USUARIO_DONO['senha']
+        ) is not None
+
+    finally:
+        try:
+            usuario_rep.deletar_usuario(DADOS_USUARIO_DONO['email'])
+            print(f"Usuário de email {DADOS_USUARIO_DONO['email']} removido com sucesso.")
+        except Exception as e:
+            print(f"Falha ao limpar usuário de email {DADOS_USUARIO_DONO['email']}: {e}")

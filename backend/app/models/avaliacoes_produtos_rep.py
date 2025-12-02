@@ -85,3 +85,7 @@ def deletar_avaliacao_produto(avaliacao_id: int) -> None:
         )
         conn.execute(stmt)
     return None
+
+def listar_avaliacoes_produtos(produto_id: int):
+    pass
+

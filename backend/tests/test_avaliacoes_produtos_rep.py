@@ -146,3 +146,32 @@ def test_deletar_avaliacao_produto(setup_produto):  # pylint: disable=redefined-
         stmt = text(f"SELECT * FROM avaliacoes_produtos WHERE id = {nova_avaliacao.id}")
         result = conn.execute(stmt).first()
         assert result is None
+
+def test_listar_avaliacoes_produtos(setup_produto):  # pylint: disable=redefined-outer-name
+    """Teste para listar avaliações de um produto."""
+    produto_id = setup_produto
+    nota1 = Decimal('4.0')
+    comentario1 = "Bom produto."
+    data_avaliacao1 = datetime.now()
+
+    nota2 = Decimal('5.0')
+    comentario2 = "Excelente!"
+    data_avaliacao2 = datetime.now()
+
+    avaliacoes_produtos_rep.adicionar_avaliacao_produto(
+        produto_id, nota1, comentario1, data_avaliacao1
+    )
+    avaliacoes_produtos_rep.adicionar_avaliacao_produto(
+        produto_id, nota2, comentario2, data_avaliacao2
+    )
+
+    avaliacoes = avaliacoes_produtos_rep.listar_avaliacoes_produto(produto_id)
+
+    assert len(avaliacoes) >= 2
+    notas = [Decimal(str(avaliacao['nota'])) for avaliacao in avaliacoes]
+    assert nota1 in notas
+    assert nota2 in notas
+
+
+    
+

@@ -73,3 +73,15 @@ def adicionar_avaliacao_produto(produto_id: int, nota: str, comentario: str, dat
         result = conn.execute(stmt).first()
         return result
     return None
+
+def deletar_avaliacao_produto(avaliacao_id: int) -> None:
+    """Deleta uma avaliação de produto pelo seu ID.
+        Argumentos:
+        avaliacao_id (int): ID da avaliação a ser deletada.
+    """
+    with engine.begin() as conn:
+        stmt = delete(avaliacoes_produtos).where(
+            avaliacoes_produtos.c.id == avaliacao_id
+        )
+        conn.execute(stmt)
+    return None

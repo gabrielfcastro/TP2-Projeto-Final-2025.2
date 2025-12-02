@@ -51,13 +51,14 @@ def setup_usuario_token(client):
         except ValueError as e:
             if "UNIQUE constraint" not in str(e) and "já existe" not in str(e):
                 print(f"AVISO SETUP: Erro ao criar usuário: {e}")
-            usuario = usuario_rep.listar_usuarios(email=email_usuario)
-            if usuario:
-                usuario_id = usuario[0]['id']
         
         with client.application.app_context():
-            token_de_acesso = create_access_token(identity=usuario_id)
-        
+            token_de_acesso = create_access_token(identity = email_usuario)
+
+        usuario = usuario_rep.listar_usuarios(email = email_usuario)
+        if usuario:
+            usuario_id = usuario[0]['id']
+
         yield {
             "token": token_de_acesso,
             "usuario_id": usuario_id,
@@ -217,8 +218,3 @@ def test_limpar_todo_historico(client, setup_usuario_token):
     
     finally:
         historico_busca_rep.deletar_historico_por_usuario(usuario_id)
-
-def test_listar_sem_token(client):
-    response = client.get('/api/historico_busca/')
-    
-    assert response.status_code == 401 

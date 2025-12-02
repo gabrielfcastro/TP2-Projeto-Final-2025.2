@@ -1,10 +1,5 @@
+import type Product from "@/types/ProductType";
 import { api } from "@/utils/api";
-
-export interface Product {
-  id: number;
-  nome: string;
-  preco: number;
-}
 
 export class ProductService {
   async getProducts(): Promise<Product[]> {

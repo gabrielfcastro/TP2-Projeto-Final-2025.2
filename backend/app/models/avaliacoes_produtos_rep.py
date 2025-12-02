@@ -20,6 +20,10 @@ avaliacoes_produtos = metadata.tables.get("avaliacoes_produtos")
 if avaliacoes_produtos is None:
     raise Exception("Tabela 'avaliacoes_produtos' não encontrada no banco.")
 
+produtos = metadata.tables.get("produtos")
+if produtos is None:
+    raise Exception("Tabela 'produtos' não encontrada no banco.")
+
 def adicionar_avaliacao_produto(produto_id: int, nota: str, comentario: str, data: datetime):
     """Adiciona uma nova avaliação para um produto.
         Argumentos:

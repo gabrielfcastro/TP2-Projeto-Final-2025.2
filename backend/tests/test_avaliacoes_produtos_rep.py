@@ -71,6 +71,7 @@ def test_adicionar_avaliacao_produto_sucesso(setup_produto):  # pylint: disable=
         produto_id, nota, comentario, data_avaliacao
     )
 
+
     print(nova_avaliacao.nota)
     assert nova_avaliacao is not None
     assert nova_avaliacao.produto_id == produto_id
@@ -78,6 +79,8 @@ def test_adicionar_avaliacao_produto_sucesso(setup_produto):  # pylint: disable=
     assert nova_avaliacao.nota is not None
     assert nova_avaliacao.comentario == comentario
     assert nova_avaliacao.data_avaliacao == data_avaliacao
+
+    #avaliacao_media_produto = avaliacoes_produtos_rep.calcular_media_avaliacoes_produto(produto_id)
 
 def test_adicionar_avaliacao_produto_nota_invalida(setup_produto):  # pylint: disable=redefined-outer-name
     """Teste para adicionar uma avaliação de produto com nota inválida."""
@@ -126,8 +129,7 @@ def test_adicionar_avaliacao_produto_comentario_longo(setup_produto):  # pylint:
         avaliacoes_produtos_rep.adicionar_avaliacao_produto(
             produto_id, nota, comentario, data_avaliacao
         )
-    assert f"""O comentário não pode exceder
-     {avaliacoes_produtos_rep.TAMANHO_MAX_COMENTARIO} caracteres.""" in str(error_info.value)
+    assert f"O comentário não pode exceder {avaliacoes_produtos_rep.TAMANHO_MAX_COMENTARIO} caracteres." in str(error_info.value)
 
 def test_deletar_avaliacao_produto(setup_produto):  # pylint: disable=redefined-outer-name
     """Teste para deletar uma avaliação de produto."""
@@ -173,3 +175,26 @@ def test_listar_avaliacoes_produtos(setup_produto):  # pylint: disable=redefined
     notas = [Decimal(str(avaliacao['nota'])) for avaliacao in avaliacoes]
     assert nota1 in notas
     assert nota2 in notas
+
+def test_calcular_media_avaliacoes_produto(setup_produto):  # pylint: disable=redefined-outer-name
+    """Teste para calcular a média das avaliações de um produto."""
+    produto_id = setup_produto
+    nota1 = Decimal('4.0')
+    comentario1 = "Bom produto."
+    data_avaliacao1 = datetime.now()
+
+    nota2 = Decimal('5.0')
+    comentario2 = "Excelente!"
+    data_avaliacao2 = datetime.now()
+
+    avaliacoes_produtos_rep.adicionar_avaliacao_produto(
+        produto_id, nota1, comentario1, data_avaliacao1
+    )
+    avaliacoes_produtos_rep.adicionar_avaliacao_produto(
+        produto_id, nota2, comentario2, data_avaliacao2
+    )
+
+    media = avaliacoes_produtos_rep.calcular_media_avaliacoes_produto(produto_id)
+
+    expected_media = (nota1 + nota2) / Decimal('2')
+    assert media == expected_media

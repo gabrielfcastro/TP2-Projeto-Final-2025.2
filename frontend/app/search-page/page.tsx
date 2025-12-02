@@ -3,8 +3,8 @@
 export default function SearchPage() {
 
     const handlerBuscarProduto = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault() // impede o submit da página
-    alert('Alguma coisa aqui')
+        e.preventDefault() // impede o submit da página
+        alert('Alguma coisa aqui')
     }
 
     return <>

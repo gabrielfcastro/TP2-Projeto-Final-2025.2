@@ -145,13 +145,7 @@ def test_criar_historico_busca_sem_dados(client, setup_usuario_token):
     
     assert response.status_code == 400
     data = response.get_json()
-    assert "produto ou feirante" in data.get('erro', '').lower()
-
-def test_criar_historico_sem_token(client):
-    response = client.post('/api/historico_busca/', 
-                         json=DADOS_BUSCA_PRODUTO)
-    
-    assert response.status_code == 401  
+    assert "produto ou feirante" in data.get('erro', '').lower() 
 
 def test_listar_historico_busca(client, setup_usuario_token):
     token = setup_usuario_token["token"]

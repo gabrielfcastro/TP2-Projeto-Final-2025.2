@@ -12,6 +12,7 @@ de avaliações de produtos.
 
 import sys
 import os
+from decimal import Decimal
 from sqlalchemy import text
 import pytest
 
@@ -60,7 +61,7 @@ def setup_produto():  # pylint: disable=redefined-outer-name
 def test_adicionar_avaliacao_produto_sucesso(setup_produto):  # pylint: disable=redefined-outer-name
     """Teste para adicionar uma avaliação de produto corretamente."""
     produto_id = setup_produto
-    nota = 4
+    nota = Decimal('4.5')
     comentario = "Ótimo produto!"
 
     nova_avaliacao = avaliacoes_produtos_rep.adicionar_avaliacao_produto(

@@ -99,14 +99,19 @@ $(document).ready(function(){initNavTree('namespacemodels_1_1feirantes__rep.html
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:af4ff4d381f2dc8c8eb6e3a48b8269e11" id="r_af4ff4d381f2dc8c8eb6e3a48b8269e11"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemodels_1_1feirantes__rep.html#af4ff4d381f2dc8c8eb6e3a48b8269e11">criar_feirante</a> (int usuario_id, str nome_estabelecimento, str link_wpp, conn=None)</td></tr>
+<tr class="memdesc:af4ff4d381f2dc8c8eb6e3a48b8269e11"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cria um novo feirante no banco de dados.  <br /></td></tr>
 <tr class="separator:af4ff4d381f2dc8c8eb6e3a48b8269e11"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a587c2b93a07cc4aa14ef874aa2984421" id="r_a587c2b93a07cc4aa14ef874aa2984421"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemodels_1_1feirantes__rep.html#a587c2b93a07cc4aa14ef874aa2984421">listar_feirantes</a> (conn=None)</td></tr>
+<tr class="memdesc:a587c2b93a07cc4aa14ef874aa2984421"><td class="mdescLeft">&#160;</td><td class="mdescRight">Lista todos os feirantes cadastrados no banco de dados.  <br /></td></tr>
 <tr class="separator:a587c2b93a07cc4aa14ef874aa2984421"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9f99d4afc0f1048c8e15f2febb7ea9cb" id="r_a9f99d4afc0f1048c8e15f2febb7ea9cb"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemodels_1_1feirantes__rep.html#a9f99d4afc0f1048c8e15f2febb7ea9cb">buscar_feirante_por_id</a> (int id_feirante, conn=None)</td></tr>
+<tr class="memdesc:a9f99d4afc0f1048c8e15f2febb7ea9cb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Busca um feirante pelo seu ID.  <br /></td></tr>
 <tr class="separator:a9f99d4afc0f1048c8e15f2febb7ea9cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaf62ff02cf22939dae7e602e84f4f550" id="r_aaf62ff02cf22939dae7e602e84f4f550"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemodels_1_1feirantes__rep.html#aaf62ff02cf22939dae7e602e84f4f550">atualizar_feirante</a> (int id_feirante, novo_nome=None, novo_link=None, conn=None)</td></tr>
+<tr class="memdesc:aaf62ff02cf22939dae7e602e84f4f550"><td class="mdescLeft">&#160;</td><td class="mdescRight">Atualiza os dados de um feirante no banco de dados.  <br /></td></tr>
 <tr class="separator:aaf62ff02cf22939dae7e602e84f4f550"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac657b198b465fb4311bd2593d56ab73b" id="r_ac657b198b465fb4311bd2593d56ab73b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemodels_1_1feirantes__rep.html#ac657b198b465fb4311bd2593d56ab73b">deletar_feirante</a> (int id_feirante, conn=None)</td></tr>
+<tr class="memdesc:ac657b198b465fb4311bd2593d56ab73b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Deleta um feirante do banco de dados.  <br /></td></tr>
 <tr class="separator:ac657b198b465fb4311bd2593d56ab73b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
@@ -116,7 +121,12 @@ Variables</h2></td></tr>
 <tr class="memitem:afdd7cd316eef82b6f69c6af7b01db69b" id="r_afdd7cd316eef82b6f69c6af7b01db69b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemodels_1_1feirantes__rep.html#afdd7cd316eef82b6f69c6af7b01db69b">feirantes</a> = metadata.tables.get(&quot;feirantes&quot;)</td></tr>
 <tr class="separator:afdd7cd316eef82b6f69c6af7b01db69b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Function Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><pre class="fragment">"!
+    @file feirantes_rep.py
+    
+    @brief Este arquivo é responsável pela persistência dos dados dos feirantes.
+</pre> </div><h2 class="groupheader">Function Documentation</h2>
 <a id="aaf62ff02cf22939dae7e602e84f4f550" name="aaf62ff02cf22939dae7e602e84f4f550"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aaf62ff02cf22939dae7e602e84f4f550">&#9670;&#160;</a></span>atualizar_feirante()</h2>
 
@@ -155,6 +165,20 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Atualiza os dados de um feirante no banco de dados. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">id_feirante</td><td>ID do feirante a ser atualizado. </td></tr>
+    <tr><td class="paramname">novo_nome</td><td>Novo nome do estabelecimento (opcional). </td></tr>
+    <tr><td class="paramname">novo_link</td><td>Novo link do WhatsApp (opcional).</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section pre"><dt>Precondition</dt><dd>novo_nome Se fornecido, deve ter pelo menos 3 caracteres. </dd>
+<dd>
+novo_link Se fornecido, deve ser uma URL válida.</dd></dl>
+<dl class="section post"><dt>Postcondition</dt><dd>Atualiza os dados do feirante na tabela 'feirantes' do banco de dados. </dd></dl>
+
 </div>
 </div>
 <a id="a9f99d4afc0f1048c8e15f2febb7ea9cb" name="a9f99d4afc0f1048c8e15f2febb7ea9cb"></a>
@@ -182,6 +206,15 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Busca um feirante pelo seu ID. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">id_feirante</td><td>ID do feirante a ser buscado.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Dicionário com os dados do feirante ou None. </dd></dl>
 
 </div>
 </div>
@@ -223,6 +256,21 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Cria um novo feirante no banco de dados. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">usuario_id</td><td>ID do usuário associado ao feirante. </td></tr>
+    <tr><td class="paramname">nome_estabelecimento</td><td>Nome do estabelecimento do feirante. </td></tr>
+    <tr><td class="paramname">link_wpp</td><td>Link do WhatsApp do feirante.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section pre"><dt>Precondition</dt><dd>nome_estabelecimento Deve ter pelo menos 3 caracteres. </dd>
+<dd>
+link_wpp Deve ser uma URL válida.</dd></dl>
+<dl class="section post"><dt>Postcondition</dt><dd>Insere um novo registro na tabela 'feirantes' do banco de dados. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>ID do feirante criado. </dd></dl>
+
 </div>
 </div>
 <a id="ac657b198b465fb4311bd2593d56ab73b" name="ac657b198b465fb4311bd2593d56ab73b"></a>
@@ -251,6 +299,16 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Deleta um feirante do banco de dados. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">id_feirante</td><td>ID do feirante a ser deletado.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section pre"><dt>Precondition</dt><dd>id_feirante Deve existir no banco de dados. </dd></dl>
+<dl class="section post"><dt>Postcondition</dt><dd>Remove o feirante da tabela 'feirantes' do banco de dados. </dd></dl>
+
 </div>
 </div>
 <a id="a587c2b93a07cc4aa14ef874aa2984421" name="a587c2b93a07cc4aa14ef874aa2984421"></a>
@@ -268,6 +326,10 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Lista todos os feirantes cadastrados no banco de dados. </p>
+<dl class="section post"><dt>Postcondition</dt><dd>Retorna uma lista de dicionários, cada um representando um feirante. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Lista de feirantes. </dd></dl>
 
 </div>
 </div>

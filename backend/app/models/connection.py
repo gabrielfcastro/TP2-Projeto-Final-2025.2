@@ -1,5 +1,6 @@
 """"!
     @file connection.py
+    
     @brief Este arquivo é responsável pela conexão com o banco de dados.    
 """
 

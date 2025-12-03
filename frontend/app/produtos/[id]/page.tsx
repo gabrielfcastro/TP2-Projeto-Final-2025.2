@@ -145,7 +145,7 @@ export default function ProductDetailsPage() {
 								className="text-4xl font-bold mb-4"
 								style={{ color: "var(--foreground)" }}
 							>
-								R$ {product.preco.toFixed(2)}
+								R$ {Number(product.preco).toFixed(2)}
 							</p>
 
 							{product.avaliacao_media > 0 && (

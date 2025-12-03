@@ -57,7 +57,7 @@ export default function ProductCard({ product }: ProductCardProps) {
 					className="font-semibold mb-4"
 					style={{ color: "var(--foreground)" }}
 				>
-					R$ {product.preco.toFixed(2)}
+					R$ {Number(product.preco).toFixed(2)}
 				</p>
 
 				{/* Botão adicionar ao carrinho */}

@@ -68,15 +68,15 @@ const api = axios.create({
 // Interceptor de request
 api.interceptors.request.use(
 	async (config) => {
-		if (getUseMock()) {
-			console.log(
-				`[MOCK] ${config.method?.toUpperCase() || "GET"} ${config.url}`
-			);
-			// Para mock, não fazemos a requisição real
-			// Retornamos um config especial que será tratado no interceptor de response
-			(config as MockConfig).__isMock = true;
-			return config;
-		}
+		// if (getUseMock()) {
+		// 	console.log(
+		// 		`[MOCK] ${config.method?.toUpperCase() || "GET"} ${config.url}`
+		// 	);
+		// 	// Para mock, não fazemos a requisição real
+		// 	// Retornamos um config especial que será tratado no interceptor de response
+		// 	(config as MockConfig).__isMock = true;
+		// 	return config;
+		// }
 
 		const token = await getToken();
 		if (token) {

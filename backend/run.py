@@ -11,6 +11,7 @@ from app.models.usuario_rep import listar_usuarios
 from app.routes.usuario_routes import usuario_bp
 from app.routes.feirante_routes import feirante_bp
 from app.routes.produto_route import produto_bp
+from app.routes.historico_busca_routes import historico_busca_bp
 
 dir = os.path.abspath(os.path.dirname(__file__))
 load_dotenv(os.path.join(dir, ".env"))
@@ -37,9 +38,13 @@ def create_app():
     app.register_blueprint(usuario_bp)
     app.register_blueprint(feirante_bp)
     app.register_blueprint(produto_bp)
+    app.register_blueprint(historico_busca_bp)
 
     return app
 
 if __name__ == "__main__":
     app = create_app()
     app.run(debug=True, port=5000)
+
+app = create_app()
+print("Registered blueprints:", app.blueprints.keys())

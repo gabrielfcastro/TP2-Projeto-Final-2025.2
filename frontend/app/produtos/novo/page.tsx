@@ -3,12 +3,23 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useEffect } from "react";
 
 export default function NovoProdutoPage() {
 	const [nome, setNome] = useState("");
 	const [descricao, setDescricao] = useState("");
 	const [preco, setPreco] = useState("");
 	const router = useRouter();
+
+	// 🔒 VERIFICAÇÃO DE LOGIN
+	useEffect(() => {
+		const usuario = localStorage.getItem("feiranet_usuario");
+
+		if (!usuario) {
+			router.push("/login"); // redireciona pra home
+			return;
+		}
+	}, [router]);
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();

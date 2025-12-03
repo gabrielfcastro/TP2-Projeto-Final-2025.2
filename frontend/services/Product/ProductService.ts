@@ -3,15 +3,13 @@ import api from "@/utils/api";
 
 export class ProductService {
 	static async getProducts(nome?: string): Promise<Product[]> {
-		let url = "/produtos";
+		const response = await api.get<Product[]>("/produtos");
 
-		// se vier nome, enviar na URL conforme o teste espera
 		if (nome) {
-			const encoded = encodeURIComponent(nome);
-			url = `/produtos?nome=${encoded}`;
+			response.data = response.data.filter((product) =>
+				product.nome.toLowerCase().includes(nome.toLowerCase())
+			);
 		}
-
-		const response = await api.get<Product[]>(url);
 		return response.data;
 	}
 

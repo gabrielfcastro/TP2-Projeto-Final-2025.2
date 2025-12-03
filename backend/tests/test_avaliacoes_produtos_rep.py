@@ -243,6 +243,6 @@ def test_calcular_total_avaliacoes_produtos(setup_produto):  # pylint: disable=r
         produto_id, nota2, comentario2, data_avaliacao2
     )
 
-    total_avaliacoes = avaliacoes_produtos_rep.calcular_total_avaliacoes_produto(produto_id)
+    total_avaliacoes = avaliacoes_produtos_rep.calcular_total_avaliacoes_produtos(produto_id)
 
     assert total_avaliacoes >= 2

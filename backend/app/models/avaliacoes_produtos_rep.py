@@ -147,3 +147,20 @@ def atualizar_media_avaliacoes_tabela_produtos(produto_id: int):
             avaliacao_media=media
         )
         conn.execute(stmt)
+
+def calcular_total_avaliacoes_produtos(produto_id: int) -> int:
+    """Calcula o total de avaliações de um produto específico.
+        Argumentos:
+        produto_id (int): ID do produto cujas avaliações serão contadas.
+
+        Retorna:
+        O total de avaliações do produto.
+    """
+    with engine.connect() as conn:
+        stmt = select(avaliacoes_produtos).where(
+            avaliacoes_produtos.c.produto_id == produto_id
+        )
+        result = conn.execute(stmt)
+        total_avaliacoes = len(result.fetchall())
+
+    return total_avaliacoes

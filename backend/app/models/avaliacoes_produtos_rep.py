@@ -164,3 +164,18 @@ def calcular_total_avaliacoes_produtos(produto_id: int) -> int:
         total_avaliacoes = len(result.fetchall())
 
     return total_avaliacoes
+
+def atualizar_total_avaliacoes_tabela_produtos(produto_id: int):
+    """Atualiza o total de avaliações na tabela de produtos.
+        Argumentos:
+        produto_id (int): ID do produto cujo total será atualizado.
+    """
+    total = calcular_total_avaliacoes_produtos(produto_id)
+
+    with engine.begin() as conn:
+        stmt = update(produtos).where(
+            produtos.c.id == produto_id
+        ).values(
+            total_avaliacoes=total
+        )
+        conn.execute(stmt)

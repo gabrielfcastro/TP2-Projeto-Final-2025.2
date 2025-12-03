@@ -246,3 +246,30 @@ def test_calcular_total_avaliacoes_produtos(setup_produto):  # pylint: disable=r
     total_avaliacoes = avaliacoes_produtos_rep.calcular_total_avaliacoes_produtos(produto_id)
 
     assert total_avaliacoes >= 2
+
+def test_atualizar_total_avaliacoes_tabela_produtos(setup_produto):  # pylint: disable=redefined-outer-name
+    """Teste para atualizar o total de avaliações na tabela de produtos."""
+    produto_id = setup_produto
+    nota1 = Decimal('2.0')
+    comentario1 = "Produto ruim."
+    data_avaliacao1 = datetime.now()
+
+    nota2 = Decimal('4.0')
+    comentario2 = "Produto bom."
+    data_avaliacao2 = datetime.now()
+
+    avaliacoes_produtos_rep.adicionar_avaliacao_produto(
+        produto_id, nota1, comentario1, data_avaliacao1
+    )
+    avaliacoes_produtos_rep.adicionar_avaliacao_produto(
+        produto_id, nota2, comentario2, data_avaliacao2
+    )
+
+    avaliacoes_produtos_rep.atualizar_total_avaliacoes_tabela_produtos(produto_id)
+
+    with engine.connect() as conn:
+        stmt = text(f"SELECT total_avaliacoes FROM produtos WHERE id = {produto_id}")
+        result = conn.execute(stmt).mappings().first()
+        total_atualizado = result['total_avaliacoes'] if result is not None else None
+
+    assert total_atualizado >= 2

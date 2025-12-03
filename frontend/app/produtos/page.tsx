@@ -12,8 +12,20 @@ interface Produto {
 }
 
 export default function ProdutosPage() {
+	const router = useRouter();
 	const [produtos, setProdutos] = useState<Produto[]>([]);
 
+	// 🔒 VERIFICAÇÃO DE LOGIN
+	useEffect(() => {
+		const usuario = localStorage.getItem("feiranet_usuario");
+
+		if (!usuario) {
+			router.push("/login"); // redireciona pra home
+			return;
+		}
+	}, [router]);
+
+	// 🔄 CARREGAR PRODUTOS
 	useEffect(() => {
 		async function carregarDados() {
 			try {
@@ -27,6 +39,7 @@ export default function ProdutosPage() {
 		carregarDados();
 	}, []);
 
+	// 🗑️ EXCLUIR PRODUTO
 	const handleDelete = async (id: number) => {
 		if (!confirm("Tem certeza que deseja excluir?")) return;
 		try {

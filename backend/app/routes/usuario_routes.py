@@ -14,6 +14,7 @@ def criar_usuario():
     email = dados.get('email')
     nome = dados.get('nome')
     senha = dados.get('senha')
+    tipo_usuario = dados.get('tipo_usuario')
 
     if not all([email, nome, senha]): 
         return jsonify({'erro':'Dados Ausentes'}),400
@@ -23,7 +24,7 @@ def criar_usuario():
             email=email,
             nome=nome,
             senha=senha,
-            tipo_usuario="Usuario"
+            tipo_usuario=tipo_usuario
         )
 
         if not usuario_id:
@@ -34,6 +35,7 @@ def criar_usuario():
         json = {
                 "email": email,
                 "nome": nome,
+                "tipo_usuario": tipo_usuario,
                 "access_token": access_token}
         return jsonify(json), 201
         

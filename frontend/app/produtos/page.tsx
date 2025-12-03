@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 interface Produto {
   id: number;
@@ -12,6 +13,24 @@ interface Produto {
 
 export default function ProdutosPage() {
   const [produtos, setProdutos] = useState<Produto[]>([]);
+  const router = useRouter();
+
+  // BLOQUEIO: apenas FEIRANTE pode acessar esta página
+  useEffect(() => {
+    const data = localStorage.getItem("feiranet_usuario");
+
+    if (!data) {
+      router.replace("/"); // não logado
+      return;
+    }
+
+    const user = JSON.parse(data);
+
+    if (user.tipo !== "vendor") {
+      router.replace("/"); // logado mas não é feirante
+      return;
+    }
+  }, [router]);
 
   useEffect(() => {
     async function carregarDados() {

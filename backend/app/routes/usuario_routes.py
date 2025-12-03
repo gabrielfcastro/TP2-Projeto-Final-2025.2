@@ -1,3 +1,8 @@
+"""!
+    @file usuario_routes.py
+    @brief Este arquivo é responsável pelas rotas do usuário.
+"""
+
 from ..models import usuario_rep
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import create_access_token
@@ -14,6 +19,14 @@ def listar_todos_usuarios():
 
 @usuario_bp.route('/', methods = ['POST'])
 def criar_usuario():
+    """!
+        @brief Pega os dados por request do usuário para solicitar no repositório.
+        @throws ConnectionError Se a conexão não for estabelecida corretamente.
+        @throws LookupError Se o usuário não for encontrado.
+        @throws ValueError Se os dados do usuário estiverem inválidos.
+
+        @return Retorna um json com todos os dados servindo como response para o front-end.
+    """
     dados = request.json
 
     if not dados :
@@ -58,6 +71,14 @@ def criar_usuario():
 @usuario_bp.route("/login", methods= ['POST'])
 def login():
     
+    """!
+        @brief Verifica se o usuario tem login para autenticação
+        @throws ConnectionError Se a conexão não for estabelecida corretamente.
+        @throws LookupError Se o usuário não for encontrado.
+        @throws ValueError Se os dados do usuário estiverem inválidos.
+
+        @return Retorna o email junto com o token de acesso do login.
+    """
     dados = request.json
     if not dados:
         return jsonify({'erro':'JSON ausente'}),400

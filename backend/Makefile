@@ -37,7 +37,7 @@ test: clean
 
 	
 run:
-	$(PYTHON) $(APP_DIR)/run.py
+	$(PYTHON) run.py
 
 docs:
 	$(DOXYGEN) Doxyfile

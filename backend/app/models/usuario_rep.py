@@ -1,4 +1,4 @@
-"""
+"""!
     @file usuario_rep.py
     @brief Este arquivo é responsável pela persistência dos dados do usuário.
 """
@@ -18,7 +18,7 @@ if usuario is None:
     raise ConnectionError("Tabela 'usuario' não encontrada no banco.")
 
 def adicionar_usuario(email: str, senha: str, nome: str, tipo_usuario: str):
-    """
+    """!
         @brief Adiciona os dados do usuário na tabela do banco de dados.
 
         @param email Corresponde ao email do usuário.
@@ -75,7 +75,7 @@ def adicionar_usuario(email: str, senha: str, nome: str, tipo_usuario: str):
         return None
 
 def listar_usuarios(email = None, id = None):
-    """
+    """!
         @brief Lista o usuario com os especificos email ou id.
 
         @param email Opcional: corresponde ao email do usuário.
@@ -106,7 +106,7 @@ def listar_usuarios(email = None, id = None):
     return usuarios
 
 def verificar_credenciais(email: str, senha_enviada: str):
-    """
+    """!
         @brief Verifica se o email e senha corresponde já existem na Banco de Dados.
         @param email Corresponde ao email do usuário.
         @param senha_enviada Corresponde a senha enviada para a comparação da senha
@@ -145,7 +145,7 @@ def verificar_credenciais(email: str, senha_enviada: str):
     return usuario_encontrado 
 
 def deletar_usuario(email:str):
-    """
+    """!
         @brief Deleta o usuário do Banco de Dados.
         @param email Corresponde ao email do usuário que queira deletar.
 

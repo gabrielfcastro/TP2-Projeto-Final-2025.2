@@ -47,3 +47,15 @@ next-env.d.ts
 
 #Bd
 *.db
+
+# Cache, Build e Banco de Dados
+backend/app/models/__pycache__/
+backend/app/models/.pytest_cache/
+backend/tests/.pytest_cache/
+backend/banco.db
+*.pyc
+
+# Ambientes Virtuais (Venvs)
+.venv/
+venv/
+backend/.venv/

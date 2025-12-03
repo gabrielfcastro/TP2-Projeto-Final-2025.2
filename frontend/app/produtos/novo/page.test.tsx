@@ -6,7 +6,7 @@ global.fetch = jest.fn(() =>
   Promise.resolve({
     ok: true,
     json: () => Promise.resolve({ id: 10, nome: "Produto Teste", preco: 15 }),
-  })
+  }),
 ) as jest.Mock;
 
 // 2. Mock do Roteamento (Para o router.push não quebrar o teste)
@@ -46,7 +46,7 @@ describe("Página de Cadastro de Produto", () => {
             descricao: "Queijo feito hoje na fazenda",
             preco: 25.0,
           }),
-        })
+        }),
       );
     });
   });

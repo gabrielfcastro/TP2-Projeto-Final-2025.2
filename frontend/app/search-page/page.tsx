@@ -1,20 +1,35 @@
 "use client";
 
+import ProductCard from "@/components/ProductCard";
+import SearchBar from "@/components/SearchBar";
+import { useProductSearch } from "@/hooks/useProductSearch";
+
 export default function SearchPage() {
-  const handlerBuscarProduto = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault(); // impede o submit da página
-    alert("Alguma coisa aqui");
-  };
+	const { products, query, loading, error, setQuery, handleSearch } =
+		useProductSearch();
 
-  return (
-    <>
-      Lista de Produtos
-      <form onSubmit={handlerBuscarProduto}>
-        <label htmlFor="produto-name">Pesquisar Produto</label>
-        <input type="text" name="produto-name" id="produto-name" />
+	return (
+		<main className="min-h-screen bg-zinc-950 p-10 text-zinc-100">
+			<h1 className="text-4xl font-bold mb-8 text-white tracking-tight text-center">
+				Lista de Produtos
+			</h1>
 
-        <button type="submit">Buscar</button>
-      </form>
-    </>
-  );
+			<div className="max-w-6xl mx-auto mb-8">
+				<SearchBar
+					query={query}
+					setQuery={setQuery}
+					onSearch={handleSearch}
+					loading={loading}
+				/>
+			</div>
+
+			{error && <p className="text-red-500 text-center">{error}</p>}
+
+			<div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+				{products.map((product) => (
+					<ProductCard key={product.id} product={product} />
+				))}
+			</div>
+		</main>
+	);
 }

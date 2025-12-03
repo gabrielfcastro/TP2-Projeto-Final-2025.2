@@ -99,12 +99,16 @@ $(document).ready(function(){initNavTree('namespacemodels_1_1produtos__rep.html'
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:acadbf9b3f580a8c6b2d89831e3dd6dc9" id="r_acadbf9b3f580a8c6b2d89831e3dd6dc9"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemodels_1_1produtos__rep.html#acadbf9b3f580a8c6b2d89831e3dd6dc9">adicionar_produto</a> (int feirante_id, str nome, float preco, str descricao=None, float latitude=None, float longitude=None)</td></tr>
+<tr class="memdesc:acadbf9b3f580a8c6b2d89831e3dd6dc9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adiciona um novo produto ao banco de dados.  <br /></td></tr>
 <tr class="separator:acadbf9b3f580a8c6b2d89831e3dd6dc9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af603e9132380fd653144cfc58fdf9653" id="r_af603e9132380fd653144cfc58fdf9653"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemodels_1_1produtos__rep.html#af603e9132380fd653144cfc58fdf9653">listar_produtos</a> (id_produto=None, feirante_id=None)</td></tr>
+<tr class="memdesc:af603e9132380fd653144cfc58fdf9653"><td class="mdescLeft">&#160;</td><td class="mdescRight">Lista produtos do banco de dados com base em filtros opcionais.  <br /></td></tr>
 <tr class="separator:af603e9132380fd653144cfc58fdf9653"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa703e0b4833718ad0cd2fee46961624e" id="r_aa703e0b4833718ad0cd2fee46961624e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemodels_1_1produtos__rep.html#aa703e0b4833718ad0cd2fee46961624e">buscar_produto_por_id</a> (int id_produto)</td></tr>
+<tr class="memdesc:aa703e0b4833718ad0cd2fee46961624e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Busca um produto pelo seu ID.  <br /></td></tr>
 <tr class="separator:aa703e0b4833718ad0cd2fee46961624e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adfa42f08432a7bee1f4600874ff1c987" id="r_adfa42f08432a7bee1f4600874ff1c987"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemodels_1_1produtos__rep.html#adfa42f08432a7bee1f4600874ff1c987">deletar_produto</a> (int id_produto)</td></tr>
+<tr class="memdesc:adfa42f08432a7bee1f4600874ff1c987"><td class="mdescLeft">&#160;</td><td class="mdescRight">Deleta um produto do banco de dados.  <br /></td></tr>
 <tr class="separator:adfa42f08432a7bee1f4600874ff1c987"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
@@ -171,6 +175,32 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Adiciona um novo produto ao banco de dados. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">feirante_id</td><td>ID do feirante que está cadastrando o produto. </td></tr>
+    <tr><td class="paramname">nome</td><td>Nome do produto. </td></tr>
+    <tr><td class="paramname">preco</td><td>Preço do produto. </td></tr>
+    <tr><td class="paramname">descricao</td><td>Descrição do produto (opcional). </td></tr>
+    <tr><td class="paramname">latitude</td><td>Latitude da localização do produto (opcional). </td></tr>
+    <tr><td class="paramname">longitude</td><td>Longitude da localização do produto (opcional).</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section pre"><dt>Precondition</dt><dd>nome Deve conter entre 5 e 50 caracteres. </dd>
+<dd>
+preco Deve ser um valor maior que zero e conter exatamente duas casas decimais. </dd>
+<dd>
+descricao Deve conter no máximo 500 caracteres, se fornecida.</dd></dl>
+<dl class="section post"><dt>Postcondition</dt><dd>Insere um novo produto na tabela 'produtos' do banco de dados.</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">ValueError</td><td>Se algum dos parâmetros fornecidos for inválido. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>ID do produto criado. </dd></dl>
+
 </div>
 </div>
 <a id="aa703e0b4833718ad0cd2fee46961624e" name="aa703e0b4833718ad0cd2fee46961624e"></a>
@@ -189,6 +219,16 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Busca um produto pelo seu ID. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">id_produto</td><td>ID do produto a ser buscado.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section post"><dt>Postcondition</dt><dd>Busca o produto na tabela 'produtos' do banco de dados.</dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Dicionário contendo os dados do produto encontrado ou None se não encontrado. </dd></dl>
+
 </div>
 </div>
 <a id="adfa42f08432a7bee1f4600874ff1c987" name="adfa42f08432a7bee1f4600874ff1c987"></a>
@@ -206,6 +246,22 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Deleta um produto do banco de dados. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">id_produto</td><td>ID do produto a ser deletado.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section pre"><dt>Precondition</dt><dd>id_produto Deve existir no banco de dados. </dd></dl>
+<dl class="section post"><dt>Postcondition</dt><dd>Remove o produto da tabela 'produtos' do banco de dados. </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">ValueError</td><td>Se o produto com o ID fornecido não for encontrado. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -234,6 +290,17 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Lista produtos do banco de dados com base em filtros opcionais. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">id_produto</td><td>ID do produto a ser buscado (opcional). </td></tr>
+    <tr><td class="paramname">feirante_id</td><td>ID do feirante para filtrar os produtos (opcional).</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section post"><dt>Postcondition</dt><dd>Busca produtos na tabela 'produtos' do banco de dados com base nos filtros fornecidos.</dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Lista de dicionários contendo os dados dos produtos encontrados. </dd></dl>
 
 </div>
 </div>

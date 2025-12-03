@@ -99,12 +99,16 @@ $(document).ready(function(){initNavTree('namespaceroutes_1_1produto__route.html
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:ad509ac4dface996807f3b89028571743" id="r_ad509ac4dface996807f3b89028571743"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceroutes_1_1produto__route.html#ad509ac4dface996807f3b89028571743">criar_produto</a> ()</td></tr>
+<tr class="memdesc:ad509ac4dface996807f3b89028571743"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cria um novo produto no sistema.  <br /></td></tr>
 <tr class="separator:ad509ac4dface996807f3b89028571743"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a272177c2674772d8f3ddd84ed7ebbc25" id="r_a272177c2674772d8f3ddd84ed7ebbc25"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceroutes_1_1produto__route.html#a272177c2674772d8f3ddd84ed7ebbc25">listar_produtos</a> ()</td></tr>
+<tr class="memdesc:a272177c2674772d8f3ddd84ed7ebbc25"><td class="mdescLeft">&#160;</td><td class="mdescRight">Lista todos os produtos ou filtra por feirante_id.  <br /></td></tr>
 <tr class="separator:a272177c2674772d8f3ddd84ed7ebbc25"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8bd8c144dd0d3abee7c8ee3933f8b87d" id="r_a8bd8c144dd0d3abee7c8ee3933f8b87d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceroutes_1_1produto__route.html#a8bd8c144dd0d3abee7c8ee3933f8b87d">listar_produto_por_id</a> (id_produto)</td></tr>
+<tr class="memdesc:a8bd8c144dd0d3abee7c8ee3933f8b87d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Busca um produto pelo seu ID.  <br /></td></tr>
 <tr class="separator:a8bd8c144dd0d3abee7c8ee3933f8b87d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4402709b00d1f362f1a5aa682bb5ba44" id="r_a4402709b00d1f362f1a5aa682bb5ba44"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceroutes_1_1produto__route.html#a4402709b00d1f362f1a5aa682bb5ba44">deletar_produto</a> (id_produto)</td></tr>
+<tr class="memdesc:a4402709b00d1f362f1a5aa682bb5ba44"><td class="mdescLeft">&#160;</td><td class="mdescRight">Deleta um produto do sistema.  <br /></td></tr>
 <tr class="separator:a4402709b00d1f362f1a5aa682bb5ba44"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
@@ -128,6 +132,36 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Cria um novo produto no sistema. </p>
+<p>Esta rota processa uma requisição POST proveniente do front contendo os dados necessários para criar um novo produto.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">feirante_id</td><td>ID do feirante que está cadastrando o produto. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">nome</td><td>Nome do produto. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">preco</td><td>Preço do produto. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">descricao</td><td>Descrição do produto (opcional). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">latitude</td><td>Latitude da localização do produto (opcional). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">longitude</td><td>Longitude da localização do produto (opcional).</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section pre"><dt>Precondition</dt><dd>feirante_id Deve ser um ID válido de um feirante existente. </dd>
+<dd>
+nome Deve conter entre 5 e 50 caracteres. </dd>
+<dd>
+preco Deve ser um valor maior que zero e conter exatamente duas casas decimais. </dd>
+<dd>
+descricao Deve conter no máximo 500 caracteres, se fornecida.</dd></dl>
+<dl class="section post"><dt>Postcondition</dt><dd>Insere um novo produto na tabela 'produtos' do banco de dados.</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">ValueError</td><td>Se os dados fornecidos forem inválidos. </td></tr>
+    <tr><td class="paramname">ConnectionError</td><td>Se houver falha ao salvar o produto no banco.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Retorna um JSON de resposta contendo os dados do produto criado em caso de sucesso (201) ou uma mensagem de erro em caso de falha. </dd></dl>
+
 </div>
 </div>
 <a id="a4402709b00d1f362f1a5aa682bb5ba44" name="a4402709b00d1f362f1a5aa682bb5ba44"></a>
@@ -145,6 +179,24 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Deleta um produto do sistema. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">id_produto</td><td>ID do produto a ser deletado.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section pre"><dt>Precondition</dt><dd>id_produto Deve existir no banco de dados. </dd></dl>
+<dl class="section post"><dt>Postcondition</dt><dd>Remove o produto da tabela 'produtos' do banco de dados.</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">ValueError</td><td>Se o produto com o ID fornecido não for encontrado. </td></tr>
+    <tr><td class="paramname">Exception</td><td>Se ocorrer um erro inesperado durante a operação.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Retorna um JSON de resposta contendo uma mensagem de sucesso em caso de sucesso (200) ou uma mensagem de erro em caso de falha. </dd></dl>
 
 </div>
 </div>
@@ -164,6 +216,22 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Busca um produto pelo seu ID. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">id_produto</td><td>ID do produto a ser buscado.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section post"><dt>Postcondition</dt><dd>Busca o produto na tabela 'produtos' do banco de dados.</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">Exception</td><td>Se ocorrer um erro ao buscar o produto.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Retorna um JSON de resposta contendo os dados do produto em caso de sucesso (200) ou uma mensagem de erro em caso de falha. </dd></dl>
+
 </div>
 </div>
 <a id="a272177c2674772d8f3ddd84ed7ebbc25" name="a272177c2674772d8f3ddd84ed7ebbc25"></a>
@@ -180,6 +248,22 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Lista todos os produtos ou filtra por feirante_id. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">feirante_id</td><td>(opcional) ID do feirante para filtrar os produtos.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section post"><dt>Postcondition</dt><dd>Recupera os produtos da tabela 'produtos' do banco de dados.</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">Exception</td><td>Se ocorrer um erro ao listar os produtos.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Retorna um JSON de resposta contendo a lista de produtos em caso de sucesso (200) ou uma mensagem de erro em caso de falha. </dd></dl>
 
 </div>
 </div>

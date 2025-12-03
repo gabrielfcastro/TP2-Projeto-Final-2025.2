@@ -218,9 +218,10 @@ def test_atualizar_media_avaliacoes_tabela_produtos(setup_produto):  # pylint: d
     avaliacoes_produtos_rep.atualizar_media_avaliacoes_tabela_produtos(produto_id)
 
     with engine.connect() as conn:
-        stmt = text(f"SELECT media_avaliacoes FROM produtos WHERE id = {produto_id}")
-        result = conn.execute(stmt).first()
-        media_atualizada = result['media_avaliacoes']
+        stmt = text(f"SELECT avaliacao_media FROM produtos WHERE id = {produto_id}")
+        result = conn.execute(stmt).mappings().first()
+        media_atualizada = result['avaliacao_media'] if result is not None else None
 
     expected_media = (nota1 + nota2) / Decimal('2')
     assert media_atualizada == expected_media.quantize(Decimal('0.10'))
+    

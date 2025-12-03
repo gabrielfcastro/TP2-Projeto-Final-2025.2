@@ -131,4 +131,19 @@ def calcular_media_avaliacoes_produto(produto_id: int) -> Decimal:
 
     soma_notas = sum(notas)
     media = soma_notas / Decimal(len(notas))
-    return media.quantize(Decimal('0.10')) 
+    return media.quantize(Decimal('0.10'))
+
+def atualizar_media_avaliacoes_tabela_produtos(produto_id: int):
+    """Atualiza a média das avaliações na tabela de produtos.
+        Argumentos:
+        produto_id (int): ID do produto cuja média será atualizada.
+    """
+    media = calcular_media_avaliacoes_produto(produto_id)
+
+    with engine.begin() as conn:
+        stmt = update(produtos).where(
+            produtos.c.id == produto_id
+        ).values(
+            avaliacao_media=media
+        )
+        conn.execute(stmt)

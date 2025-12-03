@@ -20,7 +20,7 @@ export function clearCachedToken() {
 }
 
 const baseURL =
-	process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:5000/api";
+	process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5000/api";
 
 function getUseMock(): boolean {
 	return (
@@ -78,10 +78,10 @@ api.interceptors.request.use(
 		// 	return config;
 		// }
 
-		const token = await getToken();
-		if (token) {
-			config.headers.Authorization = `Bearer ${token}`;
-		}
+		//const token = await getToken();
+		//if (token) {
+		//	config.headers.Authorization = `Bearer ${token}`;
+		//}
 
 		return config;
 	},

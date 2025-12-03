@@ -3,7 +3,7 @@ import api from "@/utils/api";
 
 export class ProductService {
 	static async getProducts(nome?: string): Promise<Product[]> {
-		const response = await api.get<Product[]>('/produtos');
+		const response = await api.get<Product[]>("/produtos");
 
 		if (nome) {
 			response.data = response.data.filter((product) =>

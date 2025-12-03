@@ -1,0 +1,4 @@
+*.pyc
+backend/.env
+backend/.pylintrc
+.vscode/settings.json

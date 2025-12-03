@@ -1,0 +1,98 @@
+from ..models import historico_busca_rep
+from flask import Blueprint, request, jsonify
+from flask_jwt_extended import jwt_required, get_jwt_identity
+
+historico_busca_bp = Blueprint('historico_busca_bp', __name__, url_prefix='/api/historico_busca')
+
+@historico_busca_bp.route('/', methods=['POST'])
+def criar_historico():
+    dados = request.json
+
+    if not dados:
+        return jsonify({'erro': 'JSON ausente'}), 400
+    
+    current_user_id = dados.get('usuario_id')
+    produto_buscado = dados.get('produto_buscado')
+    feirante_buscado = dados.get('feirante_buscado')
+
+    if not produto_buscado and not feirante_buscado:
+        return jsonify({'erro': 'Digite um produto ou feirante para buscar'}), 400
+    
+    try:
+        
+        historico_id = historico_busca_rep.adicionar_historico_busca(
+            usuario_id=current_user_id,
+            produto_buscado=produto_buscado,
+            feirante_buscado=feirante_buscado
+        )
+
+        if not historico_id:
+            return jsonify({'erro': 'Falha ao salvar a busca'}), 500
+        
+        return jsonify({
+            'mensagem': 'Busca salva no histórico',
+            'historico_id': historico_id
+        }), 201
+        
+    except ValueError as e:
+        return jsonify({"erro": str(e)}), 400
+    except Exception as e:
+        return jsonify({"erro": "Erro interno no servidor"}), 500
+
+@historico_busca_bp.route('/', methods=['GET'])
+def listar_historico():
+    try:
+        current_user_id = request.args.get('usuario_id', type=int)
+        
+        if not current_user_id:
+            return jsonify({'erro': 'ID do usuário é obrigatório'}), 400
+        
+        limit = request.args.get('limit', default=None, type=int)
+        
+        if limit:
+            historicos = historico_busca_rep.buscar_historico_recente(
+                usuario_id=current_user_id, 
+                limite=limit
+            )
+        else:
+            historicos = historico_busca_rep.listar_historico_buscas(
+                usuario_id=current_user_id
+            )
+        
+        return jsonify({
+            'usuario_id': current_user_id,
+            'total_buscas': len(historicos),
+            'historicos': historicos
+        }), 200
+    
+    except Exception as e:
+        print(f"Error in listar_historico: {e}")
+        return jsonify({"erro": "Erro interno no servidor"}), 500
+
+@historico_busca_bp.route('/', methods=['DELETE'])
+def limpar_historico():
+    try:
+        dados = request.json
+        if not dados:
+            return jsonify({'erro': 'JSON ausente'}), 400
+        
+        current_user_id = dados.get('usuario_id')
+        
+        if not current_user_id:
+            return jsonify({'erro': 'ID do usuário é obrigatório'}), 400
+        
+        registros_deletados = historico_busca_rep.deletar_historico_por_usuario(
+            usuario_id=current_user_id
+        )
+        
+        return jsonify({
+            'mensagem': f'Histórico limpo com sucesso',
+            'registros_removidos': registros_deletados
+        }), 200
+    
+    except Exception as e:
+        # Add error logging for debugging
+        print(f"Error in limpar_historico: {e}")
+        import traceback
+        traceback.print_exc()
+        return jsonify({"erro": "Erro interno no servidor"}), 500

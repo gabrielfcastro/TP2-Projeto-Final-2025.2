@@ -52,11 +52,10 @@ def buscar_historico_por_id(historico_id: int):
         else:
             return None
 
-def deletar_historico_busca(historico_id: int):
+def deletar_historico_por_usuario(usuario_id: int):
 
-    stmt = delete(historico_buscas).where(historico_buscas.c.id == historico_id)
+    stmt = delete(historico_buscas).where(historico_buscas.c.usuario_id == usuario_id)
     
     with engine.begin() as conn:
         result = conn.execute(stmt)
-        if result.rowcount == 0:
-            raise ValueError(f"Histórico de busca com ID {historico_id} não encontrado.")
+        return result.rowcount  

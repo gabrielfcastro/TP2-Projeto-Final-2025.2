@@ -69,7 +69,9 @@ const api = axios.create({
 api.interceptors.request.use(
 	async (config) => {
 		if (getUseMock()) {
-			console.log(`[MOCK] ${config.method?.toUpperCase() || "GET"} ${config.url}`);
+			console.log(
+				`[MOCK] ${config.method?.toUpperCase() || "GET"} ${config.url}`
+			);
 			// Para mock, não fazemos a requisição real
 			// Retornamos um config especial que será tratado no interceptor de response
 			(config as MockConfig).__isMock = true;

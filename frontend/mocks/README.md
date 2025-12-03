@@ -91,11 +91,14 @@ export async function getMockResponse(endpoint: string): Promise<Response> {
 		const { getMockExample } = await import("@/mocks/example");
 		const example = getMockExample(id);
 		if (!example) {
-			return new Response(JSON.stringify({ error: "Example not found" }), {
-				status: 404,
-				statusText: "Not Found",
-				headers: { "Content-Type": "application/json" },
-			});
+			return new Response(
+				JSON.stringify({ error: "Example not found" }),
+				{
+					status: 404,
+					statusText: "Not Found",
+					headers: { "Content-Type": "application/json" },
+				}
+			);
 		}
 		mockData = example;
 	} else {

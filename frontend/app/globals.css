@@ -3,6 +3,8 @@
 :root {
 	--background: #ffffff;
 	--foreground: #171717;
+	--border-color: rgba(23, 23, 23, 0.2);
+	--hover-bg: rgba(23, 23, 23, 0.1);
 }
 
 @theme inline {
@@ -16,6 +18,8 @@
 	:root {
 		--background: #0a0a0a;
 		--foreground: #ededed;
+		--border-color: rgba(237, 237, 237, 0.2);
+		--hover-bg: rgba(237, 237, 237, 0.1);
 	}
 }
 

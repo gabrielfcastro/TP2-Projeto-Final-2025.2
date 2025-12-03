@@ -13,7 +13,7 @@ export async function getMockResponse(endpoint: string): Promise<Response> {
 
 	if (path === "/produtos" || path === "/produtos/") {
 		const { mockProducts } = await import("@/mocks/products");
-		
+
 		// Filtra por nome se o parâmetro estiver presente
 		if (queryParams.has("nome")) {
 			const nomeFilter = queryParams.get("nome")?.toLowerCase() || "";
@@ -28,11 +28,14 @@ export async function getMockResponse(endpoint: string): Promise<Response> {
 		const { getMockProduct } = await import("@/mocks/products");
 		const product = getMockProduct(id);
 		if (!product) {
-			return new Response(JSON.stringify({ error: "Product not found" }), {
-				status: 404,
-				statusText: "Not Found",
-				headers: { "Content-Type": "application/json" },
-			});
+			return new Response(
+				JSON.stringify({ error: "Product not found" }),
+				{
+					status: 404,
+					statusText: "Not Found",
+					headers: { "Content-Type": "application/json" },
+				}
+			);
 		}
 		mockData = product;
 	} else {
@@ -54,4 +57,3 @@ export function isNetworkError(error: unknown): boolean {
 			error.message.includes("Failed to fetch"))
 	);
 }
-

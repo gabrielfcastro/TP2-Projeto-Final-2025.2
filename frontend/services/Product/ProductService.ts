@@ -3,7 +3,9 @@ import api from "@/utils/api";
 
 export class ProductService {
 	static async getProducts(nome?: string): Promise<Product[]> {
-		const endpoint = nome ? `/produtos?nome=${encodeURIComponent(nome)}` : "/produtos";
+		const endpoint = nome
+			? `/produtos?nome=${encodeURIComponent(nome)}`
+			: "/produtos";
 		const response = await api.get<Product[]>(endpoint);
 		return response.data;
 	}

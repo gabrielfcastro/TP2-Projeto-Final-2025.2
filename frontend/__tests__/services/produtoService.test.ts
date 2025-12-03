@@ -81,7 +81,9 @@ describe("ProductService", () => {
 		const products = await ProductService.getProducts("Produto 1");
 
 		expect(products).toEqual(filteredProducts);
-		expect(mockedApi.get).toHaveBeenCalledWith("/produtos?nome=Produto%201");
+		expect(mockedApi.get).toHaveBeenCalledWith(
+			"/produtos?nome=Produto%201"
+		);
 	});
 
 	it("GET product details", async () => {

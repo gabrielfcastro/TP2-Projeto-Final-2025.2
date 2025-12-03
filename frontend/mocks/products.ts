@@ -61,4 +61,3 @@ export const mockProducts: Product[] = [
 export const getMockProduct = (id: number): Product | undefined => {
 	return mockProducts.find((product) => product.id === id);
 };
-

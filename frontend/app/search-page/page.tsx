@@ -1,37 +1,35 @@
 "use client";
 
+import ProductCard from "@/components/ProductCard";
+import SearchBar from "@/components/SearchBar";
 import { useProductSearch } from "@/hooks/useProductSearch";
 
 export default function SearchPage() {
-  const { products, query, loading, error, setQuery, handleSearch } = useProductSearch();
+	const { products, query, loading, error, setQuery, handleSearch } =
+		useProductSearch();
 
-  return (
-    <>
-      <h1>Lista de Produtos</h1>
+	return (
+		<main className="min-h-screen bg-zinc-950 p-10 text-zinc-100">
+			<h1 className="text-4xl font-bold mb-8 text-white tracking-tight text-center">
+				Lista de Produtos
+			</h1>
 
-      <form onSubmit={handleSearch}>
-        <label htmlFor="produto-name">Pesquisar Produto</label>
+			<div className="max-w-6xl mx-auto mb-8">
+				<SearchBar
+					query={query}
+					setQuery={setQuery}
+					onSearch={handleSearch}
+					loading={loading}
+				/>
+			</div>
 
-        <input
-          type="text"
-          id="produto-name"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="Pesquisar produto"
-        />
+			{error && <p className="text-red-500 text-center">{error}</p>}
 
-        <button type="submit" disabled={loading}>
-          {loading ? "Buscando..." : "Buscar"}
-        </button>
-      </form>
-
-      {error && <p style={{ color: "red" }}>{error}</p>}
-
-      <ul>
-        {products.map((product) => (
-          <li key={product.id}>{product.nome}</li>
-        ))}
-      </ul>
-    </>
-  );
+			<div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+				{products.map((product) => (
+					<ProductCard key={product.id} product={product} />
+				))}
+			</div>
+		</main>
+	);
 }

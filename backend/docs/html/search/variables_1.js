@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['db_5fpath_0',['db_path',['../namespacemodels_1_1connection.html#a8a35a3b5b842800a6c7026f3dca1a5b6',1,'models::connection']]]
+  ['base_5fdir_0',['BASE_DIR',['../namespacemodels_1_1connection.html#a1b3eb3be70b5ba5d78293e7d02cd3c4e',1,'models::connection']]],
+  ['bind_1',['bind',['../namespacemodels_1_1connection.html#a0d8626d326de2665ae5e3bb0073ab536',1,'models::connection']]]
 ];

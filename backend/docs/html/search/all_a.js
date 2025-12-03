@@ -8,6 +8,6 @@ var searchData=
   ['padrao_5fsenha_5',['PADRAO_SENHA',['../namespacemodels_1_1usuario__rep.html#a0c2188b53fa7eabd17f1967910654b1b',1,'models::usuario_rep']]],
   ['produto_5fbp_6',['produto_bp',['../namespaceroutes_1_1produto__route.html#ab12418aa31a18d9fe4285e45b121fa0a',1,'routes::produto_route']]],
   ['produto_5froute_2epy_7',['produto_route.py',['../produto__route_8py.html',1,'']]],
-  ['produtos_8',['produtos',['../namespacemodels_1_1produtos__rep.html#a7923b3a4ee688ad27e023ffadce195d8',1,'models::produtos_rep']]],
+  ['produtos_8',['produtos',['../namespacemodels_1_1avaliacoes__produtos__rep.html#ad1887cb0fd7e5ed2e956541e8f10b190',1,'models.avaliacoes_produtos_rep.produtos'],['../namespacemodels_1_1produtos__rep.html#a7923b3a4ee688ad27e023ffadce195d8',1,'models.produtos_rep.produtos']]],
   ['produtos_5frep_2epy_9',['produtos_rep.py',['../produtos__rep_8py.html',1,'']]]
 ];

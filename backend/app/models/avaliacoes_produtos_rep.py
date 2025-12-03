@@ -1,7 +1,7 @@
-"""
-Módulo de repositório para gerenciamento de avaliações de produtos.
+"""!
+    @file avaliacoes_produtos_rep.py
 
-Pode criar, ler, atualizar e deletar avaliações de produtos.
+    @brief Este arquivo é responsável pela persistência dos dados das avaliações dos produtos.
 """
 
 #Garanta que está na pasta backend no terminal antes de rodar:
@@ -25,19 +25,20 @@ if produtos is None:
     raise Exception("Tabela 'produtos' não encontrada no banco.")
 
 def adicionar_avaliacao_produto(produto_id: int, nota: str, comentario: str, data: datetime):
-    """Adiciona uma nova avaliação para um produto.
-        Argumentos:
-        produto_id (int): ID do produto
-        nota (Decimal): Nota da avaliação (1.0 a 5.0)
-        comentario (str): Comentário da avaliação
+    """!
+        @brief Adiciona uma nova avaliação de produto ao banco de dados.
 
-        Lança:
-        Se a nota estiver fora do intervalo permitido ou
-        se o comentário exceder o tamanho máximo.
-        Lança ValueError.
+        @param produto_id ID do produto a ser avaliado.
+        @param nota Nota da avaliação.
+        @param comentario Comentário da avaliação.
+        @param data Data da avaliação.
 
-        Retorna:
-        A avaliação criada.
+        @pre Nota Deve ser um número decimal entre 1.0 e 5.0, com até 1 casa decimal.
+        @pre Comentario Deve ter no máximo 500 caracteres.
+        @post Insere uma nova avaliação na tabela 'avaliacoes_produtos' do banco de dados.
+        @throws ValueError Se a nota ou o comentário forem inválidos.
+        @return A avaliação criada.
+
     """
     if nota is None:
         raise ValueError("A nota não pode ser nula.")
@@ -84,9 +85,13 @@ def adicionar_avaliacao_produto(produto_id: int, nota: str, comentario: str, dat
     return None
 
 def deletar_avaliacao_produto(avaliacao_id: int):
-    """Deleta uma avaliação de produto pelo seu ID.
-        Argumentos:
-        avaliacao_id (int): ID da avaliação a ser deletada.
+    """!
+        @brief Deleta uma avaliação de produto do banco de dados.
+
+        @param avaliacao_id ID da avaliação a ser deletada.
+
+        @pre avaliacao_id Deve existir no banco de dados.
+        @post Remove a avaliação da tabela 'avaliacoes_produtos' do banco de dados.
     """
     with engine.begin() as conn:
         stmt = delete(avaliacoes_produtos).where(
@@ -95,12 +100,12 @@ def deletar_avaliacao_produto(avaliacao_id: int):
         conn.execute(stmt)
 
 def listar_avaliacoes_produtos(produto_id: int):
-    """Lista todas as avaliações de um produto específico.
-        Argumentos:
-        produto_id (int): ID do produto cujas avaliações serão listadas.
+    """!
+        @brief Lista todas as avaliações de um produto específico.
 
-        Retorna:
-        Lista de avaliações do produto.
+        @param produto_id ID do produto cujas avaliações serão listadas.
+
+        @return Retorna uma lista de dicionários com as avaliações do produto.
     """
     with engine.connect() as conn:
         stmt = select(avaliacoes_produtos).where(
@@ -112,12 +117,12 @@ def listar_avaliacoes_produtos(produto_id: int):
     return lista_avaliacoes
 
 def calcular_media_avaliacoes_produto(produto_id: int) -> Decimal:
-    """Calcula a média das avaliações de um produto específico.
-        Argumentos:
-        produto_id (int): ID do produto cujas avaliações serão consideradas.
+    """!
+         @brief Calcula a média das avaliações de um produto específico.
 
-        Retorna:
-        A média das notas das avaliações do produto como Decimal.
+        @param produto_id ID do produto cujas avaliações serão calculadas.
+
+        @return Retorna a média das avaliações do produto como um Decimal com 1 casa decimal.
     """
     with engine.connect() as conn:
         stmt = select(avaliacoes_produtos.c.nota).where(
@@ -134,9 +139,12 @@ def calcular_media_avaliacoes_produto(produto_id: int) -> Decimal:
     return media.quantize(Decimal('0.10'))
 
 def atualizar_media_avaliacoes_tabela_produtos(produto_id: int):
-    """Atualiza a média das avaliações na tabela de produtos.
-        Argumentos:
-        produto_id (int): ID do produto cuja média será atualizada.
+    """!
+        @brief Atualiza a média das avaliações na tabela de produtos.
+
+        @param produto_id ID do produto cuja média será atualizada.
+
+        @post Atualiza o campo 'avaliacao_media' na tabela 'produtos' com a média calculada.
     """
     media = calcular_media_avaliacoes_produto(produto_id)
 
@@ -149,12 +157,12 @@ def atualizar_media_avaliacoes_tabela_produtos(produto_id: int):
         conn.execute(stmt)
 
 def calcular_total_avaliacoes_produtos(produto_id: int) -> int:
-    """Calcula o total de avaliações de um produto específico.
-        Argumentos:
-        produto_id (int): ID do produto cujas avaliações serão contadas.
+    """!
+        @brief Calcula o total de avaliações de um produto específico.
 
-        Retorna:
-        O total de avaliações do produto.
+        @param produto_id ID do produto cujas avaliações serão contadas.
+
+        @return Retorna o total de avaliações do produto como um inteiro.
     """
     with engine.connect() as conn:
         stmt = select(avaliacoes_produtos).where(
@@ -166,9 +174,10 @@ def calcular_total_avaliacoes_produtos(produto_id: int) -> int:
     return total_avaliacoes
 
 def atualizar_total_avaliacoes_tabela_produtos(produto_id: int):
-    """Atualiza o total de avaliações na tabela de produtos.
-        Argumentos:
-        produto_id (int): ID do produto cujo total será atualizado.
+    """!
+        @brief Atualiza o total de avaliações na tabela de produtos.
+
+        @param produto_id ID do produto cujo total será atualizado.
     """
     total = calcular_total_avaliacoes_produtos(produto_id)
 

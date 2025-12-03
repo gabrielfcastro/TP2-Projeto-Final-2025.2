@@ -96,6 +96,9 @@ $(document).ready(function(){initNavTree('historico__busca__rep_8py.html',''); i
   <div class="headertitle"><div class="title">historico_busca_rep.py File Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Este arquivo é responsável pelo CRUD do Histórico de Busca.  
+<a href="#details">More...</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="namespaces" name="namespaces"></a>
 Namespaces</h2></td></tr>
@@ -107,12 +110,19 @@ Namespaces</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:af50e79ae4c7cff5a75f4b544808fd318" id="r_af50e79ae4c7cff5a75f4b544808fd318"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemodels_1_1historico__busca__rep.html#af50e79ae4c7cff5a75f4b544808fd318">models.historico_busca_rep.adicionar_historico_busca</a> (int usuario_id, str produto_buscado=&quot;&quot;, str feirante_buscado=&quot;&quot;)</td></tr>
+<tr class="memdesc:af50e79ae4c7cff5a75f4b544808fd318"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cria uma nova entrada no histórico de busca do usuário.  <br /></td></tr>
 <tr class="separator:af50e79ae4c7cff5a75f4b544808fd318"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6040d99f148408c46af1cdc0574152b2" id="r_a6040d99f148408c46af1cdc0574152b2"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemodels_1_1historico__busca__rep.html#a6040d99f148408c46af1cdc0574152b2">models.historico_busca_rep.listar_historico_buscas</a> (usuario_id=None, historico_id=None)</td></tr>
+<tr class="memdesc:a6040d99f148408c46af1cdc0574152b2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Lista todas as entradas do histórico de busca.  <br /></td></tr>
 <tr class="separator:a6040d99f148408c46af1cdc0574152b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a40f9efbbb57daa45842776ee17cea33c" id="r_a40f9efbbb57daa45842776ee17cea33c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemodels_1_1historico__busca__rep.html#a40f9efbbb57daa45842776ee17cea33c">models.historico_busca_rep.buscar_historico_por_id</a> (int historico_id)</td></tr>
+<tr class="memdesc:a40f9efbbb57daa45842776ee17cea33c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Busca um registro específico pelo seu ID.  <br /></td></tr>
 <tr class="separator:a40f9efbbb57daa45842776ee17cea33c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a237df9203145b898d40b893b31543a04" id="r_a237df9203145b898d40b893b31543a04"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemodels_1_1historico__busca__rep.html#a237df9203145b898d40b893b31543a04">models.historico_busca_rep.deletar_historico_por_usuario</a> (int usuario_id)</td></tr>
+<tr class="memdesc:a237df9203145b898d40b893b31543a04"><td class="mdescLeft">&#160;</td><td class="mdescRight">Deleta o histórico de busca de um usuário específico.  <br /></td></tr>
+<tr class="separator:a237df9203145b898d40b893b31543a04"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1572eb504d0a87929e71c306911a6e78" id="r_a1572eb504d0a87929e71c306911a6e78"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemodels_1_1historico__busca__rep.html#a1572eb504d0a87929e71c306911a6e78">models.historico_busca_rep.deletar_historico_busca</a> (int historico_id)</td></tr>
+<tr class="memdesc:a1572eb504d0a87929e71c306911a6e78"><td class="mdescLeft">&#160;</td><td class="mdescRight">Deleta uma entrada específica no histórico.  <br /></td></tr>
 <tr class="separator:a1572eb504d0a87929e71c306911a6e78"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
@@ -120,7 +130,9 @@ Variables</h2></td></tr>
 <tr class="memitem:a027663024cb61ca37fd86bb52e0ed6e1" id="r_a027663024cb61ca37fd86bb52e0ed6e1"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemodels_1_1historico__busca__rep.html#a027663024cb61ca37fd86bb52e0ed6e1">models.historico_busca_rep.historico_buscas</a> = metadata.tables.get(&quot;historico_buscas&quot;)</td></tr>
 <tr class="separator:a027663024cb61ca37fd86bb52e0ed6e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-</div><!-- contents -->
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Este arquivo é responsável pelo CRUD do Histórico de Busca. </p>
+</div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

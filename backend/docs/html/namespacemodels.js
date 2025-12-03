@@ -1,5 +1,17 @@
 var namespacemodels =
 [
+    [ "avaliacoes_produtos_rep", "namespacemodels_1_1avaliacoes__produtos__rep.html", [
+      [ "adicionar_avaliacao_produto", "namespacemodels_1_1avaliacoes__produtos__rep.html#ad93713ca3d16b653ebb9d9e34b34bbea", null ],
+      [ "atualizar_media_avaliacoes_tabela_produtos", "namespacemodels_1_1avaliacoes__produtos__rep.html#a47501eccc6f7f40ebe1e92da3ae7cc9f", null ],
+      [ "atualizar_total_avaliacoes_tabela_produtos", "namespacemodels_1_1avaliacoes__produtos__rep.html#a061e0378676f0177f8ca16093e8bb673", null ],
+      [ "calcular_media_avaliacoes_produto", "namespacemodels_1_1avaliacoes__produtos__rep.html#a07ab1cca52237bfd76c7c57bc40f9193", null ],
+      [ "calcular_total_avaliacoes_produtos", "namespacemodels_1_1avaliacoes__produtos__rep.html#a24d00101961358444af407a265e83914", null ],
+      [ "deletar_avaliacao_produto", "namespacemodels_1_1avaliacoes__produtos__rep.html#ad51fa8730440f60dc87e6d9931357c2b", null ],
+      [ "listar_avaliacoes_produtos", "namespacemodels_1_1avaliacoes__produtos__rep.html#a869a0c8733fd16adef748d6cc7e0fd91", null ],
+      [ "avaliacoes_produtos", "namespacemodels_1_1avaliacoes__produtos__rep.html#a4ce037d1242dcaafb2485d65550dcad1", null ],
+      [ "produtos", "namespacemodels_1_1avaliacoes__produtos__rep.html#ad1887cb0fd7e5ed2e956541e8f10b190", null ],
+      [ "TAMANHO_MAX_COMENTARIO", "namespacemodels_1_1avaliacoes__produtos__rep.html#af015e594b9031b87b35ef28b038f3325", null ]
+    ] ],
     [ "connection", "namespacemodels_1_1connection.html", [
       [ "BASE_DIR", "namespacemodels_1_1connection.html#a1b3eb3be70b5ba5d78293e7d02cd3c4e", null ],
       [ "bind", "namespacemodels_1_1connection.html#a0d8626d326de2665ae5e3bb0073ab536", null ],
@@ -20,6 +32,7 @@ var namespacemodels =
       [ "adicionar_historico_busca", "namespacemodels_1_1historico__busca__rep.html#af50e79ae4c7cff5a75f4b544808fd318", null ],
       [ "buscar_historico_por_id", "namespacemodels_1_1historico__busca__rep.html#a40f9efbbb57daa45842776ee17cea33c", null ],
       [ "deletar_historico_busca", "namespacemodels_1_1historico__busca__rep.html#a1572eb504d0a87929e71c306911a6e78", null ],
+      [ "deletar_historico_por_usuario", "namespacemodels_1_1historico__busca__rep.html#a237df9203145b898d40b893b31543a04", null ],
       [ "listar_historico_buscas", "namespacemodels_1_1historico__busca__rep.html#a6040d99f148408c46af1cdc0574152b2", null ],
       [ "historico_buscas", "namespacemodels_1_1historico__busca__rep.html#a027663024cb61ca37fd86bb52e0ed6e1", null ]
     ] ],

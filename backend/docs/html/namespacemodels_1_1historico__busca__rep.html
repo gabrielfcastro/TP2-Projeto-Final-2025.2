@@ -99,12 +99,19 @@ $(document).ready(function(){initNavTree('namespacemodels_1_1historico__busca__r
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:af50e79ae4c7cff5a75f4b544808fd318" id="r_af50e79ae4c7cff5a75f4b544808fd318"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemodels_1_1historico__busca__rep.html#af50e79ae4c7cff5a75f4b544808fd318">adicionar_historico_busca</a> (int usuario_id, str produto_buscado=&quot;&quot;, str feirante_buscado=&quot;&quot;)</td></tr>
+<tr class="memdesc:af50e79ae4c7cff5a75f4b544808fd318"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cria uma nova entrada no histórico de busca do usuário.  <br /></td></tr>
 <tr class="separator:af50e79ae4c7cff5a75f4b544808fd318"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6040d99f148408c46af1cdc0574152b2" id="r_a6040d99f148408c46af1cdc0574152b2"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemodels_1_1historico__busca__rep.html#a6040d99f148408c46af1cdc0574152b2">listar_historico_buscas</a> (usuario_id=None, historico_id=None)</td></tr>
+<tr class="memdesc:a6040d99f148408c46af1cdc0574152b2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Lista todas as entradas do histórico de busca.  <br /></td></tr>
 <tr class="separator:a6040d99f148408c46af1cdc0574152b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a40f9efbbb57daa45842776ee17cea33c" id="r_a40f9efbbb57daa45842776ee17cea33c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemodels_1_1historico__busca__rep.html#a40f9efbbb57daa45842776ee17cea33c">buscar_historico_por_id</a> (int historico_id)</td></tr>
+<tr class="memdesc:a40f9efbbb57daa45842776ee17cea33c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Busca um registro específico pelo seu ID.  <br /></td></tr>
 <tr class="separator:a40f9efbbb57daa45842776ee17cea33c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a237df9203145b898d40b893b31543a04" id="r_a237df9203145b898d40b893b31543a04"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemodels_1_1historico__busca__rep.html#a237df9203145b898d40b893b31543a04">deletar_historico_por_usuario</a> (int usuario_id)</td></tr>
+<tr class="memdesc:a237df9203145b898d40b893b31543a04"><td class="mdescLeft">&#160;</td><td class="mdescRight">Deleta o histórico de busca de um usuário específico.  <br /></td></tr>
+<tr class="separator:a237df9203145b898d40b893b31543a04"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1572eb504d0a87929e71c306911a6e78" id="r_a1572eb504d0a87929e71c306911a6e78"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemodels_1_1historico__busca__rep.html#a1572eb504d0a87929e71c306911a6e78">deletar_historico_busca</a> (int historico_id)</td></tr>
+<tr class="memdesc:a1572eb504d0a87929e71c306911a6e78"><td class="mdescLeft">&#160;</td><td class="mdescRight">Deleta uma entrada específica no histórico.  <br /></td></tr>
 <tr class="separator:a1572eb504d0a87929e71c306911a6e78"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
@@ -145,6 +152,25 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Cria uma nova entrada no histórico de busca do usuário. </p>
+<p>Insere novos registros na tabela do histórico de busca com os parâmetros fornecidos pelo usuário.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">usuario_id</td><td>ID do usuário que está realizando a busca. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">produto_buscado</td><td>Nome do produto buscado (opcional). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">feirante_buscado</td><td>Nome do feirante buscado (opcional).</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">ValueError</td><td>Se os dados do usuário estiverem inválidos ou se nenhum parâmetro de busca for fornecido. </td></tr>
+    <tr><td class="paramname">Exception</td><td>Para erros de banco de dados ou se a tabela não existir.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A ID da entrada criada no histórico de busca. </dd></dl>
+
 </div>
 </div>
 <a id="a40f9efbbb57daa45842776ee17cea33c" name="a40f9efbbb57daa45842776ee17cea33c"></a>
@@ -163,6 +189,22 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Busca um registro específico pelo seu ID. </p>
+<p>Retorna uma entrada específica através do seu ID na tabela de Histórico de Busca.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">histrico_id</td><td>ID do histórico a ser retornado.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">Exception</td><td>Para erros de banco de dados.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Retorna um dicionário com os dados da entrada do histórico. </dd></dl>
+
 </div>
 </div>
 <a id="a1572eb504d0a87929e71c306911a6e78" name="a1572eb504d0a87929e71c306911a6e78"></a>
@@ -180,6 +222,57 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Deleta uma entrada específica no histórico. </p>
+<p>Deleta um registro específico na tabela de Histórico de Busca.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">historico_id</td><td>ID da entrada que será removida.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">Exception</td><td>Para erros de banco de dados. </td></tr>
+    <tr><td class="paramname">ValueError</td><td>Se o histórico com o ID especificado não for encontrado.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Retorna o número de registros removidos. </dd></dl>
+
+</div>
+</div>
+<a id="a237df9203145b898d40b893b31543a04" name="a237df9203145b898d40b893b31543a04"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a237df9203145b898d40b893b31543a04">&#9670;&#160;</a></span>deletar_historico_por_usuario()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">models.historico_busca_rep.deletar_historico_por_usuario </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>usuario_id</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Deleta o histórico de busca de um usuário específico. </p>
+<p>Deleta todas os registros na tabela de Histórico de Busca relacionados a um usuário específico.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">usuario_id</td><td>ID do usuário cujo histórico será removido.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">Exception</td><td>Para erros de banco de dados.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Retorna o número de registros removidos. </dd></dl>
 
 </div>
 </div>
@@ -208,6 +301,23 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Lista todas as entradas do histórico de busca. </p>
+<p>Retorna uma lista com os registros da tabela de Histórico de Busca de um usuário específico.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">usuario_id</td><td>ID do usuário que está realizando a busca. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">histrico_id</td><td>ID do histórico a ser retornado (opcional).</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">Exception</td><td>Para erros de banco de dados.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Retorna uma lista de dicionários, onde cada dicionário representa uma entrada do histórico. </dd></dl>
 
 </div>
 </div>

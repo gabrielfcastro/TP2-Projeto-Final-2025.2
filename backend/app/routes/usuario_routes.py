@@ -4,6 +4,14 @@ from flask_jwt_extended import create_access_token
 
 usuario_bp = Blueprint('usuario_bp', __name__, url_prefix='/api/usuarios')
 
+@usuario_bp.route('/', methods=['GET'])
+def listar_todos_usuarios():
+    try:
+        usuarios = usuario_rep.listar_usuarios()
+        return jsonify(usuarios), 200
+    except Exception as e:
+        return jsonify({"erro": str(e)}), 500
+
 @usuario_bp.route('/', methods = ['POST'])
 def criar_usuario():
     dados = request.json

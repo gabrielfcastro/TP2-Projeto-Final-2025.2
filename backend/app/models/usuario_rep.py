@@ -60,9 +60,9 @@ def adicionar_usuario(email: str, senha: str, nome: str, tipo_usuario: str):
                             "- Deve conter pelo menos 1 letra Maiúscula, 1 letra Minúscula, 1 numérico e 1 caractere especial \n"
                             "- Deve conter entre 8 à 15 caracteres.")
 
-    if not re.match(PADRAO_PAPEL, tipo_usuario):
+    if not tipo_usuario or not re.match(PADRAO_PAPEL, tipo_usuario):
         raise ValueError ("Papel Inexistente: \n"
-                        "- Deve ser um dos seguintes: Cliente, Feirante, Admin. ")
+                        "- Deve ser um dos seguintes: Usuario, Cliente, Feirante, Admin. ")
 
     senha_hash = bcrypt.hashpw(senha.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
 

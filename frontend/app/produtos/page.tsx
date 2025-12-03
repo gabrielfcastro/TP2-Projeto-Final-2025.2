@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 interface Produto {
   id: number;
@@ -11,9 +12,16 @@ interface Produto {
 }
 
 export default function ProdutosPage() {
+  const router = useRouter();
   const [produtos, setProdutos] = useState<Produto[]>([]);
+  const [isFeirante, setIsFeirante] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const user = localStorage.getItem("feiranet_usuario");
+    const userData = user ? JSON.parse(user) : null;
+    setIsFeirante(userData && userData.tipo === "Feirante");
+
     async function carregarDados() {
       try {
         const res = await fetch("http://127.0.0.1:5000/api/produtos/");
@@ -21,6 +29,8 @@ export default function ProdutosPage() {
         setProdutos(dados);
       } catch (error) {
         console.error("Erro ao buscar produtos", error);
+      } finally {
+        setLoading(false);
       }
     }
     carregarDados();
@@ -46,12 +56,14 @@ export default function ProdutosPage() {
             Meus Produtos
           </h1>
 
-          <Link
-            href="/produtos/novo"
-            className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-500 transition font-bold shadow-lg shadow-green-900/20"
-          >
-            + Novo Produto
-          </Link>
+          {isFeirante && (
+            <Link
+              href="/produtos/novo"
+              className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-500 transition font-bold shadow-lg shadow-green-900/20"
+            >
+              + Novo Produto
+            </Link>
+          )}
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -77,14 +89,16 @@ export default function ProdutosPage() {
                   </p>
                 </div>
 
-                <div className="flex gap-3 pt-4 border-t border-zinc-800">
-                  <button
-                    onClick={() => handleDelete(prod.id)}
-                    className="flex-1 bg-red-900/30 text-red-400 py-2 px-4 rounded hover:bg-red-900/50 hover:text-red-300 transition text-sm font-medium border border-red-900/50"
-                  >
-                    Excluir
-                  </button>
-                </div>
+                {isFeirante && (
+                  <div className="flex gap-3 pt-4 border-t border-zinc-800">
+                    <button
+                      onClick={() => handleDelete(prod.id)}
+                      className="flex-1 bg-red-900/30 text-red-400 py-2 px-4 rounded hover:bg-red-900/50 hover:text-red-300 transition text-sm font-medium border border-red-900/50"
+                    >
+                      Excluir
+                    </button>
+                  </div>
+                )}
               </div>
             ))
           )}

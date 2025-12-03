@@ -1,6 +1,5 @@
 """!
     @file usuario_rep.py
-    
     @brief Este arquivo é responsável pela persistência dos dados do usuário.
 """
 

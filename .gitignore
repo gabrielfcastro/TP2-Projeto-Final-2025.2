@@ -59,7 +59,7 @@ next-env.d.ts
 venv/
 backend/.venv/
 backend/__pycache__/
-backend/app/models/__pycache__/
+backend/app/models/__pycache__/*.pyc
 backend/.pytest_cache/
 backend/tests/.pytest_cache/
 # Arquivos de log de cobertura
@@ -73,4 +73,5 @@ backend/banco.db
 *.pyc
 
 .vscode/settings.json
+
 

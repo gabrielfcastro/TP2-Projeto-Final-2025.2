@@ -1,4 +1,4 @@
-"""
+"""!
     @file usuario_routes.py
     @brief Este arquivo é responsável pelas rotas do usuário.
 """
@@ -11,7 +11,7 @@ usuario_bp = Blueprint('usuario_bp', __name__, url_prefix='/api/usuarios')
 
 @usuario_bp.route('/', methods = ['POST'])
 def criar_usuario():
-    """
+    """!
         @brief Pega os dados por request do usuário para solicitar no repositório.
         @throws ConnectionError Se a conexão não for estabelecida corretamente.
         @throws LookupError Se o usuário não for encontrado.
@@ -63,7 +63,7 @@ def criar_usuario():
 @usuario_bp.route("/login", methods= ['POST'])
 def login():
     
-    """
+    """!
         @brief Verifica se o usuario tem login para autenticação
         @throws ConnectionError Se a conexão não for estabelecida corretamente.
         @throws LookupError Se o usuário não for encontrado.

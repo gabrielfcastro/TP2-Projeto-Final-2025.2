@@ -94,7 +94,7 @@ def login():
         access_token = create_access_token(identity=email)
 
         json = {"email": usuario['email'],
-                "access_token": access_token}
+                "access_token": access_token, "tipo_usuario": usuario['tipo_usuario']}
         return jsonify(json), 200
     
     except LookupError as e:

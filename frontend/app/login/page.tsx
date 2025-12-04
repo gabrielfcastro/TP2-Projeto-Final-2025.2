@@ -128,7 +128,7 @@ export default function Login() {
         const userData = {
           email: data.email,
           nome: data.nome || data.email.split('@')[0], // Se não tiver nome, usa parte do email
-          tipo: userType // Como o backend não retorna tipo, usamos o selecionado
+          tipo: data.tipo_usuario // Como o backend não retorna tipo, usamos o selecionado
         }
         
         // 1. Chave 'feiranet_usuario' - requisito do projeto
@@ -153,8 +153,11 @@ export default function Login() {
             case "vendor":
               window.location.href = "/produtos"
               break
+            case "feirante":
+              window.location.href = "/produtos"
+              break
             default:
-              window.location.href = "/"
+              window.location.href = "/search-page"
           }
         }, 100)
       }

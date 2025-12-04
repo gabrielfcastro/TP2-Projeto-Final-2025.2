@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['usuario_0',['usuario',['../namespacemodels_1_1usuario__rep.html#a95360eff552ea3f347e433eca1e0565c',1,'models::usuario_rep']]],
-  ['usuario_5fbp_1',['usuario_bp',['../namespaceroutes_1_1usuario__routes.html#acc608781511ba8f47d6a0690dba23ea8',1,'routes::usuario_routes']]]
+  ['tamanho_5fmax_5fcomentario_0',['TAMANHO_MAX_COMENTARIO',['../namespacemodels_1_1avaliacoes__produtos__rep.html#af015e594b9031b87b35ef28b038f3325',1,'models::avaliacoes_produtos_rep']]],
+  ['tamanho_5fmax_5fdescricao_1',['TAMANHO_MAX_DESCRICAO',['../namespacemodels_1_1produtos__rep.html#ae541ef1a81e6d5cb997006e2a0913a92',1,'models::produtos_rep']]]
 ];

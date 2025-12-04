@@ -99,12 +99,16 @@ $(document).ready(function(){initNavTree('namespaceroutes_1_1feirante__routes.ht
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a5375a8247accba62627cee97d451c84e" id="r_a5375a8247accba62627cee97d451c84e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceroutes_1_1feirante__routes.html#a5375a8247accba62627cee97d451c84e">criar_feirante</a> ()</td></tr>
+<tr class="memdesc:a5375a8247accba62627cee97d451c84e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cria um novo feirante no sistema.  <br /></td></tr>
 <tr class="separator:a5375a8247accba62627cee97d451c84e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaf3a253f12ed96d8c52135d2d318891c" id="r_aaf3a253f12ed96d8c52135d2d318891c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceroutes_1_1feirante__routes.html#aaf3a253f12ed96d8c52135d2d318891c">listar_todos_feirantes</a> ()</td></tr>
+<tr class="memdesc:aaf3a253f12ed96d8c52135d2d318891c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Lista todos os feirantes cadastrados no sistema.  <br /></td></tr>
 <tr class="separator:aaf3a253f12ed96d8c52135d2d318891c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8bc4fc92343930a2458d5809f5d9afc0" id="r_a8bc4fc92343930a2458d5809f5d9afc0"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceroutes_1_1feirante__routes.html#a8bc4fc92343930a2458d5809f5d9afc0">buscar_feirante</a> (id_feirante)</td></tr>
+<tr class="memdesc:a8bc4fc92343930a2458d5809f5d9afc0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Busca um feirante pelo seu ID.  <br /></td></tr>
 <tr class="separator:a8bc4fc92343930a2458d5809f5d9afc0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a996a1577c141fa9127b2a88c4bc7c9df" id="r_a996a1577c141fa9127b2a88c4bc7c9df"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceroutes_1_1feirante__routes.html#a996a1577c141fa9127b2a88c4bc7c9df">deletar_feirante</a> (id_feirante)</td></tr>
+<tr class="memdesc:a996a1577c141fa9127b2a88c4bc7c9df"><td class="mdescLeft">&#160;</td><td class="mdescRight">Deleta um feirante do sistema.  <br /></td></tr>
 <tr class="separator:a996a1577c141fa9127b2a88c4bc7c9df"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
@@ -129,6 +133,28 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Busca um feirante pelo seu ID. </p>
+<p>Esta rota processa uma requisição GET para recuperar os dados de um feirante específico com base no ID fornecido na URL.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">id_feirante</td><td>ID do feirante a ser buscado.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section post"><dt>Postcondition</dt><dd>Busca o feirante na tabela 'feirantes' do banco de dados.</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">Exception</td><td>Para erros internos do servidor durante a operação.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Retorna um JSON de resposta contendo:<ul>
+<li>Em caso de sucesso (200): Dicionário com os dados do feirante.</li>
+<li>Em caso de erro (404): {"erro": "Feirante &lt;id&gt; não encontrado."}</li>
+<li>Em caso de erro (500): {"erro": "Erro interno no servidor"} </li>
+</ul>
+</dd></dl>
+
 </div>
 </div>
 <a id="a5375a8247accba62627cee97d451c84e" name="a5375a8247accba62627cee97d451c84e"></a>
@@ -145,6 +171,29 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Cria um novo feirante no sistema. </p>
+<p>Esta rota processa uma requisição POST proveniente do front contendo os dados necessários para criar um novo feirante. O usuário deve estar autenticado para realizar esta operação.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">nome_estabelecimento</td><td>Nome do estabelecimento do feirante. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">link_wpp</td><td>Link do WhatsApp do feirante.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section pre"><dt>Precondition</dt><dd>nome_estabelecimento Deve ser uma string não vazia. </dd>
+<dd>
+link_wpp Deve ser uma string não vazia.</dd></dl>
+<dl class="section post"><dt>Postcondition</dt><dd>Insere um novo feirante na tabela 'feirantes' do banco de dados.</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">ValueError</td><td>Se os dados fornecidos forem inválidos. </td></tr>
+    <tr><td class="paramname">LookupError</td><td>Se o usuário autenticado não for encontrado no banco. </td></tr>
+    <tr><td class="paramname">ConnectionError</td><td>Se houver falha ao salvar o feirante no banco.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Retorna um JSON de resposta contendo os dados do feirante criado em caso de sucesso (201) ou uma mensagem de erro em caso de falha. </dd></dl>
 
 </div>
 </div>
@@ -164,6 +213,30 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Deleta um feirante do sistema. </p>
+<p>Esta rota processa uma requisição DELETE para remover um feirante específico do banco de dados com base no ID fornecido na URL. O usuário deve estar autenticado para realizar esta operação.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">id_feirante</td><td>ID do feirante a ser deletado.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section pre"><dt>Precondition</dt><dd>id_feirante Deve existir no banco de dados.</dd></dl>
+<dl class="section post"><dt>Postcondition</dt><dd>Remove o feirante da tabela 'feirantes' do banco de dados.</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">ValueError</td><td>Se o feirante com o ID fornecido não for encontrado. </td></tr>
+    <tr><td class="paramname">Exception</td><td>Para erros internos do servidor durante a operação.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Retorna um JSON de resposta contendo:<ul>
+<li>Em caso de sucesso (200): {"mensagem": "Feirante &lt;id&gt; deletado com sucesso."}</li>
+<li>Em caso de erro (404): {"erro": "Feirante &lt;id&gt; não encontrado."}</li>
+<li>Em caso de erro (500): {"erro": "Erro interno no servidor"} </li>
+</ul>
+</dd></dl>
+
 </div>
 </div>
 <a id="aaf3a253f12ed96d8c52135d2d318891c" name="aaf3a253f12ed96d8c52135d2d318891c"></a>
@@ -180,6 +253,21 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Lista todos os feirantes cadastrados no sistema. </p>
+<p>Esta rota processa uma requisição GET para recuperar a lista de todos os feirantes cadastrados no banco de dados.</p>
+<dl class="section post"><dt>Postcondition</dt><dd>Busca todos os feirantes na tabela 'feirantes' do banco de dados.</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">Exception</td><td>Para erros internos do servidor durante a operação.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Retorna um JSON de resposta contendo:<ul>
+<li>Em caso de sucesso (200): Lista de dicionários com os dados dos feirantes.</li>
+<li>Em caso de erro (500): {"erro": "Erro interno no servidor"} </li>
+</ul>
+</dd></dl>
 
 </div>
 </div>

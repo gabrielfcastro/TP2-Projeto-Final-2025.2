@@ -7,6 +7,12 @@ var namespaceroutes =
       [ "listar_todos_feirantes", "namespaceroutes_1_1feirante__routes.html#aaf3a253f12ed96d8c52135d2d318891c", null ],
       [ "feirante_bp", "namespaceroutes_1_1feirante__routes.html#a4cc435f472161d036059ea3f9f11de09", null ]
     ] ],
+    [ "historico_busca_routes", "namespaceroutes_1_1historico__busca__routes.html", [
+      [ "criar_historico", "namespaceroutes_1_1historico__busca__routes.html#a30b25ca3238a83236607b851f2a7a78c", null ],
+      [ "limpar_historico", "namespaceroutes_1_1historico__busca__routes.html#a4f5228900cc193157b027dbd4d218e18", null ],
+      [ "listar_historico", "namespaceroutes_1_1historico__busca__routes.html#ad3549d23a1aab01d4c78c592191c687f", null ],
+      [ "historico_busca_bp", "namespaceroutes_1_1historico__busca__routes.html#ac76d7dc0ad93937ed0777ab6186175b6", null ]
+    ] ],
     [ "produto_route", "namespaceroutes_1_1produto__route.html", [
       [ "criar_produto", "namespaceroutes_1_1produto__route.html#ad509ac4dface996807f3b89028571743", null ],
       [ "deletar_produto", "namespaceroutes_1_1produto__route.html#a4402709b00d1f362f1a5aa682bb5ba44", null ],
@@ -16,6 +22,7 @@ var namespaceroutes =
     ] ],
     [ "usuario_routes", "namespaceroutes_1_1usuario__routes.html", [
       [ "criar_usuario", "namespaceroutes_1_1usuario__routes.html#a8da4978ffae6ec6498a74a0fac58d315", null ],
+      [ "listar_todos_usuarios", "namespaceroutes_1_1usuario__routes.html#a9d77281b9c2a4fd83b7865c9ebdc4769", null ],
       [ "login", "namespaceroutes_1_1usuario__routes.html#a6440987b47646ec607c5e97263189fe6", null ],
       [ "usuario_bp", "namespaceroutes_1_1usuario__routes.html#acc608781511ba8f47d6a0690dba23ea8", null ]
     ] ]

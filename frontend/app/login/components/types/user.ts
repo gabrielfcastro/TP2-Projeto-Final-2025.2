@@ -1,4 +1,4 @@
-export type UserType = "user" | "vendor" | "admin";
+export type UserType = "user" | "vendor" | "admin" | "feirante";
 
 export type FormData = {
 	email: string;

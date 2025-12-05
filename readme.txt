@@ -1,46 +1,47 @@
-============================================================
-               README - Guia de Execução do Projeto
-============================================================
+🚀 Guia de Execução do Projeto
 
-Este arquivo explica, de forma simples e direta, como rodar
-o Backend e o Frontend do projeto.
+Este documento explica de forma simples e direta como executar Backend e Frontend do projeto.
 
-============================================================
-1. BACKEND
-============================================================
+📦 1. Backend
+✅ Passo a passo
 
-1) Ative o ambiente virtual:
-       source tp2-projeto-final/bin/activate
+Ativar o ambiente virtual
 
-2) Instale as dependências necessárias:
-       pip install -r requirements.txt
-
-3) Inicie o servidor do backend:
-       python run.py
+source tp2-projeto-final/bin/activate
 
 
-============================================================
-2. FRONTEND
-============================================================
+Instalar as dependências
 
-1) Acesse a pasta do frontend:
-       cd frontend
-
-2) Instale as dependências do projeto:
-       pnpm install
-
-3) Inicialize o servidor de desenvolvimento:
-       pnpm run dev
+pip install -r requirements.txt
 
 
-============================================================
-3. EXECUTANDO O PROJETO COMPLETO
-============================================================
+Iniciar o servidor backend
 
-Para rodar tudo ao mesmo tempo, utilize dois terminais:
+python run.py
 
-• Terminal 1 (Backend):
-       python run.py
+🎨 2. Frontend
+✅ Passo a passo
 
-• Terminal 2 (Frontend):
-       pnpm run dev
+Entrar na pasta do frontend
+
+cd frontend
+
+
+Instalar dependências
+
+pnpm install
+
+
+Rodar o servidor de desenvolvimento
+
+pnpm run dev
+
+🔗 3. Executando Backend + Frontend
+
+Use dois terminais:
+
+🖥️ Terminal 1 — Backend
+python run.py
+
+🌐 Terminal 2 — Frontend
+pnpm run dev

@@ -5,65 +5,51 @@
 Este sistema digital foi desenvolvido para facilitar a interação entre **consumidores** e **feirantes**, permitindo buscar produtos, comparar preços e localizar bancas dentro de uma feira.
 
 O sistema possui três perfis de acesso:
-- **Administrador:** Gerencia categorias, usuários e relatórios.
-- **Feirantes:** Cadastram produtos, preços e informações da banca.
-- **Usuários:** Pesquisam produtos e visualizam detalhes dos vendedores.
+- **Administrador:** Gerencia o sistema, define tipos de produtos permitidos e locais/posições GPS válidas. Gera relatórios de uso e popularidade.
+- **Feirantes:** Cadastram seus produtos, definem preços, informam a localização da banca (endereço ou coordenadas) e observações.
+- **Usuários:** Podem se cadastrar para salvar históricos, pesquisar produtos por nome, banca ou região, e visualizar preços e localizações. Também podem avaliar e comunicar-se com feirantes.
 
 > **⚠️ Nota sobre o Protótipo**
->
-> Este software é uma **versão inicial**, que implementa a base de cadastro de usuários, feirantes e produtos.  
-> Algumas funcionalidades planejadas ainda **não estão disponíveis**, como:
-> - Integração com GPS e cálculo de distâncias.
-> - Filtros avançados (por localização, avaliação, proximidade).
+> Este software é uma versão inicial. Funcionalidades como integração automática com GPS, filtros avançados de ordenação (distância/nota) e relatórios complexos **não estão implementadas**. O foco atual é a arquitetura base de cadastro e interação.
 
 ---
 
 ## 🚀 Guia de Execução
 
-Siga os passos abaixo para rodar o Backend e o Frontend localmente.
+Copie e cole os comandos abaixo para configurar e rodar o projeto.
 
-### 📦 1. Backend (API)
+### ▶️ Comandos de Instalação e Execução
 
-Abra o terminal e execute os comandos na ordem:
-
-**1. Ativar o ambiente virtual**
 ```bash
+# ==========================================
+#  PARTE 1: BACKEND (Terminal 1)
+# ==========================================
+
+# 1. Ativar o ambiente virtual
 source tp2-projeto-final/bin/activate
 
-2. Instalar as dependências
-Bash
-
+# 2. Instalar dependências do backend
 pip install -r requirements.txt
 
-3. Iniciar o servidor
-Bash
-
+# 3. Iniciar o servidor backend
+# (Este comando manterá o terminal ocupado. Não o feche.)
 python run.py
 
-🎨 2. Frontend (Interface)
+# ==========================================
+#  PARTE 2: FRONTEND (Abra um NOVO Terminal)
+# ==========================================
 
-Mantenha o terminal do backend aberto e abra um novo terminal:
-
-1. Acessar a pasta do frontend
-Bash
-
+# 4. Acessar a pasta do frontend
 cd frontend
 
-2. Instalar as dependências
-Bash
-
+# 5. Instalar dependências do frontend
 pnpm install
 
-3. Rodar o servidor de desenvolvimento
-Bash
-
+# 6. Rodar o servidor de desenvolvimento
 pnpm run dev
 
-🔗 3. Executando o Sistema Completo
-
-Para utilizar o sistema, você deve manter dois terminais abertos simultaneamente:
-Terminal	Função	Comando
-🖥️ Terminal 1	Backend (API)	python run.py
-🌐 Terminal 2	Frontend (UI)	pnpm run dev
-
-Após iniciar ambos, acesse o link exibido no Terminal 2 em seu navegador.
+# ==========================================
+#  CONCLUSÃO
+# ==========================================
+# Com os dois comandos rodando (python run.py e pnpm run dev),
+# acesse o link exibido no Terminal 2 (ex: http://localhost:5173).

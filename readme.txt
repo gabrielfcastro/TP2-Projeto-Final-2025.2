@@ -9,11 +9,12 @@ O sistema possui três perfis de acesso:
 - **Feirantes:** Cadastram produtos, preços e informações da banca.
 - **Usuários:** Pesquisam produtos e visualizam detalhes dos vendedores.
 
-### ⚠️ Nota sobre o Protótipo
-Este software é uma **versão inicial**, que implementa a base de cadastro de usuários, feirantes e produtos.  
-Algumas funcionalidades planejadas ainda **não estão disponíveis**, como:
-- Integração com GPS e cálculo de distâncias.
-- Filtros avançados (por localização, avaliação, proximidade).
+> **⚠️ Nota sobre o Protótipo**
+>
+> Este software é uma **versão inicial**, que implementa a base de cadastro de usuários, feirantes e produtos.  
+> Algumas funcionalidades planejadas ainda **não estão disponíveis**, como:
+> - Integração com GPS e cálculo de distâncias.
+> - Filtros avançados (por localização, avaliação, proximidade).
 
 ---
 
@@ -21,45 +22,48 @@ Algumas funcionalidades planejadas ainda **não estão disponíveis**, como:
 
 Siga os passos abaixo para rodar o Backend e o Frontend localmente.
 
----
+### 📦 1. Backend (API)
 
-## 📦 1. Backend (API)
+Abra o terminal e execute os comandos na ordem:
 
-No terminal, execute:
-
-### ▶️ Ativar o ambiente virtual
+**1. Ativar o ambiente virtual**
 ```bash
 source tp2-projeto-final/bin/activate
 
-▶️ Instalar dependências
+2. Instalar as dependências
+Bash
 
 pip install -r requirements.txt
 
-▶️ Iniciar o servidor
+3. Iniciar o servidor
+Bash
 
 python run.py
 
 🎨 2. Frontend (Interface)
 
-Em um novo terminal:
-▶️ Acessar a pasta do frontend
+Mantenha o terminal do backend aberto e abra um novo terminal:
+
+1. Acessar a pasta do frontend
+Bash
 
 cd frontend
 
-▶️ Instalar dependências
+2. Instalar as dependências
+Bash
 
 pnpm install
 
-▶️ Rodar o servidor de desenvolvimento
+3. Rodar o servidor de desenvolvimento
+Bash
 
 pnpm run dev
 
-🔗 3. Executando Backend + Frontend Juntos
+🔗 3. Executando o Sistema Completo
 
-Para utilizar o sistema completo, mantenha dois terminais abertos ao mesmo tempo:
+Para utilizar o sistema, você deve manter dois terminais abertos simultaneamente:
+Terminal	Função	Comando
+🖥️ Terminal 1	Backend (API)	python run.py
+🌐 Terminal 2	Frontend (UI)	pnpm run dev
 
-    🖥️ Terminal 1: python run.py (Backend)
-
-    🌐 Terminal 2: pnpm run dev (Frontend)
-
-Após iniciar ambos, acesse no navegador o link exibido pelo terminal do Frontend.
+Após iniciar ambos, acesse o link exibido no Terminal 2 em seu navegador.

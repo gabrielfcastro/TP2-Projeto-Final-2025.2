@@ -1,47 +1,70 @@
-🚀 Guia de Execução do Projeto
+# 🛒 Sistema de Gestão de Feiras (Protótipo)
 
-Este documento explica de forma simples e direta como executar Backend e Frontend do projeto.
+## 📄 Sobre o Projeto
 
-📦 1. Backend
-✅ Passo a passo
+Este projeto consiste em um sistema digital desenvolvido para facilitar a interação entre consumidores e feirantes. O objetivo da plataforma é permitir que usuários encontrem produtos em feiras, comparem preços e localizem bancas específicas.
 
-Ativar o ambiente virtual
+O sistema contempla três perfis de acesso:
+* **Administrador:** Gerencia o sistema, categorias de produtos e relatórios.
+* **Feirantes (Fornecedores):** Cadastram seus produtos, definem preços e informações da banca.
+* **Usuários:** Podem pesquisar produtos e visualizar informações dos vendedores.
 
-source tp2-projeto-final/bin/activate
+### ⚠️ Nota sobre o Protótipo
+Este software é uma **versão de protótipo**. Embora a arquitetura base para cadastro de usuários, feirantes e produtos esteja funcional, algumas funcionalidades planejadas para a versão final **não estão implementadas neste momento**, especificamente:
+* Integração com GPS e cálculos de distância.
+* Filtros avançados de ordenação (por localização ou nota).
 
+---
 
-Instalar as dependências
+## 🚀 Guia de Execução
 
-pip install -r requirements.txt
+Siga os passos abaixo para rodar o Backend e o Frontend localmente.
 
+### 📦 1. Backend (API)
 
-Iniciar o servidor backend
+Abra o seu terminal e siga os comandos:
 
-python run.py
+1.  **Ativar o ambiente virtual**
+    ```bash
+    source tp2-projeto-final/bin/activate
+    ```
 
-🎨 2. Frontend
-✅ Passo a passo
+2.  **Instalar as dependências**
+    ```bash
+    pip install -r requirements.txt
+    ```
 
-Entrar na pasta do frontend
+3.  **Iniciar o servidor**
+    ```bash
+    python run.py
+    ```
 
-cd frontend
+### 🎨 2. Frontend (Interface)
 
+Em um **novo terminal**, execute:
 
-Instalar dependências
+1.  **Entrar na pasta do frontend**
+    ```bash
+    cd frontend
+    ```
 
-pnpm install
+2.  **Instalar dependências**
+    ```bash
+    pnpm install
+    ```
 
+3.  **Rodar o servidor de desenvolvimento**
+    ```bash
+    pnpm run dev
+    ```
 
-Rodar o servidor de desenvolvimento
+---
 
-pnpm run dev
+### 🔗 3. Executando Backend + Frontend Simultaneamente
 
-🔗 3. Executando Backend + Frontend
+Para utilizar o sistema completo, você precisará manter dois terminais abertos rodando ao mesmo tempo:
 
-Use dois terminais:
+* **🖥️ Terminal 1:** `python run.py` (Backend)
+* **🌐 Terminal 2:** `pnpm run dev` (Frontend)
 
-🖥️ Terminal 1 — Backend
-python run.py
-
-🌐 Terminal 2 — Frontend
-pnpm run dev
+Após iniciar ambos, acesse o link fornecido pelo terminal do Frontend no seu navegador.
